@@ -1,0 +1,46 @@
+/* Reset CSS - A minimal reset to ensure consistent styling across browsers */
+/* Version: 1.0.0 */
+
+/*** Universal border-box ***/
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none; 
+    color: inherit; 
+    cursor: pointer;
+}
+
+button {
+    background-color: transparent; 
+    color: inherit; 
+    cursor: pointer;
+}
+
+input, textarea, select {
+    border: none;
+    outline: none;
+    background: none;
+    font: inherit;
+    color: inherit;
+}
+
+fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
