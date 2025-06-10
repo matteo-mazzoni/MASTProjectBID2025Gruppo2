@@ -2,17 +2,32 @@ package com.mast.readup.entities;
 
 import java.sql.Date;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "sfida")
 public class Sfida {
+
+    // Primary key class Sfida
+    @Id
     private int codiceSfida;
+
+    // Add the extra field of the entity
     private String nomeSfida;
     private String descrizioneSfida;
     private int numPartecipanti;
     private Date dataInizio;
     private Date dataFine;
 
-    public Sfida() {}
+    // Basic constructor
+    public Sfida() {
+    }
 
-    public Sfida(int codiceSfida, String nomeSfida, String descrizioneSfida, int numPartecipanti, Date dataInizio, Date dataFine) {
+    // Costructor with parameters
+    public Sfida(int codiceSfida, String nomeSfida, String descrizioneSfida, int numPartecipanti, Date dataInizio,
+            Date dataFine) {
         this.codiceSfida = codiceSfida;
         this.nomeSfida = nomeSfida;
         this.descrizioneSfida = descrizioneSfida;
@@ -21,6 +36,7 @@ public class Sfida {
         this.dataFine = dataFine;
     }
 
+    // Getters and Setters
     public int getCodiceSfida() {
         return codiceSfida;
     }
