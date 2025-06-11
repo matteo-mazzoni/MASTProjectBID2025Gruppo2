@@ -23,7 +23,7 @@ public class LibreriaKey implements Serializable {
         this.idUtente = idUtente;
     }
     
-    // Getter e Setter
+    // Getter / Setter
     public Long getIdLibro() { 
         return idLibro; 
     }
