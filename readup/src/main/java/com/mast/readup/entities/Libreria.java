@@ -1,69 +1,57 @@
 package com.mast.readup.entities;
-import java.util.Objects;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.Table;   
+import jakarta.persistence.Column;
 
-// These annotations indicates that this class is an entity and will be mapped to a database table called "libreria".
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * Entity representing the "libreria" table, which links users and books.
+ * It models a many-to-many relationship with additional attribute 'statoPrestito'.
+ */
 @Entity
 @Table(name = "libreria")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Libreria {
 
-    // Link to the composite key class LibreriaKey
+    // Composite primary key for the Libreria entity (book + user)
     @EmbeddedId
     private LibreriaKey id;
 
-    // Add the extra field of the entity
+    // Status of the loan (e.g., borrowed, returned, etc.)
     @Column(name = "stato_prestito")
     private String statoPrestito;
 
-    // Navigation properties: these properties are used to establish the relationship between Libreria entity and Libro and Utente entities.
+    // Associated book (part of the composite key)
     @MapsId("idLibro")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_libro")
     private Libro libro;
 
+    // Associated user (part of the composite key)
     @MapsId("idUtente")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_utente")
     private Utente utente;
 
-    // Basic constructor 
-    public Libreria() {}
-
-    // Constructor with parameters
-    public Libreria(LibreriaKey id, String statoPrestito) {
-        this.id = id;
+    /**
+     * Constructor to initialize a Libreria instance using a book, a user, and the loan status.
+     * Automatically generates the composite key.
+     */
+    public Libreria(Libro libro, Utente utente, String statoPrestito) {
+        this.libro = libro;
+        this.utente = utente;
+        this.id = new LibreriaKey(libro.getId(), utente.getId());
         this.statoPrestito = statoPrestito;
-    }
-
-    // Getter / Setter
-    public LibreriaKey getId() 
-    { 
-        return id; 
-    }
-    public void setId(LibreriaKey id) 
-    { 
-        this.id = id; 
-    }
-
-    public String getStatoPrestito() { 
-        return statoPrestito; 
-    }
-    public void setStatoPrestito(String statoPrestito) 
-    { 
-        this.statoPrestito = statoPrestito; 
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Libreria)) return false;
-        Libreria that = (Libreria) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }
