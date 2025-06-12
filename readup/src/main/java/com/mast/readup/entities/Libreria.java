@@ -6,7 +6,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
-import jakarta.persistence.Table;   
+import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 
 import lombok.AllArgsConstructor;
@@ -15,7 +15,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * Entity representing the "libreria" table, which links users and books.
- * It models a many-to-many relationship with additional attribute 'statoPrestito'.
+ * It models a many-to-many relationship with additional attribute
+ * 'statoPrestito'.
  */
 @Entity
 @Table(name = "libreria")
@@ -45,13 +46,14 @@ public class Libreria {
     private Utente utente;
 
     /**
-     * Constructor to initialize a Libreria instance using a book, a user, and the loan status.
+     * Constructor to initialize a Libreria instance using a book, a user, and the
+     * loan status.
      * Automatically generates the composite key.
      */
     public Libreria(Libro libro, Utente utente, String statoPrestito) {
         this.libro = libro;
         this.utente = utente;
-        this.id = new LibreriaKey(libro.getId(), utente.getId());
+        this.id = new LibreriaKey(libro.getIdLibro(), utente.getIdUtente());
         this.statoPrestito = statoPrestito;
     }
 }
