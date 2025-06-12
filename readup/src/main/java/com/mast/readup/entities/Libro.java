@@ -46,7 +46,7 @@ public class Libro {
     // Number of pages, cannot be less than 40 page
     @Column(name = "num_pagine", nullable = false)
     @Min(30)
-    private long numPagine;
+    private int numPagine;
 
     // Book genre, must not be blank
     @Column(name = "genere", length = 50, nullable = true)
