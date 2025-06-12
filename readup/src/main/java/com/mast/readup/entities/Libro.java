@@ -94,5 +94,4 @@ public class Libro {
     public void setCasaEditrice(String casaEditrice) {
         this.casaEditrice = casaEditrice;
     }
-
 }
