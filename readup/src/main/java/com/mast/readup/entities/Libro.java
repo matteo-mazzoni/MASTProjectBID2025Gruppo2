@@ -1,6 +1,5 @@
 package com.mast.readup.entities;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,31 +36,28 @@ public class Libro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_libro")
-    private int idLibro; // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long idLibro; // @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     // Add the extra field of the entity
     // Publication year (date-only), using Java 8 LocalDate
-    @Column(name = "anno_uscita")
+    @Column(name = "anno_uscita", nullable = true)
     private Date annoUscita;
 
     // Number of pages, cannot be less than 40 page
     @Column(name = "num_pagine", nullable = false)
-    @Min(40)
-    private int numPagine;
+    @Min(30)
+    private long numPagine;
 
     // Book genre, must not be blank
-    @Column(length = 50)
-    @NotBlank
+    @Column(name = "genere", length = 50, nullable = true)
     private String genere;
 
     // Book author, required field
-    @Column(length = 100, nullable = false)
-    @NotBlank
+    @Column(name = "autore", length = 100, nullable = true)
     private String autore;
 
     // Book title, required field
-    @Column(length = 100, nullable = false)
-    @NotBlank
+    @Column(name = "titolo", length = 200, nullable = true)
     private String titolo;
 
     // Optional publisher name
