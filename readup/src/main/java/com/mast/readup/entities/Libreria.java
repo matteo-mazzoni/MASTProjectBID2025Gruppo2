@@ -51,7 +51,7 @@ public class Libreria {
     public Libreria(Libro libro, Utente utente, String statoPrestito) {
         this.libro = libro;
         this.utente = utente;
-        this.id = new LibreriaKey(libro.getId(), utente.getId());
+        this.id = new LibreriaKey(libro.getIdLibro(), utente.getIdUtente());
         this.statoPrestito = statoPrestito;
     }
 }
