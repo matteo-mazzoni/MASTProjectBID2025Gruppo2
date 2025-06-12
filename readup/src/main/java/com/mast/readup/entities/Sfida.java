@@ -34,7 +34,7 @@ public class Sfida {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codice_sfida")
-    private int codiceSfida;
+    private long codiceSfida;
 
     // Challenge name
     @Column(name = "nome_sfida", length = 80, nullable = true)
