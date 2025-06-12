@@ -36,7 +36,7 @@ public class Libro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_libro")
-    private int idLibro; // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long idLibro; // @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     // Add the extra field of the entity
     // Publication year (date-only), using Java 8 LocalDate
@@ -46,7 +46,7 @@ public class Libro {
     // Number of pages, cannot be less than 40 page
     @Column(name = "num_pagine", nullable = false)
     @Min(30)
-    private int numPagine;
+    private long numPagine;
 
     // Book genre, must not be blank
     @Column(name = "genere", length = 50, nullable = true)

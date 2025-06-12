@@ -31,7 +31,7 @@ public class Utente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_utente")
-    private int idUtente;
+    private long idUtente;
 
     // Add the extra field of the entity
     // User nikname, required field
