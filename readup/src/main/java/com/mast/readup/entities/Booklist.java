@@ -2,8 +2,9 @@ package com.mast.readup.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,7 +29,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor // Lombok: Generates a no-argument constructor (required by JPA)
 @AllArgsConstructor // Lombok: Generates a constructor with all fields
 @EqualsAndHashCode(onlyExplicitlyIncluded = true) // Lombok: Limits equality to specified fields
-public class Booklist {
+public class Booklist implements JsonStringListConverter {
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     // Primary key class Booklist
     @Id
@@ -51,7 +54,26 @@ public class Booklist {
     private Utente utenteCreatore;
 
     // JSON field as a list of Strings
+
     @Column(name = "lista_libri", columnDefinition = "json", nullable = true)
-    @Convert(converter = JsonStringListConverter.class)
     private List<String> listaLibri;
+
+    @Override
+    public String convertToDatabaseColumn(List<String> attribute) {
+        try {
+            return objectMapper.writeValueAsString(attribute);
+        } catch (Exception e) {
+            throw new RuntimeException("Errore nella conversione della lista di libri in JSON", e);
+        }
+    }
+
+    @Override
+    public List<String> convertToEntityAttribute(String dbData) {
+        try {
+            return objectMapper.readValue(dbData, new TypeReference<List<String>>() {
+            });
+        } catch (Exception e) {
+            throw new RuntimeException("Errore nella conversione del JSON in lista di libri", e);
+        }
+    }
 }
