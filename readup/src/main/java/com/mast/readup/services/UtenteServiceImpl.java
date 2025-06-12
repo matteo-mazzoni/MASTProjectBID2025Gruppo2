@@ -12,9 +12,9 @@ import java.util.Optional;
 @Service // Indica che questa classe è un componente di servizio di Spring
 public class UtenteServiceImpl implements UtenteService {
 
+    @Autowired
     private final UtenteRepos UtenteRepos;
 
-    @Autowired
     public UtenteServiceImpl(UtenteRepos UtenteRepos) {
         this.UtenteRepos = UtenteRepos;
     }

@@ -12,9 +12,9 @@ import java.util.Optional;
 @Service // Indica a Spring che questa è una classe di servizio
 public class BooklistServiceImpl implements BooklistService {
 
+    @Autowired // Inietta il repository tramite il costruttore
     private final BooklistRepos booklistRepos;
 
-    @Autowired // Inietta il repository tramite il costruttore
     public BooklistServiceImpl(BooklistRepos booklistRepos) {
         this.booklistRepos = booklistRepos;
     }

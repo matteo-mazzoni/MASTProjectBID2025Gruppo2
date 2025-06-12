@@ -12,9 +12,9 @@ import java.util.Optional;
 @Service // Indica a Spring che questa è una classe di servizio
 public class SfidaServiceImpl implements SfidaService {
 
+    @Autowired // Inietta il repository tramite il costruttore
     private final SfidaRepos sfidaRepos;
 
-    @Autowired // Inietta il repository tramite il costruttore
     public SfidaServiceImpl(SfidaRepos sfidaRepos) {
         this.sfidaRepos = sfidaRepos;
     }
