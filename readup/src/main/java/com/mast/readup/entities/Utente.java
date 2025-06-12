@@ -1,15 +1,29 @@
 package com.mast.readup.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "utente")
 public class Utente {
+
+    // Primary key class Utente
+    @Id
     private int idUtente;
+
+    // Add the extra field of the entity
     private String nickname;
     private String password;
     private String email;
     private String citta;
     private boolean loggedIn;
 
-    public Utente() {}
+    // Basic constructor
+    public Utente() {
+    }
 
+    // Costructor with parameters
     public Utente(int idUtente, String nickname, String password, String email, String citta, boolean loggedIn) {
         this.idUtente = idUtente;
         this.nickname = nickname;
@@ -19,6 +33,7 @@ public class Utente {
         this.loggedIn = loggedIn;
     }
 
+    // Getters and Setters
     public int getIdUtente() {
         return idUtente;
     }
@@ -67,4 +82,3 @@ public class Utente {
         this.loggedIn = loggedIn;
     }
 }
-

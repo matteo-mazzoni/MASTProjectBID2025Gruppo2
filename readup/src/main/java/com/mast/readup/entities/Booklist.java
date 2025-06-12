@@ -1,13 +1,27 @@
 package com.mast.readup.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "booklist")
 public class Booklist {
+
+    // Primary key class Booklist
+    @Id
     private int idBooklist;
+
+    // Add the extra field of the entity
     private String nome;
     private String descrizione;
     private int idUtenteCreatore;
 
-    public Booklist() {}
+    // Basic costructor
+    public Booklist() {
+    }
 
+    // Costructor with parameter
     public Booklist(int idBooklist, String nome, String descrizione, int idUtenteCreatore) {
         this.idBooklist = idBooklist;
         this.nome = nome;
@@ -15,6 +29,7 @@ public class Booklist {
         this.idUtenteCreatore = idUtenteCreatore;
     }
 
+    // Getters and Setters
     public int getIdBooklist() {
         return idBooklist;
     }
@@ -47,4 +62,3 @@ public class Booklist {
         this.idUtenteCreatore = idUtenteCreatore;
     }
 }
-

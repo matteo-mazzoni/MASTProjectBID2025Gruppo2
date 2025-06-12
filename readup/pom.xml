@@ -60,6 +60,14 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--Jakarta validation-->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.2</version> <!-- o l'ultima disponibile -->
+        </dependency>
+
+
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
