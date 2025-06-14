@@ -2,16 +2,12 @@
 <html lang="it">
     
     <!-- Head -->
-    <head th:replace="fragments :: head(title='Home • Readup', pageCss='/css/pages/index_style.css')"></head>
+    <head th:replace="~{fragments :: head(title='Home • Readup', pageCss='/css/pages/index_style.css')}"></head>
     <!-- / Head -->
   
     <body>
         <!-- Header -->
-<<<<<<< HEAD
-        <header th:replace="fragments :: header"> </header>
-=======
-        <header th:replace="fragments :: header"></header>
->>>>>>> index_frontend
+        <header th:replace="~{fragments :: header}"></header>
         <!-- / Header -->
        
         
@@ -62,15 +58,11 @@
                 <!-- / Carousel section-->
                         
 
-             
-
-               
             </main>
             <!-- / Main -->
         </div>
 
         <!-- Footer -->
-        <footer th:replace="fragments :: footer"></footer>
->>>>>>> index_frontend
+        <footer th:replace="~{fragments :: footer}"></footer>
     </body>
 </html>
