@@ -1,28 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head th:replace="fragments :: head"></head>
-
+<html lang="it">
+    
+    <!-- Head -->
+    <head th:replace="fragments :: head(title='Home • Readup', pageCss='/css/pages/index_style.css')"></head>
+    <!-- / Head -->
+  
     <body>
         <!-- Header -->
+<<<<<<< HEAD
         <header th:replace="fragments :: header"> </header>
+=======
+        <header th:replace="fragments :: header"></header>
+>>>>>>> index_frontend
         <!-- / Header -->
        
         
 
-        <hr>
-        <!-- Main -->
-        <main>
-            <h1>Welcome to ReadUp</h1>
-            <p>This is a sample page for the ReadUp application.</p>
-        </main>
-        <!-- / Main -->
+        <div th:fragment="content">
 
+<<<<<<< HEAD
         <hr>
         <!-- Footer -->
         <footer th:replace="fragments :: footer"> </footer>
         <!-- / Footer -->
-    </body>
+=======
+            <!-- Main -->
+            <main>
 
-    
-</body>
+                <!-- Hero section -->
+                <section class="hero-container">
+
+                    <div class="hero-main">
+
+                        <div class="hero-text-container">
+                            <h1 class="primary_title">ReadUp</h1>
+                            <h3 class="secondary_title">Leggi un punto dopo l'altro</h3>
+                            <h6 class="description">Scopri le nostre sfide mensili eccetera i nostri libri e quant'altro bla blal blabl</h6>
+                
+                            <button class="cta-button">Inizia ora</button>
+
+                        </div>
+
+
+                        <!-- Hero image -->
+                        <img src="/img/bookgroup.jpg" alt="A group of young people is reading books" class="hero-image">
+                        <!-- / Hero image -->       
+
+
+                    </div>
+                    
+                </section>
+                <!-- / Hero section -->
+
+                <hr>
+
+                <!-- Carousel section-->
+                <section class="carousel-book-container">
+                    <div class="carousel-book-main">
+                    </div>
+                </section>
+                <!-- / Carousel section-->
+                        
+
+             
+
+               
+            </main>
+            <!-- / Main -->
+        </div>
+
+        <!-- Footer -->
+        <footer th:replace="fragments :: footer"></footer>
+>>>>>>> index_frontend
+    </body>
 </html>

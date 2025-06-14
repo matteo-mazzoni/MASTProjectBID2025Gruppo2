@@ -5,13 +5,107 @@
 :root {
     --title_color: #000000;
     --text_color: #273463;
-    --links_color: #315fa6:
+    --links_color: #315fa6;
     --bar_color: #8fa9da;
     --bg_card_color: #ac8fc9; 
-    --button_color: #ebeaf1;
-    --background_color: #ffffff;    
-
+    --stripe_color: #ebeaf1;
+    --background_color: #ffffff;      
 }
+
+
+.total_gradient {
+  background-image: linear-gradient(
+    180deg,
+    hsl(227deg 43% 27%) 0%,
+    hsl(224deg 46% 29%) 1%,
+    hsl(222deg 48% 32%) 3%,
+    hsl(220deg 50% 34%) 5%,
+    hsl(219deg 51% 35%) 7%,
+    hsl(218deg 52% 37%) 9%,
+    hsl(217deg 53% 39%) 12%,
+    hsl(217deg 54% 41%) 14%,
+    hsl(216deg 54% 42%) 17%,
+    hsl(218deg 44% 47%) 20%,
+    hsl(219deg 39% 52%) 23%,
+    hsl(219deg 40% 55%) 26%,
+    hsl(219deg 41% 59%) 30%,
+    hsl(219deg 43% 62%) 34%,
+    hsl(219deg 45% 65%) 37%,
+    hsl(219deg 47% 68%) 41%,
+    hsl(219deg 50% 71%) 45%,
+    hsl(223deg 47% 71%) 50%,
+    hsl(228deg 43% 72%) 55%,
+    hsl(235deg 40% 72%) 60%,
+    hsl(242deg 37% 72%) 65%,
+    hsl(249deg 36% 71%) 71%,
+    hsl(257deg 36% 70%) 78%,
+    hsl(263deg 35% 69%) 86%,
+    hsl(270deg 35% 67%) 100%
+  );
+}  
+
+.total_gradient_light {
+  background-image: linear-gradient(
+    180deg,
+    hsl(270deg 35% 67%) 0%,
+    hsl(263deg 35% 69%) 14%,
+    hsl(257deg 36% 70%) 22%,
+    hsl(249deg 36% 71%) 29%,
+    hsl(242deg 37% 72%) 35%,
+    hsl(235deg 40% 72%) 40%,
+    hsl(228deg 43% 72%) 45%,
+    hsl(223deg 47% 71%) 50%,
+    hsl(219deg 50% 71%) 55%,
+    hsl(219deg 47% 68%) 59%,
+    hsl(219deg 45% 65%) 63%,
+    hsl(219deg 43% 62%) 66%,
+    hsl(219deg 41% 59%) 70%,
+    hsl(219deg 40% 55%) 74%,
+    hsl(219deg 39% 52%) 77%,
+    hsl(218deg 44% 47%) 80%,
+    hsl(216deg 54% 42%) 83%,
+    hsl(217deg 54% 41%) 86%,
+    hsl(217deg 53% 39%) 88%,
+    hsl(218deg 52% 37%) 91%,
+    hsl(219deg 51% 35%) 93%,
+    hsl(220deg 50% 34%) 95%,
+    hsl(222deg 48% 32%) 97%,
+    hsl(224deg 46% 29%) 99%,
+    hsl(227deg 43% 27%) 100%
+  );
+}
+
+.blue_gradient {
+  background-image: linear-gradient(
+    180deg,
+    hsl(227deg 43% 27%) 0%,
+    hsl(225deg 45% 29%) 1%,
+    hsl(223deg 47% 30%) 3%,
+    hsl(222deg 48% 32%) 5%,
+    hsl(221deg 49% 33%) 7%,
+    hsl(220deg 50% 34%) 9%,
+    hsl(219deg 51% 35%) 12%,
+    hsl(218deg 52% 37%) 14%,
+    hsl(218deg 52% 38%) 17%,
+    hsl(217deg 53% 39%) 20%,
+    hsl(217deg 54% 40%) 23%,
+    hsl(217deg 54% 41%) 26%,
+    hsl(216deg 54% 42%) 30%,
+    hsl(217deg 46% 46%) 34%,
+    hsl(218deg 41% 49%) 37%,
+    hsl(219deg 39% 52%) 41%,
+    hsl(219deg 40% 54%) 45%,
+    hsl(219deg 41% 57%) 50%,
+    hsl(219deg 41% 59%) 55%,
+    hsl(219deg 43% 61%) 60%,
+    hsl(219deg 44% 63%) 65%,
+    hsl(219deg 45% 65%) 71%,
+    hsl(219deg 47% 67%) 78%,
+    hsl(219deg 48% 69%) 86%,
+    hsl(219deg 50% 71%) 100%
+  );
+}
+
 
 /*=============================================
     =               CONTAINER         =
@@ -24,54 +118,70 @@
 }
 
 
+/*=============================================
+        =              HEADER         =
+=============================================*/
+
+.header {
+    width: 100%;
+}
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+#header_block {
+    height: 5rem;
+    width: 100%;
+}
+
+#hero-img {
+    width: 100%;
+}
+
+
 /*================================================
     =             PRIMARY TITLES              =
 ================================================*/
 
 
 .primary_title {
-    text-align: center;
-    text-transform: uppercase;
-    margin: 0 0 45px 0;
-    padding: 20px 0 0 0;
+    font-family: "Nobile", sans-serif;
+    font-size: 3rem;
     color: var--(title_color);
-    font-family: "Oswald", sans-serif;
-    font-size: 4rem !important;
+    text-align: center;
 }
 
 
 /*================================================
     =            SECONDARY TITLES            =
 ================================================*/
-.small_title {
+.secondary_title {
     text-align: center;
-    text-transform: uppercase;
-    margin: 0 0 75px 0;
-    padding: 0;
     color: var--(title_color);
-    font-family: "Oswald", sans-serif;
-    font-size: 3.3rem !important;
+    font-family: "Palanquin Dark", sans-serif;
+    font-size: 2rem 
 }
 
 
 /*================================================
-    =            DESCRIPTIONS        =
+=            BODY TEXT AND DESCRIPTIONS        =
 ================================================*/
 
   .description {
     text-align: center;
-    font-family: "Open Sans", sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 1.2rem;
     color: var(--text_color);
-    line-height: 1.5;
-    padding: 0 20px;
-    margin-bottom: 50px;
 
 }
 
 
 /*================================================
-        =            BARS                =
+            =            BARS                =
 ================================================*/
 
 .bar {
@@ -84,7 +194,7 @@
 
 
 /*================================================
-        =           CARD       =
+            =           CARD       =
 ================================================*/
 
     .card {
@@ -99,7 +209,7 @@
 
 
 /*=============================================
-=            INPUT RADIO           =
+        =            INPUT RADIO           =
 =============================================*/
 label {
     margin: 0;
@@ -218,6 +328,71 @@ label {
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
 }
 
+.btn-search {
+  --bs-btn-font-weight: 600;
+  --bs-btn-font-family: 'Inter', sans-serif;
+  --bs-btn-font-size: 1rem;
+  --bs-btn-line-height: 1.2rem;
+
+  --bs-btn-color: var(--text_color); /* blu scuro */
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--bar_color); /* azzurro soft */
+  --bs-btn-border-width: 2px;
+  --bs-btn-border-radius: 0.5rem;
+
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg: var(--bar_color);
+  --bs-btn-hover-border-color: var(--bar_color);
+
+  --bs-btn-active-color: var(--bs-white);
+  --bs-btn-active-bg: var(--bg_card_color); /* viola giovanile */
+  --bs-btn-active-border-color: var(--bg_card_color);
+
+  --bs-btn-focus-shadow-rgb: 49, 95, 166;
+  --bs-btn-focus-box-shadow: 0 0 0 0.2rem rgba(49, 95, 166, 0.3);
+  --bs-btn-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+
+  --bs-btn-padding-x: 0.75rem;
+  --bs-btn-padding-y: 0.45rem;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-search-dark {
+  --bs-btn-font-weight: 600;
+  --bs-btn-font-family: 'Inter', sans-serif;
+  --bs-btn-font-size: 1rem;
+  --bs-btn-line-height: 1.2rem;
+
+  --bs-btn-color: var(--stripe_color); /* grigio chiaro */
+  --bs-btn-bg: #273463; /* blu scuro */
+  --bs-btn-border-color: transparent;
+  --bs-btn-border-width: 2px;
+  --bs-btn-border-radius: 0.5rem;
+
+  --bs-btn-hover-color: var(--bs-white);
+  --bs-btn-hover-bg: var(--bg_card_color); /* viola tenue */
+  --bs-btn-hover-border-color: transparent;
+
+  --bs-btn-active-color: var(--bs-white);
+  --bs-btn-active-bg: var(--bar_color); /* azzurro chiaro */
+  --bs-btn-active-border-color: transparent;
+
+  --bs-btn-focus-shadow-rgb: 140, 170, 218;
+  --bs-btn-focus-box-shadow: 0 0 0 0.2rem rgba(140, 170, 218, 0.4);
+  --bs-btn-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+
+  --bs-btn-padding-x: 0.75rem;
+  --bs-btn-padding-y: 0.5rem;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.25s ease;
+}
 
 /*=====  End of Section BUTTON ======*/
 
@@ -228,6 +403,8 @@ label {
 
 ul {
     list-style: none;
+    margin: 0;
+    padding: 0; 
 }
 
 
@@ -265,7 +442,7 @@ a:hover {
 /* Mozilla Firefox */
     
 * {
-    scrollbar-color: transparent black; 
+    scrollbar-color: var(--text_color); 
     scrollbar-width: 0px;
 }
 
@@ -276,32 +453,32 @@ a:hover {
 }
 
 *::-webkit-scrollbar-track {       
-    background: black;
+    background: var(--text_color);
 }
 
 *::-webkit-scrollbar-thumb {        
     border: none;
 }
 
-/*===== Codice per frecce browser Webkit ======*/
+/*===== Side arrow color for browser Webkit ======*/
 
 *::-webkit-scrollbar-button:vertical:start:decrement {
-    background:
-        linear-gradient(120deg, black 40%, rgba(0, 0, 0, 0) 41%),
-        linear-gradient(240deg, black 40%, rgba(0, 0, 0, 0) 41%),
-        linear-gradient(0deg, black 30%, rgba(0, 0, 0, 0) 31%);
-    background-color: floralwhite;
+    background: 
+        linear-gradient(120deg, var(--text_color) 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(240deg, var(--text_color) 30%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(0deg, var(--text_color) 30%, rgba(0, 0, 0, 0) 31%);
+    background-color: var(--background_color);
 }
 
-*::-webkit-scrollbar-button:vertical:end:increment {
-    background:
-        linear-gradient(300deg, black 40%, rgba(0, 0, 0, 0) 41%),
-        linear-gradient(60deg, black 40%, rgba(0, 0, 0, 0) 41%),
-        linear-gradient(180deg, black 30%, rgba(0, 0, 0, 0) 31%);
-    background-color: floralwhite;
+*::-webkit-scrollbar-button:vertical:start:increment {
+    background: 
+        linear-gradient(120deg, var(--text_color) 40%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(240deg, var(--text_color) 30%, rgba(0, 0, 0, 0) 41%),
+        linear-gradient(0deg, var(--text_color) 30%, rgba(0, 0, 0, 0) 31%);
+    background-color: var(--background_color);
 }
 
-/*===== End Codice per frecce browser Webkit ======*/
+/*===== End side arrow color for browser Webkit ======*/
 
 
 /* Explorer */
