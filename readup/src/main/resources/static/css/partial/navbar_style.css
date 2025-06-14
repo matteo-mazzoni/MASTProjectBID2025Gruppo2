@@ -1,0 +1,199 @@
+/* ----------------------------------------
+          NAVBAR GENERAL STRUCTURE
+----------------------------------------- */
+.navbar {
+  padding: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.container-fluid {
+  padding-left: 0;
+}
+
+/* ----------------------------------------
+                      LOGO
+----------------------------------------- */
+.navbar-brand {
+  padding: 0rem 0rem 0.5rem 0rem;
+}
+
+.navbar-brand > img {
+  height: 5rem;  
+  width: auto;
+  padding: 0;
+  margin: 0;
+}
+
+/* ----------------------------------------
+        TOGGLER (mobile menu button)
+----------------------------------------- */
+.navbar-toggler {
+  border-color: var(--bar_color);
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  border-radius: 0.3rem;
+  transition: border-color 0.2s;
+}
+
+.navbar-toggler:focus {
+  outline: 2px solid var(--bar_color);
+  box-shadow: 0 0 0 0.2rem rgba(143, 169, 218, 0.5);
+}
+
+/* ----------------------------------------
+          NAVIGATION LINKS ITEM
+----------------------------------------- */
+
+.navbar-nav {
+  display: flex;
+  justify-content: right;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-nav li {
+  margin: 0 0.4rem;
+} 
+
+.nav-link {
+  font-weight: 500;
+  color: var(--text_color);
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.3rem;
+}
+
+.nav-link:hover, .nav-link:focus, nav-link:active {
+  color: var(--links_color);
+  text-decoration: none;
+  border-bottom: 2px solid var(--bar_color);
+}
+
+.nav-link:not(:focus):not(:hover) {
+  color: var(--text_color);
+  border-bottom: none;
+}
+
+
+/* ----------------------------------------
+                DROPDOWN MENU'
+----------------------------------------- */
+.dropdown-menu {
+  border-radius: 0.5rem;
+  border: none;
+  padding: 0.5rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  opacity: 0;
+  transform: translateY(5px);
+}
+
+.dropdown-item {
+  font-weight: 500;
+  color: var(--text_color);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  background-color: var(--bar_color);
+  color: var(--background_color);
+}
+
+
+/* ----------------------------------------
+            SEARCH FORM STYLING
+----------------------------------------- */
+form[role="search"] {
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+form[role="search"] input[type="search"] {
+  font-size: 1rem;
+  color: var(--text_color);
+  line-height: 1.2rem;
+  padding: 0.75rem 0.45rem;
+  border: 1px solid var(--stripe_color);
+  border-radius: 0.5rem !important;
+}
+
+form[role="search"] input[type="search"]:focus,
+form[role="search"] input[type="search"]:hover {
+  outline: none;
+  border: 1px solid var(--stripe_color)
+}
+
+
+
+.input-group {
+  align-items: center;
+} 
+
+.input-group i {
+  padding-right: 0.5rem;
+}
+
+/* ----------------------------------------
+              SEARCH FORM BUTTON
+----------------------------------------- */
+
+.btn-outline-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color .2s ease-in-out, background-color .2s ease-in-out,
+  border-color .2s ease-in-out, box-shadow .2s ease-in-out;
+  
+  --bs-btn-padding-x: 0.75rem;
+  --bs-btn-padding-y: 0.45rem;
+  
+  --bs-btn-font-weight: 600;
+  --bs-btn-font-family: 'Inter', sans-serif;
+  --bs-btn-font-size: 1rem;
+  --bs-btn-line-height: 1.2rem;
+
+  --bs-btn-color: var(--text_color); 
+  --bs-btn-bg: var(--stripe_color);
+  --bs-btn-border-color: var(--stripe_color); 
+  --bs-btn-border-width: 2px;
+  --bs-btn-border-radius: 0.5rem;
+
+  /* BTN Active */
+  --bs-btn-active-color: var(--background_color);
+  --bs-btn-active-bg: var(--bg_card_color); 
+  --bs-btn-active-border-color: var(--bg_card_color);
+
+  /* BTN Focus */
+  --bs-btn-focus-shadow-rgb: 49, 95, 166; 
+  --bs-btn-focus-box-shadow: 0 0 0 0.2rem rgba(49, 95, 166, 0.3);
+  --bs-btn-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+  
+.btn:hover {
+  --bs-btn-hover-color: var(--background_color);
+  --bs-btn-hover-bg: var(--bar_color); 
+  --bs-btn-hover-border-color: var(--bar_color);
+}
+
+
+/* ----------------------------------------
+                  MEDIA QUERIES 
+----------------------------------------- */
+@media (max-width: 1000px) {
+  .navbar-nav {
+    margin-top: 1rem;
+  }
+
+  form[role="search"] {
+    display: none;
+  }
+}
