@@ -6,21 +6,19 @@ import com.mast.readup.repos.BooklistRepos;
 import com.mast.readup.repos.UtenteRepos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // Importante per le transazioni
+import org.springframework.transaction.annotation.Transactional; // Important for transactions
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service // Indica a Spring che questa è una classe di servizio
+@Service // Indicates to Spring that this is a service class
 public class BooklistServiceImpl implements BooklistService {
 
-    @Autowired // Inietta il repository tramite il costruttore
     private final BooklistRepos booklistRepos;
-
-    @Autowired // Inietta il repository tramite il costruttore
     private final UtenteRepos utenteRepos;
 
+    @Autowired // Injects the repositories via the constructor
     public BooklistServiceImpl(UtenteRepos utenteRepos, BooklistRepos booklistRepos) {
         this.booklistRepos = booklistRepos;
         this.utenteRepos = utenteRepos;
@@ -38,75 +36,75 @@ public class BooklistServiceImpl implements BooklistService {
 
     @Override
     public List<Booklist> getByIdUtenteCreatore(Long idUtenteCreatore) {
-    if (idUtenteCreatore == null) {
-        throw new IllegalArgumentException("L'ID dell'utente creatore non può essere null.");
+        if (idUtenteCreatore == null) {
+            throw new IllegalArgumentException("The creator user's ID cannot be null.");
         }
-    // Recupera l'utente dal repository
-    Utente utente = utenteRepos.findById(idUtenteCreatore)
-            .orElseThrow(() -> new IllegalArgumentException("Utente non trovato con ID: " + idUtenteCreatore));
-    // Recupera tutte le booklist associate all'utente
-    return booklistRepos.findByUtenteCreatore(utente);
-}
+        // Retrieve the user from the repository
+        Utente utente = utenteRepos.findById(idUtenteCreatore)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + idUtenteCreatore));
+        // Retrieve all booklists associated with the user
+        return booklistRepos.findByUtenteCreatore(utente);
+    }
 
     @Override
     @Transactional
     public Booklist creaBooklist(Long idUtenteCreatore, String nome, String descrizione){
-        // 1. Valida i dati in ingresso
+        // 1. Validate input data
         if (nome == null || nome.trim().isEmpty()) {
-            throw new IllegalArgumentException("Il nome della booklist non può essere vuoto.");
+            throw new IllegalArgumentException("The booklist name cannot be empty.");
         }
         if (idUtenteCreatore == null) {
-            throw new IllegalArgumentException("L'ID dell'utente creatore non può essere null.");
+            throw new IllegalArgumentException("The creator user's ID cannot be null.");
         }
-        // Recupera l'utente dal repository
+        // Retrieve the user from the repository
         Utente utente = utenteRepos.findById(idUtenteCreatore)
-                .orElseThrow(() -> new IllegalArgumentException("Utente non trovato con ID: " + idUtenteCreatore));
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + idUtenteCreatore));
         // Creating the booklist
         Booklist booklist = new Booklist();
         booklist.setNome(nome);
-        booklist.setDescrizione(descrizione); // La descrizione può essere null
+        booklist.setDescrizione(descrizione); // Description can be null
         booklist.setUtenteCreatore(utente);
-        booklist.setListaLibri(new ArrayList<>()); // Inizializza la lista vuota
+        booklist.setListaLibri(new ArrayList<>()); // Initialize the list as empty
 
-        // 4. Salva la Booklist nel database
+        // 4. Save the Booklist to the database
         return booklistRepos.save(booklist);
     }
 
     @Override
     public Booklist modificaDatiBooklist(long idBooklist, String nuovoNome, String nuovaDescrizione){
-        // 1. Cerca la booklist
+        // 1. Find the booklist
         Optional<Booklist> optionalBooklist = booklistRepos.findById(idBooklist);
-        Booklist booklist = optionalBooklist.orElseThrow(() -> new IllegalArgumentException("Booklist non trovata con ID: " + idBooklist));
+        Booklist booklist = optionalBooklist.orElseThrow(() -> new IllegalArgumentException("Booklist not found with ID: " + idBooklist));
 
-        // 2. Modifica i campi se i nuovi valori non sono nulli e validi
+        // 2. Modify fields if new values are not null and valid
         if (nuovoNome != null && !nuovoNome.trim().isEmpty()) {
             booklist.setNome(nuovoNome);
-        } else if (nuovoNome != null) { // Caso in cui nuovoNome è una stringa vuota o solo spazi
-            throw new IllegalArgumentException("Il nome della booklist non può essere vuoto.");
+        } else if (nuovoNome != null) { // Case where nuovoNome is an empty string or just spaces
+            throw new IllegalArgumentException("The booklist name cannot be empty.");
         }
 
         if (nuovaDescrizione != null) {
              booklist.setDescrizione(nuovaDescrizione);
         }
-        // 3. Salva la booklist aggiornata
+        // 3. Save the updated booklist
         return booklistRepos.save(booklist);
     }
 
     @Override
     public Booklist modificaLibriBooklist(long idBooklist, List<String> nuovaListaLibri) {
-        // 1. Cerca la booklist
+        // 1. Find the booklist
         Optional<Booklist> optionalBooklist = booklistRepos.findById(idBooklist);
-        Booklist booklist = optionalBooklist.orElseThrow(() -> new IllegalArgumentException("Booklist non trovata con ID: " + idBooklist));
+        Booklist booklist = optionalBooklist.orElseThrow(() -> new IllegalArgumentException("Booklist not found with ID: " + idBooklist));
 
         if (nuovaListaLibri == null) {
             booklist.setListaLibri(new ArrayList<>());
         } else if (nuovaListaLibri.isEmpty()) {
-        // Mantieni la lista precedente e lancia un errore
-        throw new IllegalArgumentException("La nuova lista di libri non può essere vuota. La lista precedente è stata mantenuta.");
+            // Keep the previous list and throw an error
+            throw new IllegalArgumentException("The new list of books cannot be empty. The previous list has been kept.");
         } else {
             booklist.setListaLibri(nuovaListaLibri);
         }
-        // 3. Salva la booklist aggiornata
+        // 3. Save the updated booklist
         return booklistRepos.save(booklist);
     }
 
@@ -115,5 +113,4 @@ public class BooklistServiceImpl implements BooklistService {
         booklistRepos.deleteById(idBooklist);
     }
 
-    
 }
