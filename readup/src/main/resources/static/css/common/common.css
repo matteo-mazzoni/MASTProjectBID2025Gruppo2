@@ -111,10 +111,24 @@
     =               CONTAINER         =
 =============================================*/
 
-.container_80 {
-    width: 80%;
-    margin: 100px auto 0 auto;
-    background-color: var--(background_color);
+.container_90 {
+    display: grid;
+    width: 90%;
+    margin: auto;   
+    
+}
+
+
+/*=============================================
+        =              BODY         =
+=============================================*/
+
+body {
+  margin: 0;
+  background-color: var(--background_color);
+  font-family: 'Inter', sans-serif;
+  color: var(--text_color);
+  overflow-x: hidden;
 }
 
 
@@ -126,21 +140,11 @@
     width: 100%;
 }
 
-.hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
 #header_block {
-    height: 5rem;
-    width: 100%;
+  height: 5rem;
+  width: 100%;
 }
 
-#hero-img {
-    width: 100%;
-}
 
 
 /*================================================
@@ -171,269 +175,13 @@
 =            BODY TEXT AND DESCRIPTIONS        =
 ================================================*/
 
-  .description {
+.description {
     text-align: center;
     font-family: "Inter", sans-serif;
     font-size: 1.2rem;
     color: var(--text_color);
 
 }
-
-
-/*================================================
-            =            BARS                =
-================================================*/
-
-.bar {
-    width: 100%;
-    min-height: 35px;
-    background: var(--background_color);
-}
-
-
-
-
-/*================================================
-            =           CARD       =
-================================================*/
-
-    .card {
-        background-color: var(--bg_card_color);
-        border: var(var(--background_color));
-        border-radius: 0;
-        -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.25);
-        -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.25);
-        box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.25);
-        
-    }
-
-
-/*=============================================
-        =            INPUT RADIO           =
-=============================================*/
-label {
-    margin: 0;
-    cursor: pointer;
-}
-
-/* Input radio disappeared */
-.radio_input {
-    visibility: hidden;
-}
-
-
-/* New input radio style */
-.radio_nuovo_input {
-    display: inline;
-    margin-top: 30px;
-    width: 1em;
-    height: 1em;
-    border-radius: 50%;
-    background-color: floralwhite;
-    background-clip: content-box;
-}
-
-/* New input radio style after checked */
-.radio_nuovo_input::after {
-    content: "";
-    display: block;
-    width: 70%;
-    height: 70%;
-    background: --var(--background_color);
-    margin: 2px;
-    border-radius: 50%;
-    transform: scale(0);
-    transition: transform 0.2s;
-}
-
-/* Input radio after that checked one */  
-.radio_input:checked + .radio_nuovo_input::after {
-    transform: scale(1);
-}
-
-
-/*=====  End of Section INPUT  ======*/
-
-
-/*=============================================
-=               Section SOCIAL ICON         =
-==============================================*/
-
-.social_icon {
-    .icon {
-        color: --var(--text_color);
-        margin-right: 10px;
-        font-size: 1.2rem !important;
-    }
-
-    
-}
-
-
-/*=====  End of Section SOCIAL ICON  ======*/
-
-
-
-
-/*========================================
-=            Section BUTTON         =
-========================================*/
-.button {
-    display: inline-block;
-	outline: none;
-	cursor: pointer;
-	text-align: center;
-	text-decoration: none;
-	padding: 0.5em 2em 0.55em;
-	-webkit-border-radius: 0.5em; 
-	-moz-border-radius: 0.5em;
-	border-radius: 0.5em;
-    letter-spacing: 1px;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.button:hover, .button:focus {
-    color: black;
-    text-decoration: none;
-}
-
-.button:active {
-    position: relative;
-	top: 1px;
-    background-color: white;
-    color: black;
-}
-
-.orange {
-	color: floralwhite;
-	border: solid 1px rgb(218, 124, 12);
-	background: rgb(247, 141, 29);
-	background: -webkit-gradient(linear, left top, left bottom, from(rgb(250, 165, 26)), to(rgb(244, 122, 32)));
-	background: -moz-linear-gradient(top,  rgb(250, 165, 26),  rgb(244, 122, 32));
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
-}
-
-.orange:hover {
-	background: #f47c20;
-	background: -webkit-gradient(linear, left top, left bottom, from(rgb(248, 142, 17)), to(rgb(240, 96, 21)));
-	background: -moz-linear-gradient(top,  rgb(248, 142, 17),  rgb(240, 96, 21));
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
-
-}
-
-.orange:active {
-    color: black;
-	background: -webkit-gradient(linear, left top, left bottom, from(rgb(244, 122, 32)), to(rgb(250, 165, 26)));
-	background: -moz-linear-gradient(top,  rgb(244, 122, 32),  rgb(250, 165, 26));
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
-}
-
-.btn-search {
-  --bs-btn-font-weight: 600;
-  --bs-btn-font-family: 'Inter', sans-serif;
-  --bs-btn-font-size: 1rem;
-  --bs-btn-line-height: 1.2rem;
-
-  --bs-btn-color: var(--text_color); /* blu scuro */
-  --bs-btn-bg: transparent;
-  --bs-btn-border-color: var(--bar_color); /* azzurro soft */
-  --bs-btn-border-width: 2px;
-  --bs-btn-border-radius: 0.5rem;
-
-  --bs-btn-hover-color: var(--bs-white);
-  --bs-btn-hover-bg: var(--bar_color);
-  --bs-btn-hover-border-color: var(--bar_color);
-
-  --bs-btn-active-color: var(--bs-white);
-  --bs-btn-active-bg: var(--bg_card_color); /* viola giovanile */
-  --bs-btn-active-border-color: var(--bg_card_color);
-
-  --bs-btn-focus-shadow-rgb: 49, 95, 166;
-  --bs-btn-focus-box-shadow: 0 0 0 0.2rem rgba(49, 95, 166, 0.3);
-  --bs-btn-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-
-  --bs-btn-padding-x: 0.75rem;
-  --bs-btn-padding-y: 0.45rem;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  transition: all 0.2s ease-in-out;
-}
-
-.btn-search-dark {
-  --bs-btn-font-weight: 600;
-  --bs-btn-font-family: 'Inter', sans-serif;
-  --bs-btn-font-size: 1rem;
-  --bs-btn-line-height: 1.2rem;
-
-  --bs-btn-color: var(--stripe_color); /* grigio chiaro */
-  --bs-btn-bg: #273463; /* blu scuro */
-  --bs-btn-border-color: transparent;
-  --bs-btn-border-width: 2px;
-  --bs-btn-border-radius: 0.5rem;
-
-  --bs-btn-hover-color: var(--bs-white);
-  --bs-btn-hover-bg: var(--bg_card_color); /* viola tenue */
-  --bs-btn-hover-border-color: transparent;
-
-  --bs-btn-active-color: var(--bs-white);
-  --bs-btn-active-bg: var(--bar_color); /* azzurro chiaro */
-  --bs-btn-active-border-color: transparent;
-
-  --bs-btn-focus-shadow-rgb: 140, 170, 218;
-  --bs-btn-focus-box-shadow: 0 0 0 0.2rem rgba(140, 170, 218, 0.4);
-  --bs-btn-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-
-  --bs-btn-padding-x: 0.75rem;
-  --bs-btn-padding-y: 0.5rem;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  transition: all 0.25s ease;
-}
-
-/*=====  End of Section BUTTON ======*/
-
-
-/*=============================================
-    =            Section LISTS           =
-==============================================*/
-
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0; 
-}
-
-
-/*=====  End of Section LISTS  ======*/
-
-
-
-/*=====================================
-=             Section LINKS          =
-======================================*/
-
-    
-a:hover {
-    color: black;
-}
-
-.my_links {
-    color: floralwhite;
-    &:hover {
-        text-decoration: none;
-        color: rgb(250, 153, 28) !important;
-    }
-
-}
-
-
-/*=====  End of Section LINKS  ======*/
-
-
 
 /*=============================================
 =               Section SCROLLBARS          =
@@ -492,24 +240,5 @@ a:hover {
 
 
 
-
-/*================================================
-    =          FLEXBOX UTILITIES CLASSES     =
-================================================*/
-
-.d_flex {
-    display: flex;
-}
-
-.d_flex_column {
-    display: flex;
-    flex-direction: column;
-}
-
-.d_flex_center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 

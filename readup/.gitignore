@@ -6,6 +6,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 application.properties
+magazzino.css
 
 ### STS ###
 .apt_generated

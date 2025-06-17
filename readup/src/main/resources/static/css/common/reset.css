@@ -20,18 +20,15 @@ button {
     cursor: pointer;
 }
 
-input, textarea, select {
-    border: none;
-    outline: none;
-    background: none;
-    font: inherit;
-    color: inherit;
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0; 
 }
 
-fieldset {
-    border: 0;
-    padding: 0;
-    margin: 0;
+input, textarea, select {
+    font: inherit;
+    color: inherit;
 }
 
 table {
@@ -44,3 +41,4 @@ img, video {
     height: auto;
     display: block;
 }
+

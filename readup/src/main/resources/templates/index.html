@@ -15,46 +15,79 @@
 
             <!-- Main -->
             <main>
-
-                <!-- Hero section -->
-                <section class="hero-container">
-
-                    <div class="hero-main">
-
-                        <div class="hero-text-container">
-                            <h1 class="primary_title">ReadUp</h1>
-                            <h3 class="secondary_title">Leggi un punto dopo l'altro</h3>
-                            <h6 class="description">Scopri le nostre sfide mensili eccetera i nostri libri e quant'altro bla blal blabl</h6>
                 
-                            <button class="cta-button">Inizia ora</button>
-
-                        </div>
-
-
-                        <!-- Hero image -->
-                        <img src="/img/bookgroup.jpg" alt="A group of young people is reading books" class="hero-image">
-                        <!-- / Hero image -->       
-
-
-                    </div>
-                    
-                </section>
-                <!-- / Hero section -->
+                <div class="tagline text-center py-5">
+                    <h1 class="primary_title">Benvenuto in ReadUp</h1>
+                    <h3 class="secondary_title">Un libro alla volta, un punto alla volta</h3>
+                    <h6 class="description">La piattaforma dove ogni libro diventa un’esperienza condivisa.</h6>
+                    <h6 class="description">Unisciti a oltre 10.000 lettori: scopri, discuti e incentiva la tua passione per la lettura.</h6>
+                </div>    
 
                 <hr>
 
+                <div class="container_90">
+
+                    <!-- Hero section -->
+                    <section>
+
+                        <div class="hero-main">
+                            
+                            <!-- Hero image -->
+                            <img src="/img/bookgroup.jpg" alt="A group of young people is reading books" class="hero-image">
+                            <!-- / Hero image --> 
+                            
+                            <button class="button">Inizia ora</button>
+                            
+                        </div>      
+                            
+                    </section>
+                    <!-- / Hero section -->
+                          
+                    <!-- Registration form section-->
+                    <section class="registration-form">
+                        <div class="registration-text">
+                            <h1>Scopri un nuovo modo di leggere</h1>
+                            <p>Con ReadUp trasformi ogni pagina in un’esperienza social.</p>
+                        </div>
+
+                        <div class="registration-card">
+                            <h5>Registrati gratuitamente in meno di 1 minuto</h5>
+                            <form th:action="@{/register}" method="post">
+                                <input type="text" id="username" name="username" placeholder="Username" autofocus/>
+                                <input type="email" name="email" placeholder="Email"/>
+                                <input type="password" name="password" placeholder="Password" />
+                                <button type="submit">Registrati</button>
+                            </form>
+                        </div>
+                    </section>     
+                    <!-- / Registration form section -->
+
+                </div>
+                
+                <!-- Testimonials -->
+                <section class="testimonials-grid" th:fragment="testimonials">
+                    <div class="testimonial">
+                        <p>«ReadUp ha rivoluzionato il mio modo di leggere.»</p>
+                        <footer>— <span th:text="${user1}">Maria Rossi</span></footer>
+                    </div>
+                    <div class="testimonial">
+                        <p>«Le statistiche mi aiutano a raggiungere nuovi obiettivi ogni mese.»</p>
+                        <footer>— <span th:text="${user2}">Luca Bianchi</span></footer>
+                    </div>
+                </section>
+                <!-- / Testimonials -->
+                
                 <!-- Carousel section-->
                 <section class="carousel-book-container">
                     <div class="carousel-book-main">
+                        Carousel placeholder
                     </div>
                 </section>
                 <!-- / Carousel section-->
-                        
-
             </main>
             <!-- / Main -->
         </div>
-
+                            
         <!-- Footer -->
         <footer th:replace="~{fragments :: footer}"></footer>
     </body>
