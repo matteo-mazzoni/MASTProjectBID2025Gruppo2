@@ -26,6 +26,11 @@ public class ReadUpMVC {
         return "sfide"; 
     }
 
+    @GetMapping("/faq.html")
+    public String faq() {
+        return "faq"; 
+    }
+
     @GetMapping("/contattaci.html")
     public String contattaci(Model model) {
         return "contattaci"; 

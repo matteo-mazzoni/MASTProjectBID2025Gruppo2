@@ -9,6 +9,9 @@ hr {
 
 }
 
+/* ----------------------------------------
+                  HERO 
+----------------------------------------- */
 
 .hero-main {
   width: 100%;
@@ -27,7 +30,26 @@ hr {
   padding-top: 3rem;
 }
 
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
 
+.hero-section .btn-primary {
+  z-index: 1; /* sopra l’overlay */
+  padding: 0.75rem 2rem;
+  font-size: 1.25rem;
+  background-color: var(--links_color);
+  border-color: var(--links_color);
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.hero-section .btn-primary:hover {
+  background-color: var(--bar_color);
+  border-color: var(--bar_color);
+  transform: translateY(-2px);
+}
 
 
 
@@ -45,7 +67,7 @@ hr {
   padding: 2rem;
   background: var(--stripe_color);
   border-radius: 1rem;
-  min-width: 500px;
+  min-width: 550px;
   margin: 0 auto;
 }
 
@@ -70,6 +92,7 @@ hr {
 .registration-card {
   position: relative;
   background-color: var(--bg_card_color);
+  min-width: 250px;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(39,52,99,0.3);
@@ -77,6 +100,9 @@ hr {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.registration-card p {
+  margin-top: 1.5rem;
+}
 
 .registration-card h5 {
   color: var(--title_color);

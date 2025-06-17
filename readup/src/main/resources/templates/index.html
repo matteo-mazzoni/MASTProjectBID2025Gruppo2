@@ -28,17 +28,61 @@
                 <div class="container_90">
 
                     <!-- Hero section -->
-                    <section>
+                    <section id="top-books-carousel" class="py-5 bg-light">
+                        <div class="container">
+                            <h2 class="mb-4 text-center">I libri più visti della settimana</h2>
 
-                        <div class="hero-main">
-                            
-                            <!-- Hero image -->
-                            <img src="/img/bookgroup.jpg" alt="A group of young people is reading books" class="hero-image">
-                            <!-- / Hero image --> 
-                            
-                            <button class="button">Inizia ora</button>
-                            
-                        </div>      
+                            <div id="carouselBooks" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+
+                                    <!-- Partition in sottoliste di 4 libri ciascuna -->
+                                    <!-- <div th:each="slide, slideStat : ${#lists.partition(topBooks, 4)}"
+                                        th:classappend="${slideStat.index == 0} ? ' active' : ''" class="carousel-item">
+                                    </div> -->
+                                       
+                                    
+                                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                                        <!-- Una card per libro -->
+                                        <div th:each="book : ${slide}" class="col">
+                                        <div class="card h-100 shadow-sm">
+                                            <!-- <img th:src="@{https://covers.openlibrary.org/b/isbn/{isbn}-M.jpg(isbn=${book.isbn})}" -->
+                                                <!-- th:alt="${book.title}"
+                                                class="card-img-top"
+                                                onerror="this.src='/img/placeholder-cover.png'"> -->
+                                            <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title" th:text="${book.title}">Titolo</h5>
+                                            <p class="card-text text-muted mb-4" th:text="${book.author}">Autore</p>
+                                            <a th:href="@{/books/{id}(id=${book.id})}" 
+                                                class="mt-auto btn btn-sm btn-outline-primary">
+                                                Scopri di più
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- / card -->
+                            </div>
+                            </div>
+                                <!-- / slide -->
+
+                        </div>
+                        
+                        <!-- Controlli -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselBooks" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Precedente</span>
+                        </button>
+
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselBooks" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Successivo</span>
+                        </button>
+                        
+                        <!-- Indicatori (opzionali) -->
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselBooks" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                            <button type="button" data-bs-target="#carouselBooks" data-bs-slide-to="1"></button>
+                            <!-- Aggiungi dinamicamente con Thymeleaf se vuoi -->
+                        </div>
                             
                     </section>
                     <!-- / Hero section -->
@@ -57,8 +101,11 @@
                                 <input type="email" name="email" placeholder="Email"/>
                                 <input type="password" name="password" placeholder="Password" />
                                 <button type="submit">Registrati</button>
+                                <p class="text-center">Hai già un account? <a th:href="@{/login}">Accedi</a> </p>
                             </form>
                         </div>
+
+                        
                     </section>     
                     <!-- / Registration form section -->
 
@@ -76,14 +123,7 @@
                     </div>
                 </section>
                 <!-- / Testimonials -->
-                
-                <!-- Carousel section-->
-                <section class="carousel-book-container">
-                    <div class="carousel-book-main">
-                        Carousel placeholder
-                    </div>
-                </section>
-                <!-- / Carousel section-->
+        
             </main>
             <!-- / Main -->
         </div>
