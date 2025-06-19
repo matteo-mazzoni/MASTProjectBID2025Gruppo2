@@ -1,6 +1,7 @@
 hr {
   margin: 2rem 0 1rem 0;
 }
+
 .container_90 {
   grid-template-columns: 2fr 1fr;
   grid-gap: 1rem;
@@ -103,3 +104,55 @@ hr {
 }
 
 
+/* ----------------------------------------
+                  TESTIMONIALS
+----------------------------------------- */
+.testimonials {   
+  grid-column: 1 / -1;
+  width: 100%;  
+}
+
+.testimonial-slider .container {
+  height: 120px; 
+  position: relative;
+  overflow: visible;
+}
+
+.testimonial-item {
+  position: absolute;
+  top: 50%;
+  left: 100%;              
+  transform: translateY(-50%);
+  white-space: nowrap;
+  text-align: center;
+  animation: slideInOut 8s ease-in-out infinite;
+}
+
+@keyframes slideInOut {
+  0%   { left: 100%;  opacity: 0; }
+  20%  { left: 50%;   opacity: 1; }  /* entra e si ferma al centro */
+  60%  { left: 50%;   opacity: 1; }  /* resta al centro */
+  100% { left: -100%; opacity: 0; }  /* esce a sinistra */
+}
+
+.testimonial-item .stars {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  color: var(--links_color);
+  animation: popStars 1s ease-in-out infinite alternate;
+}
+
+@keyframes popStars {
+  from { transform: scale(1); }
+  to   { transform: scale(1.2); }
+}
+
+.testimonial-item .comment {
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+
+.testimonial-item .author {
+  font-weight: bold;
+}

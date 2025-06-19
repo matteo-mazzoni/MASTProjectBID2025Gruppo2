@@ -114,32 +114,32 @@ leftArrow.addEventListener("click", () => {
 
 /* UTILIZZIAMO UN EVENT LISTENER CHE OSSERVA IL RESIZE DELLA FINESTRA DEL BROWSER TRAMITE LA FUNZIONE resizeHandler */
 
-window.addEventListener('resize', resizeHandler);
+// window.addEventListener('resize', resizeHandler);
 
-const resizeHandler = () => {
+// const resizeHandler = () => {
 
-  // Aggiorna la larghezza delle slide
-  slideWidth = slideArray[currentIndexSlide].clientWidth;
+//   // Aggiorna la larghezza delle slide
+//   slideWidth = slideArray[currentIndexSlide].clientWidth;
 
-  /* Aggiorna la posizione del contenitore delle slide in base alla nuova larghezza
+//   /* Aggiorna la posizione del contenitore delle slide in base alla nuova larghezza
 
-  Due casi:
+//   Due casi:
 
-  1. Se current index slide vale 0, lo scrollLeft rimane sempre pari a 0
-  2. Se current index slide vale 1, 2, 3, lo scrolleft è pari all'indice della slide corrente per la larghezza della singola slide corrente */
+//   1. Se current index slide vale 0, lo scrollLeft rimane sempre pari a 0
+//   2. Se current index slide vale 1, 2, 3, lo scrolleft è pari all'indice della slide corrente per la larghezza della singola slide corrente */
 
-  if (currentIndexSlide === 0) {
-    slideContainer.scrollLeft = 0;
-  } else {
-    slideContainer.scrollLeft = currentIndexSlide * slideWidth;
-  }
-}
+//   if (currentIndexSlide === 0) {
+//     slideContainer.scrollLeft = 0;
+//   } else {
+//     slideContainer.scrollLeft = currentIndexSlide * slideWidth;
+//   }
+// }
 
 /*=====  End of Function  ======*/
 
 
 /*==================================================
-          =            Testimonnials            =
+          =            Testimonials            =
 ====================================================*/
 
  const testimonials = [
@@ -152,49 +152,34 @@ const resizeHandler = () => {
 
 
 /*==================================================
-          =            Functions            =
+          =            Function           =
 ====================================================*/
 
-  function renderTestimonials() {
-    const container = document.getElementById("testimonialsContainer");
-    testimonials.forEach(t => {
-      const [stars, first, last, comment] = t;
+const container = document.getElementById("sliderContent");
+let idx = 0;
 
-      // Crea la colonna
-      const col = document.createElement("div");
-      col.className = "col-md-6 col-lg-4";
+function renderTestimonials() {
+  
+  // Destructuring array
+  const [stars, first, last, comment] = testimonials[idx];
+  
+  // Creating stars
+  let starsHtml = `<span class="stars">`;
+  for (let i = 0; i < stars; i++) starsHtml += "★";
+  starsHtml += `</span>`;
 
-      // Crea la card
-      const card = document.createElement("div");
-      card.className = "card h-100 shadow-sm p-4";
+  // Creating complete HTML node
+  container.innerHTML =
+    starsHtml +
+    `<div class="comment">${comment}</div>` +
+    `<div class="author">— ${first} ${last}</div>`;
 
-      // Stelle
-      const starsDiv = document.createElement("div");
-      starsDiv.className = "mb-2";
-      for (let i = 1; i <= 4; i++) {
-        const span = document.createElement("span");
-        span.className = "fa fa-star" + (i <= stars ? " checked" : "");
-        starsDiv.appendChild(span);
-      }
-      card.appendChild(starsDiv);
+  idx = (idx + 1) % testimonials.length;
 
-      // Testo recensione
-      const p = document.createElement("p");
-      p.className = "mb-3";
-      p.textContent = comment;
-      card.appendChild(p);
+ 
+}
 
-      // Nome e cognome
-      const h6 = document.createElement("h6");
-      h6.className = "mb-0";
-      h6.textContent = `${first} ${last}`;
-      card.appendChild(h6);
+renderTestimonials();
+setInterval(renderTestimonials, 3000);
 
-      // Monta struttura
-      col.appendChild(card);
-      container.appendChild(col);
-    });
-  }
-
-  // 3) Avvia il rendering dopo che il DOM è pronto
-  document.addEventListener("DOMContentLoaded", renderTestimonials);
+    
