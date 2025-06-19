@@ -28,7 +28,7 @@ public class ReadUpMVC {
     // I miei libri
     @GetMapping("/libri.html")
     public String libri(){
-        return "book"; 
+        return "libri"; 
     }
 
     // Sfide
