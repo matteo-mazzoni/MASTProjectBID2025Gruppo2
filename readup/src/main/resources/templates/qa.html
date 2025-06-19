@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it">
+    
+    <!-- Head -->
+    <head th:replace="~{fragments :: head(
+        title='Q&A • Readup', pageCss='/css/pages/qa_style.css', 
+        extraPageCss='/css/partial/navbar_style.css', 
+        pageJS=null)}">
+    </head>  
+    <!-- / Head -->
+  
+    <body>
+        <!-- Header -->
+        <header th:replace="~{fragments :: header}"></header>
+        <!-- / Header -->
+
+        <div th:fragment="content">
+
+            <!-- Main -->
+            <main>
+            </main>
+            <!-- / Main -->
+
+        </div>
+        
+        <!-- Footer -->
+        <footer th:replace="~{fragments :: footer}"></footer>
+        <!-- / Footer -->
+
+    </body>
+
+</html>
