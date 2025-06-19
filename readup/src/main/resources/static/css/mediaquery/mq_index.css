@@ -1,7 +1,3 @@
-/* ----------------------------------------
-                  MEDIA QUERIES 
------------------------------------------ */
-
 @media (max-width: 768px) {
   .registration-form {
     grid-template-columns: 1fr; 
@@ -11,14 +7,5 @@
   .registration-text,
   .registration-card {
     width: 100%;
-  }
-}
-@media (max-width: 1000px) {
-  .navbar-nav {
-    margin-top: 1rem;
-  }
-
-  form[role="search"] {
-    display: none;
   }
 }

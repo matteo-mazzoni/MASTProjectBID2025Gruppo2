@@ -185,4 +185,15 @@ form[role="search"] input[type="search"]:hover {
 }
 
 
+/* ----------------------------------------
+                  MEDIA QUERIES 
+----------------------------------------- */
+@media (max-width: 1000px) {
+  .navbar-nav {
+    margin-top: 1rem;
+  }
 
+  form[role="search"] {
+    display: none;
+  }
+}
