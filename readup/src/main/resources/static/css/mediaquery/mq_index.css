@@ -1,0 +1,11 @@
+@media (max-width: 768px) {
+  .registration-form {
+    grid-template-columns: 1fr; 
+    padding: 1.5rem;
+  }
+
+  .registration-text,
+  .registration-card {
+    width: 100%;
+  }
+}

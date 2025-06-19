@@ -36,7 +36,7 @@
 }
 
 .navbar-toggler:focus {
-  outline: 2px solid var(--bar_color);
+  outline: 2px solid var(--stripe_color);
   box-shadow: 0 0 0 0.2rem rgba(143, 169, 218, 0.5);
 }
 
@@ -63,7 +63,7 @@
   border-radius: 0.3rem;
 }
 
-.nav-link:hover, .nav-link:focus, nav-link:active {
+.nav-link:hover, .nav-link:focus, .nav-link:active {
   color: var(--links_color);
   text-decoration: none;
   border-bottom: 2px solid var(--bar_color);
@@ -81,7 +81,7 @@
 .dropdown-menu {
   border-radius: 0.5rem;
   border: none;
-  padding: 0.5rem 0;
+  padding: 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: opacity 0.2s ease, transform 0.2s ease;
   opacity: 0;
