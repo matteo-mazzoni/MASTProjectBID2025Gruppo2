@@ -180,6 +180,6 @@ function renderTestimonials() {
 }
 
 renderTestimonials();
-setInterval(renderTestimonials, 3000);
+setInterval(renderTestimonials, 20000);
 
     
