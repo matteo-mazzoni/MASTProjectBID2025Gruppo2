@@ -2,7 +2,11 @@
 <html lang="it">
     
     <!-- Head -->
-    <head th:replace="~{fragments :: head(title='Sfide • Readup', pageCss='/css/pages/booklist_style.css')}"></head>
+    <head th:replace="~{fragments :: head(
+        title='Home • Readup', pageCss='/css/pages/index_style.css', 
+        extraPageCss='/css/partial/carousel_style.css', 
+        pageJS='/js/index.js')}">
+    </head>  
     <!-- / Head -->
   
     <body>
