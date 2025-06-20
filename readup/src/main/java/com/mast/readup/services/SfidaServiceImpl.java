@@ -17,7 +17,6 @@ public class SfidaServiceImpl implements SfidaService {
 
     @Autowired
     private final SfidaRepos sfidaRepos;
-
     @Autowired
     private final UtenteRepos utenteRepos;
 
@@ -52,7 +51,7 @@ public class SfidaServiceImpl implements SfidaService {
             throw new IllegalArgumentException("L'ID del creatore non può essere null.");
         }
 
-        // Trova l'utente creatore
+        // Find the creator user by ID
         Utente creatore = utenteRepos.findById(idCreatore)
                 .orElseThrow(() -> new IllegalArgumentException("Utente creatore con ID " + idCreatore + " non trovato."));
         Sfida sfida = new Sfida();
@@ -66,15 +65,42 @@ public class SfidaServiceImpl implements SfidaService {
 
     @Override
     public void rimuoviSfida(Long codiceSfida) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'rimuoviSfida'");
+        Sfida sfida = sfidaRepos.findById(codiceSfida)
+                .orElseThrow(() -> new IllegalArgumentException("Sfida con ID " + codiceSfida + " non trovata."));
+        sfidaRepos.delete(sfida);
     }
 
     @Override
     public Sfida aggiornaSfida(Long codiceSfida, String nomeSfida, String descrizione, LocalDate dataInizio,
             LocalDate dataFine) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'aggiornaSfida'");
+        Sfida sfida = sfidaRepos.findById(codiceSfida)
+                .orElseThrow(() -> new IllegalArgumentException("Sfida con ID " + codiceSfida + " non trovata."));
+
+        if (nomeSfida != null && !nomeSfida.trim().isEmpty()) {
+            sfida.setNomeSfida(nomeSfida);
+        } else if (nomeSfida != null) {
+            throw new IllegalArgumentException("Il nome della sfida non può essere vuoto.");
+        }
+
+        if (descrizione != null) {
+            sfida.setDescrizioneSfida(descrizione);
+        }
+
+        LocalDate currentDataInizio = (dataInizio != null) ? dataInizio : sfida.getDataInizio();
+        LocalDate currentDataFine = (dataFine != null) ? dataFine : sfida.getDataFine();
+
+        if (currentDataInizio.isAfter(currentDataFine)) {
+            throw new IllegalArgumentException("La data di inizio non può essere successiva alla data di fine.");
+        }
+
+        if (dataInizio != null) {
+            sfida.setDataInizio(dataInizio);
+        }
+        if (dataFine != null) {
+            sfida.setDataFine(dataFine);
+        }
+
+        return sfidaRepos.save(sfida);
     }
 
     @Override
@@ -88,7 +114,7 @@ public class SfidaServiceImpl implements SfidaService {
         if (sfida.getNomePartecipanti() == null) {
             sfida.setNomePartecipanti(new ArrayList<>());
         }
-
+        // verifies if the nickname of the user is not null or empty
         String nicknameUtente = utente.getNickname();
         if (nicknameUtente == null || nicknameUtente.trim().isEmpty()) {
             throw new IllegalArgumentException("Il nickname dell'utente non può essere vuoto per la partecipazione alla sfida.");
@@ -97,8 +123,6 @@ public class SfidaServiceImpl implements SfidaService {
         if (LocalDate.now().isAfter(sfida.getDataFine())) {
             throw new IllegalStateException("Impossibile partecipare, la sfida è già terminata per data.");
         }
-
-        // Controlla se l'utente è già partecipante usando il nickname
         if (sfida.getNomePartecipanti().contains(nicknameUtente)) {
             throw new IllegalArgumentException("L'utente con nickname '" + nicknameUtente + "' è già un partecipante di questa sfida.");
         }
@@ -115,9 +139,8 @@ public class SfidaServiceImpl implements SfidaService {
         Utente utente = utenteRepos.findById(idUtente)
                 .orElseThrow(() -> new IllegalArgumentException("Utente con ID " + idUtente + " non trovato."));
 
-        // Assicurati che la lista dei partecipanti sia inizializzata (dovrebbe esserlo)
         if (sfida.getNomePartecipanti() == null) {
-            sfida.setNomePartecipanti(new ArrayList<>()); // Inizializza per sicurezza, anche se non dovrebbe essere null a questo punto
+            sfida.setNomePartecipanti(new ArrayList<>());
         }
 
         String nicknameUtente = utente.getNickname();
@@ -125,7 +148,6 @@ public class SfidaServiceImpl implements SfidaService {
             throw new IllegalArgumentException("Il nickname dell'utente non può essere vuoto per l'abbandono della sfida.");
         }
 
-        // Controlla se l'utente è effettivamente un partecipante usando il nickname
         if (!sfida.getNomePartecipanti().contains(nicknameUtente)) {
             throw new IllegalArgumentException("L'utente con nickname '" + nicknameUtente + "' non è un partecipante di questa sfida.");
         }
@@ -134,11 +156,5 @@ public class SfidaServiceImpl implements SfidaService {
         sfida.setNumPartecipanti(sfida.getNomePartecipanti().size());
 
         return sfidaRepos.save(sfida);
-    }
-
-    @Override
-    public Sfida getDatiSfida(Long codiceSfida) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDatiSfida'");
     }
 }

@@ -15,5 +15,4 @@ public interface SfidaService {
     Sfida aggiornaSfida(Long codiceSfida, String nomeSfida, String descrizione, LocalDate dataInizio, LocalDate dataFine);
     Sfida partecipaSfida(Long codiceSfida, Long idUtente);
     Sfida abbandonaSfida(Long codiceSfida, Long idUtente);
-    Sfida getDatiSfida(Long codiceSfida);
 }
