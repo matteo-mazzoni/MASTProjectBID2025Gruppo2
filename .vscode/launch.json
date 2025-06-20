@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ReadupApplication<readup>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/MASTProjectBID2025Gruppo2/readup",
+            "mainClass": "com.mast.readup.ReadupApplication",
+            "projectName": "readup",
+            "args": ""
+        }
+    ]
+}
