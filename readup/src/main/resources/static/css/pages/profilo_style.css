@@ -1,0 +1,57 @@
+.profile-photo-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 2rem; 
+  max-width: 1200px;
+}
+
+.section-spacing {
+  margin-top: 1rem; 
+}
+
+.profile-photo-card {
+  background-color: var(--bg_card_color);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(39, 52, 99, 0.3);
+  text-align: center;
+  width: 300px;
+  margin-left: 3rem; 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-photo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(39, 52, 99, 0.4);
+}
+
+.profile-photo {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--stripe_color);
+  align-content: center;
+  margin: 0 auto 1.5rem auto;
+}
+
+.upload-btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  color: var(--links_color);
+  border: 2px solid var(--links_color);
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.upload-btn:hover {
+  background: var(--links_color);
+  color: var(--background_color);
+}
+
+input[type="file"] {
+  display: none;
+}

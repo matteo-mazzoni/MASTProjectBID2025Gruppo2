@@ -18,6 +18,21 @@
 
             <!-- Main -->
             <main>
+               <div class="section-spacing">
+                <div class="profile-photo-wrapper">
+                    <div class="profile-photo-card">
+                    <img th:src="@{/profile/image/{id}(id=${userId})}" class="profile-photo" alt="Foto profilo">
+                    <form th:action="@{/profile/upload}" method="post" enctype="multipart/form-data">
+                        <label for="imageUpload" class="upload-btn">Cambia immagine</label>
+                        <input id="imageUpload" type="file" name="image" accept="image/*" onchange="this.form.submit()" />
+                    </form>
+                    </div>
+                </div>
+                </div>
+
+
+        
+
             </main>
             <!-- / Main -->
 
