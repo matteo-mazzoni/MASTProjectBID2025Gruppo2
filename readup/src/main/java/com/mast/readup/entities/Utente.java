@@ -57,4 +57,8 @@ public class Utente {
     // User loggedIn
     @Column(name = "loggedIn", nullable = false)
     private boolean loggedIn;
+
+    // User profile image, can be null
+    @Column(name = "profile_image", nullable = true)
+    private byte[] profileImage;
 }
