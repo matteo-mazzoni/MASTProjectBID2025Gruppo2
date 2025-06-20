@@ -1,3 +1,8 @@
+/* Navbar CSS - Styles for carousel component */
+/* Version: 1.0.0 */
+/* Author: Romina Trazzi */
+
+
 /* ----------------------------------------
           NAVBAR GENERAL STRUCTURE
 ----------------------------------------- */
@@ -37,7 +42,7 @@
 
 .navbar-toggler:focus {
   outline: 2px solid var(--stripe_color);
-  box-shadow: 0 0 0 0.2rem rgba(143, 169, 218, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5);
 }
 
 /* ----------------------------------------
@@ -122,7 +127,7 @@ form[role="search"] input[type="search"] {
   line-height: 1.2rem;
   padding: 0.75rem 0.45rem;
   border: 1px solid var(--stripe_color);
-  border-radius: 0.5rem !important;
+  border-radius: 0.5rem;
 }
 
 form[role="search"] input[type="search"]:focus,
@@ -131,57 +136,12 @@ form[role="search"] input[type="search"]:hover {
   border: 1px solid var(--stripe_color)
 }
 
-
-
 .input-group {
   align-items: center;
 } 
 
 .input-group i {
   padding-right: 0.5rem;
-}
-
-/* ----------------------------------------
-              SEARCH FORM BUTTON
------------------------------------------ */
-
-.btn-outline-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  transition: color .2s ease-in-out, background-color .2s ease-in-out,
-  border-color .2s ease-in-out, box-shadow .2s ease-in-out;
-  
-  --bs-btn-padding-x: 0.75rem;
-  --bs-btn-padding-y: 0.45rem;
-  
-  --bs-btn-font-weight: 600;
-  --bs-btn-font-family: 'Inter', sans-serif;
-  --bs-btn-font-size: 1rem;
-  --bs-btn-line-height: 1.2rem;
-
-  --bs-btn-color: var(--text_color); 
-  --bs-btn-bg: var(--stripe_color);
-  --bs-btn-border-color: var(--stripe_color); 
-  --bs-btn-border-width: 2px;
-  --bs-btn-border-radius: 0.5rem;
-
-  /* BTN Active */
-  --bs-btn-active-color: var(--background_color);
-  --bs-btn-active-bg: var(--bg_card_color); 
-  --bs-btn-active-border-color: var(--bg_card_color);
-
-  /* BTN Focus */
-  --bs-btn-focus-shadow-rgb: 49, 95, 166; 
-  --bs-btn-focus-box-shadow: 0 0 0 0.2rem rgba(49, 95, 166, 0.3);
-  --bs-btn-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-  
-.btn:hover {
-  --bs-btn-hover-color: var(--background_color);
-  --bs-btn-hover-bg: var(--bar_color); 
-  --bs-btn-hover-border-color: var(--bar_color);
 }
 
 

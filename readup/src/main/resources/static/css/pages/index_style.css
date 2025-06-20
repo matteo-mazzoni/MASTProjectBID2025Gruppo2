@@ -1,3 +1,8 @@
+/* Index CSS - Styles for the index page */
+/* Version: 1.0.0 */
+/* Author: Romina Trazzi */
+
+
 hr {
   margin: 2rem 0 3rem 0;
 }
@@ -20,7 +25,7 @@ hr {
   padding: 0 2rem;
   background: var(--stripe_color);
   border-radius: 1rem;
-  min-width: 550px;
+  /* min-width: 550px; */
   margin: 0 auto;
 }
 
@@ -101,6 +106,14 @@ hr {
 }
 .registration-card form button:active {
   transform: translateY(0);
+}
+
+form a {
+  color: var(--bs-link-color);
+}
+
+form a:hover, form a:focus {
+  text-decoration: underline;
 }
 
 

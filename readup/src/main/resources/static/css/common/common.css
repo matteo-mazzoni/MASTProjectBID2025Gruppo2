@@ -1,3 +1,8 @@
+/* Common CSS - Shared base styles and utility classes for the project */
+/* Version: 1.0.0 */
+/* Author: Romina Trazzi */
+
+
 /*=============================================
     =           COLOR PALETTE       =
 =============================================*/
@@ -202,6 +207,60 @@ footer p {
     color: var(--text_color);
 }
 
+
+/*================================================
+            =            BUTTONS        =
+================================================*/
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color .2s ease-in-out, background-color .2s ease-in-out,
+  border-color .2s ease-in-out, box-shadow .2s ease-in-out;
+  
+  --bs-btn-padding-x: 0.75rem;
+  --bs-btn-padding-y: 0.45rem;
+  
+  --bs-btn-font-weight: 600;
+  --bs-btn-font-family: 'Inter', sans-serif;
+  --bs-btn-font-size: 1rem;
+  --bs-btn-line-height: 1.2rem;
+
+  --bs-btn-color: var(--text_color); 
+  --bs-btn-bg: var(--stripe_color);
+  --bs-btn-border-color: var(--stripe_color); 
+  --bs-btn-border-width: 2px;
+  --bs-btn-border-radius: 0.5rem;
+
+  /* BTN Active */
+  --bs-btn-active-color: var(--background_color);
+  --bs-btn-active-bg: var(--bg_card_color); 
+  --bs-btn-active-border-color: var(--bg_card_color);
+
+  /* BTN Focus */
+  --bs-btn-focus-shadow-rgb: 49, 95, 166; 
+  --bs-btn-focus-box-shadow: 0 0 0 0.2rem rgba(49, 95, 166, 0.3);
+  --bs-btn-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+  
+.btn:hover {
+  --bs-btn-hover-color: var(--background_color);
+  --bs-btn-hover-bg: var(--bar_color); 
+  --bs-btn-hover-border-color: var(--bar_color);
+}
+
+
+
+
+
+
+
+
+
+
+
 /*=============================================
 =               Section SCROLLBARS          =
 ==============================================*/
@@ -257,7 +316,21 @@ footer p {
 /*=====  End of Section SCROLLBARS  ======*/  
 
 
+@media (max-width: 768px) {
+    
+    .primary_title {
+        font-size: 2.2rem;
+    }
+
+    .secondary_title {
+       font-size: 1.5rem;
+    }
+
+    .description {
+        font-size: 1rem;
+    }
 
 
+}
 
 
