@@ -114,7 +114,7 @@ public class SfidaServiceImpl implements SfidaService {
         if (sfida.getNomePartecipanti() == null) {
             sfida.setNomePartecipanti(new ArrayList<>());
         }
-
+        // verifies if the nickname of the user is not null or empty
         String nicknameUtente = utente.getNickname();
         if (nicknameUtente == null || nicknameUtente.trim().isEmpty()) {
             throw new IllegalArgumentException("Il nickname dell'utente non può essere vuoto per la partecipazione alla sfida.");
