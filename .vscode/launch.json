@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ReadupApplication<readup>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.mast.readup.ReadupApplication",
+            "projectName": "readup",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
