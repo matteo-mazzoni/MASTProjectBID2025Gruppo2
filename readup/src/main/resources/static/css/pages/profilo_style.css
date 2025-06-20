@@ -1,12 +1,21 @@
 .profile-photo-wrapper {
   display: flex;
   justify-content: flex-start;
-  padding-top: 2rem; 
-  max-width: 1200px;
+  flex-wrap: nowrap;
+  padding-top: 2rem;
+  width: 100%;
+  gap: 2rem;
+}
+
+.profile-description-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  flex-grow: 1;
 }
 
 .section-spacing {
-  margin-top: 1rem; 
+  margin-top: 2rem; 
 }
 
 .profile-photo-card {
@@ -26,32 +35,74 @@
 }
 
 .profile-photo {
+  display: block;
+  margin: 0 auto 1.5rem auto;
   width: 150px;
   height: 150px;
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid var(--stripe_color);
   align-content: center;
-  margin: 0 auto 1.5rem auto;
 }
 
 .upload-btn {
-  display: inline-block;
-  padding: 0.6rem 1.2rem;
-  font-size: 0.95rem;
-  color: var(--links_color);
-  border: 2px solid var(--links_color);
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--links_color);
+  color: var(--background_color);
+  border: none;
   border-radius: 6px;
-  background: transparent;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .upload-btn:hover {
-  background: var(--links_color);
-  color: var(--background_color);
+ background-color: var(--text_color);
+  transform: translateY(-2px);
+}
+
+.upload-btn:active {
+  transform: translateY(0);
 }
 
 input[type="file"] {
   display: none;
+}
+
+
+.profile-section-card {
+  background-color: var(--bg_card_color);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(39, 52, 99, 0.3);
+  text-align: center;
+  margin-left: 3rem; 
+  margin-right: 3rem; 
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media screen and (max-width: 767px) {
+  .profile-photo-wrapper {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+  }
+
+  .profile-photo-card,
+  .profile-section-card {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .profile-description-column {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .profile-photo {
+    margin: 0 auto 1.5rem auto;
+  }
 }
