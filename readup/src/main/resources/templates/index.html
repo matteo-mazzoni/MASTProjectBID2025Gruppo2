@@ -5,6 +5,7 @@
     <head th:replace="~{fragments :: head(
         title='Home • Readup', pageCss='/css/pages/index_style.css', 
         extraPageCss='/css/partial/carousel_style.css', 
+        mqPageCss='/css/mediaquery/mq_index.css',
         pageJS='/js/index.js')}">
     </head>  
     <!-- / Head -->
@@ -20,7 +21,7 @@
             <!-- Main -->
             <main>
                 
-                <div class="tagline text-center py-5">
+                <div class="col-12 tagline text-center py-5">
                     <h1 class="primary_title">Benvenuto in ReadUp</h1>
                     <h3 class="secondary_title">Un libro alla volta, un punto alla volta</h3>
                     <h6 class="description">La piattaforma dove ogni libro diventa un’esperienza condivisa.</h6>
@@ -28,17 +29,17 @@
                 </div>    
 
                 <hr>
-
+                
                 <div class="container_90">
-
+    
                     <!-- Carousel section -->
                     <section id="top-books-carousel">
-                        <div class="carousel_container">
+                        <div class="carousel_container container-fluid">
                             
-                            <h2 class="mb-4 text-center">I libri più letti della settimana</h2>
+                            <h2 class="mb-4 text-center">I libri consigliati della settimana</h2>
                             
                             <section class="slider_carousel">
-
+    
                                 <!-- Arrow button prev -->
                                 <div class="arrow_button_container">
                                     <button class="slide-arrow carousel-control-prev btn-outline-secondary" id="slide-arrow-prev">  
@@ -46,7 +47,7 @@
                                     </button>
                                 </div>
                     
-
+    
                                 <!-- Slide items -->
                                 <ul class="slides_container" id="slides_container">
                                     
@@ -55,8 +56,8 @@
                                         <h5 class="card-title pt-4">Titolo 1</h5>
                                         <p class="card-text text-muted mb-4">Autore 1</p>
                                         <img src="https://bookstoreromanceday.org/wp-content/uploads/2020/08/book-cover-placeholder.png" alt="book placeholder">
-                                        <a href="#" class="btn btn-sm btn-outline-secondary mb-2">Aggiungi ai tuoi libri preferiti</a>
-                                        <a href="#" class="btn btn-sm btn-outline-secondary mb-4">Aggiungi ad una booklist</a>
+                                        <a href="#" class="btn btn-sm btn-action mb-2">Aggiungi ai tuoi libri preferiti</a>
+                                        <a href="#" class="btn btn-sm btn-action mb-4">Aggiungi ad una booklist</a>
                                     </li>
                                     
                                     <!-- 2nd Book -->
@@ -64,53 +65,53 @@
                                         <h5 class="card-title pt-4">Titolo 1</h5>
                                         <p class="card-text text-muted mb-4">Autore 1</p>
                                         <img src="https://blocks.astratic.com/img/user-img-big.png" class="card-img-top" alt="book placeholder">
-                                        <a href="#" class="btn btn-sm btn-outline-secondary mb-2">Aggiungi ai tuoi libri preferiti</a>
-                                        <a href="#" class="btn btn-sm btn-outline-secondary mb-4">Aggiungi ad una booklist</a>
+                                        <a href="#" class="btn btn-sm btn-action mb-2">Aggiungi ai tuoi libri preferiti</a>
+                                        <a href="#" class="btn btn-sm btn-action mb-4">Aggiungi ad una booklist</a>
                                     </li>
-
+    
                                     <!-- 3rd Book -->
                                     <li class="slide">
                                         <h5 class="card-title pt-4">Titolo 1</h5>
                                         <p class="card-text text-muted mb-4">Autore 1</p>
                                         <img src="https://bookstoreromanceday.org/wp-content/uploads/2020/08/book-cover-placeholder.png" class="card-img-top" alt="book placeholder">
-                                        <a href="#" class="btn btn-sm btn-outline-secondary mb-2">Aggiungi ai tuoi libri preferiti</a>
-                                        <a href="#" class="btn btn-sm btn-outline-secondary mb-4">Aggiungi ad una booklist</a>
+                                        <a href="#" class="btn btn-sm btn-action mb-2">Aggiungi ai tuoi libri preferiti</a>
+                                        <a href="#" class="btn btn-sm btn-action mb-4">Aggiungi ad una booklist</a>
                                     </li>
-
+    
                                     <!-- 4th Book -->
                                     <li class="slide">
                                         <h5 class="card-title pt-4">Titolo 1</h5>
                                         <p class="card-text text-muted mb-4">Autore 1</p>
                                         <img src="https://blocks.astratic.com/img/general-img-landscape.png" class="card-img-top" alt="book placeholder">
-                                        <a href="#" class="btn btn-sm btn-outline-secondary mb-2">Aggiungi ai tuoi libri preferiti</a>
-                                        <a href="#" class="btn btn-sm btn-outline-secondary mb-4">Aggiungi ad una booklist</a>
+                                        <a href="#" class="btn btn-sm btn-action mb-2">Aggiungi ai tuoi libri preferiti</a>
+                                        <a href="#" class="btn btn-sm btn-action mb-4">Aggiungi ad una booklist</a>
                                     </li>
                                 </ul> 
                     
-
+    
                                 <!-- Arrow button next -->
                                 <div class="arrow_button_container">
                                     <button class="slide-arrow carousel-control-next btn-outline-secondary" id="slide-arrow-next"> 
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     </button>
                                 </div>
-
+    
                             </section>
-
+    
                         </div>
                     </section>
                     <!-- / Carousel section -->
-
+    
                     <!-- Registration form section-->
                     <section class="registration-form">
                         <div class="registration-text">
                             <h1>Scopri un nuovo modo di leggere</h1>
                             <p>Con ReadUp trasformi ogni pagina in un’esperienza social.</p>
                         </div>
-
+    
                         <div class="registration-card">
                             <h5>Registrati gratuitamente in meno di 1 minuto</h5>
-                            <form th:action="@{/register}" method="post">
+                            <form th:action="@{/register}" method="get">
                                 <input type="text" id="username" name="username" placeholder="Username" autofocus/>
                                 <input type="email" name="email" placeholder="Email"/>
                                 <input type="password" name="password" placeholder="Password" />
@@ -120,11 +121,11 @@
                         </div>
                     </section>     
                     <!-- / Registration form section -->
-
+    
                     <!-- Testimonial section -->
-                    <section class="testimonials py-5">
+                    <section class="col-12 testimonials py-5">
                         <h4 class="text-center secondary-title mb-4">Dicono di noi</h4>
-
+    
                         <div class="container text-center">
                             <div id="sliderContent" class="testimonial-item">
                         
@@ -135,11 +136,13 @@
                         
                     </section>
                     <!-- / Testimonial section -->
-
+    
                 </div>
                 
             </main>
             <!-- / Main -->
+                
+                
         </div>
                            
         

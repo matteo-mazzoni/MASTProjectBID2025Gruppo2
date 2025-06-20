@@ -4,11 +4,18 @@
             "type": "java",
             "name": "Spring Boot-ReadupApplication<readup>",
             "request": "launch",
+<<<<<<< HEAD
+            "cwd": "${workspaceFolder}/MASTProjectBID2025Gruppo2/readup",
+            "mainClass": "com.mast.readup.ReadupApplication",
+            "projectName": "readup",
+            "args": ""
+=======
             "cwd": "${workspaceFolder}",
             "mainClass": "com.mast.readup.ReadupApplication",
             "projectName": "readup",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+>>>>>>> a84218b431138afac3cfd84faadb2cf67257d7c5
         }
     ]
 }

@@ -10,36 +10,36 @@ public class ReadUpMVC {
     // Home
     @GetMapping("/")
     public String home(Model model) {
-        return "index";        
+        return "index";
     }
 
     // Profilo
     @GetMapping("/profilo.html")
     public String profilo(Model model) {
-        return "profilo"; 
+        return "profilo";
     }
 
     // Le mie Booklist
     @GetMapping("/booklist.html")
     public String booklist(Model model) {
-        return "booklist"; 
+        return "booklist";
     }
 
     // I miei libri
     @GetMapping("/libri.html")
     public String libri(){
-        return "book"; 
+        return "book";
     }
 
     // Sfide
     @GetMapping("/sfide.html")
     public String sfide(Model model) {
-        return "sfide"; 
+        return "sfide";
     }
 
     // Question and answers
     @GetMapping("/qa.html")
     public String qa() {
-        return "qa"; 
+        return "qa";
     }
 }
