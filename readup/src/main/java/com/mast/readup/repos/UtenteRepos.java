@@ -7,5 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UtenteRepos extends JpaRepository<Utente, Long> {
+
+    // Derived query for form validation
+    boolean existsByNickname(String nickname);
+    boolean existsByEmail(String email);
     
 }

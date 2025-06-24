@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mast.readup.entities.Utente;
@@ -17,10 +18,12 @@ import jakarta.validation.Valid;
 @Controller
 public class ReadUpMVC {
 
-    // Home
+    // Home + Register
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("Utente", new Utente());
+        if (!model.containsAttribute("Utente")) {
+            model.addAttribute("Utente", new Utente());
+        }
         return "index";
     }
 
@@ -33,33 +36,59 @@ public class ReadUpMVC {
     @PostMapping("/register")
     public String processRegister(@Valid @ModelAttribute("Utente") Utente utente,
     BindingResult result, Model model, RedirectAttributes redirectAttributes) {
-
-        // Stampa dei dati ricevuti dal form
-        System.out.println("Nickname: " + utente.getNickname());
-        System.out.println("Email: " + utente.getEmail());
-        System.out.println("Password: " + utente.getPassword());
-        System.out.println("LoggedIn: " + utente.isLoggedIn());
-
-        // //  Checking for duplicate methods 
-        // if (utenteService.nicknameEsistente(utente.getNickname())) {
-        //     result.rejectValue("nickname", null, "Nickname già in uso");
-        // }
-        // if (utenteService.emailEsistente(utente.getEmail())) {
-        //     result.rejectValue("email", null, "Email già registrata");
-        // }
-
-        if (result.hasErrors()) {
-            return "index"; 
+    
+        // Form validation server-side for duplicate nickname and email
+        if (!result.hasFieldErrors("nickname") && utenteService.nicknameEsistente(utente.getNickname())) {
+              
+            result.rejectValue(
+                "nickname",
+                "error.nickname.duplicate",
+                "ATTENZIONE: Questo username è già in uso! RIPROVA."
+            );
+        }
+        
+        if (!result.hasFieldErrors("email") && utenteService.emailEsistente(utente.getEmail())) {
+             
+            result.rejectValue(
+                "email",
+                "error.email.duplicate",
+                "ATTENZIONE: Questa email è già registrata! RIPROVA."
+            );
         }
 
+        // If there are any other errors, redirect to the registration page (home)
+        if (result.hasErrors()) {
+            return "index";
+        }
+       
+        // If there are no errors, register the user into the database and set the login property to "true"
         utente.setLoggedIn(true);
-
         utenteService.aggiungiUtente(utente);
 
-        redirectAttributes.addFlashAttribute("successMessage", "La tua registrazione avvenuta con successo, benvenuto" + utente.getNickname() + "!");
+        // Messaggio di successo (mostro solo se presente)                           
+        redirectAttributes.addFlashAttribute("successMessage",
+            "Benvenuto “" + utente.getNickname() + "”! Registrazione avvenuta con successo."
+        );
+
         return "redirect:/";
-    
     }
+
+    // User logout 
+   @PostMapping("/logout")
+    public String logout(SessionStatus sessionStatus, RedirectAttributes ra, @ModelAttribute("Utente") Utente utente) {
+        
+        utente.setLoggedIn(false);
+        
+        sessionStatus.setComplete();
+     
+        ra.addFlashAttribute("successMessage", "Logout avvenuto con successo.");
+        return "redirect:/";
+    }
+    
+
+
+
+
 
     // Profilo
     @GetMapping("/profilo.html")

@@ -258,9 +258,13 @@ footer p {
 
 
 .error {
-    color: red;
+    text-align: center;
+    color: var(--text_color);
+    font-weight: 700;
     font-size: 0.9em;
-    margin-top: 5px;
+    margin-bottom: 1rem;
+    text-decoration: underline;
+  
 }
 
 
