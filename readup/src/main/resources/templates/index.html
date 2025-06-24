@@ -111,11 +111,19 @@
     
                         <div class="registration-card">
                             <h5>Registrati gratuitamente in meno di 1 minuto</h5>
-                            <form th:action="@{/register}" method="get">
-                                <input type="text" id="username" name="username" placeholder="Username" autofocus/>
-                                <input type="email" name="email" placeholder="Email"/>
-                                <input type="password" name="password" placeholder="Password" />
+                            <form th:action="@{/register}" th:object="${Utente}" method="post">
+                                <!-- th:field binds the field to the model field of th:object class-->
+                                <input type="text" id="nickname" name="nickname" placeholder="Username" th:field="*{nickname}" 
+                                pattern="[a-zA-Z0-9]{3,20}" title="Il tuo nickname può contenere solo lettere e numeri, minimo 3, massimo 20 caratteri"
+                                required autofocus/>
+                                <div th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="error"></div>
+                                <input type="email" name="email" placeholder="Email" th:field="*{email}" required/>
+                                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
+                                <input type="password" name="password" placeholder="Password" th:field="*{password}" pattern="(?=.*[A-Z])(?=.*\d).{8,}"
+                                title="Inserisci una password con minimo 8 caratteri e almeno una lettera maiuscola e un numero" required/>
+                                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
                                 <button type="submit">Registrati</button>
+                                <p th:if="${successMessage}" th:text="${successMessage}" class="success-message"></p>
                                 <p class="text-center">Hai già un account? <a th:href="@{/login}">Accedi</a> </p>
                             </form>
                         </div>
