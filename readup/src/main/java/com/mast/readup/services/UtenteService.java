@@ -19,4 +19,7 @@ public interface UtenteService {
     void eliminaUtente(long idUtente);
     void saveProfileImage(String name, MultipartFile file);
     byte[] getProfileImage(Long idUtente);
+
+    boolean nicknameEsistente(String nickname);
+    boolean emailEsistente(String email);
 }

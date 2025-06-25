@@ -209,7 +209,7 @@ footer p {
 
 
 /*================================================
-            =            BUTTONS        =
+         =            BUTTONS        =
 ================================================*/
 
 .btn-action {
@@ -252,12 +252,20 @@ footer p {
 }
 
 
+/*================================================
+         =           TEXT ERROR       =
+================================================*/
 
 
-
-
-
-
+.error {
+    text-align: center;
+    color: var(--text_color);
+    font-weight: 700;
+    font-size: 0.9em;
+    margin-bottom: 1rem;
+    text-decoration: underline;
+  
+}
 
 
 

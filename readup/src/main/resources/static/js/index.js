@@ -2,140 +2,124 @@
         =            Carousel Selection            =
 ========================================================*/
 
-// Selezionare il container delle slide
+// It selects the slides container
 let slideContainer = document.getElementById("slides_container");
 
-//  Selezionare le slide 
-let slideArray = document.querySelectorAll(".slide"); // Crea una NodeList
+// It selects all the slides and create a Nodelist
+let slideArray = document.querySelectorAll(".slide"); 
 
-// Selezionare gli arrow button
+// It selects the arrow buttons
 let leftArrow = document.getElementById("slide-arrow-prev");
 let rightArrow = document.getElementById("slide-arrow-next");
 
 
 /*===================================================
-            =           Variables           =
+          =           Variables           =
 ====================================================*/
 
-// Impostiamo un valore indice per la slide corrente e il numero massimo di slide
+/* The index of current slide is 0 by default, while the max Index slide is the lenght of the Nodelist -1.
+The number of all the slide is 0, 1, 2, 3 = 4. But the maximum index that slideArray can reach is 3 (last number).
+Both the values of currentIndexSlide and maxIndexSlide refer to the index of the slideArray.*/
+
 let currentIndexSlide = 0;
 let maxIndexSlide = slideArray.length -1;  // 4 - 1 = 3
 
-/* le slide sono 0 1 2 3, cioè 4. Il valore massimo che l'indice dello slideArray però può raggiungere è 3. 
-Sia il valore di currentIndexSlide che il valore di maxIndexSlide si riferiscono all'indice dell'array slideArray*/
 
 
 /*==================================================
           =            Function            =
 ====================================================*/
 
-/* UTILIZZIAMO LA PROPRIETA' SCROLLLEFT PER SPOSTARE LO SLIDER. */
+/* SCROLLLEFT PROPERTY allows to move an element horizontally (single slide) */
 
-/* element.scrollLeft imposta il numero di pixel di spostamento orizzontale di un elemento 
-prendendo come punto di riferimento iniziale il suo margine sinistro. */
+/* element.scrollLeft is a read-only property that returns the number of pixels that 
+an element is scrolled horizontally starting from his left margin */
 
-// Impostiamo la proprietà scrollLeft a 0 per far iniziare il carosello sempre dalla prima slide
+/* If slides container scrolleft is 0, the carousel is at the leftmost position and this mean 
+that the it will start always from the first slide. */
 slideContainer.scrollLeft = 0;
 
-
-/* Poiché desideriamo visualizzare la slide seguente quando viene cliccato l'arrow button dx, dobbiamo spostare
-il contenitore delle slide di un numero di pixel uguale alla larghezza di una singola slide (q.tà positiva, indice da 0 => 3). */
+/* To move towards the next slide, we need to increase the scrollLeft value by the width of the slide when the 
+arrow button is clicked (positive quantity, index from 0 to 3) */
 
 rightArrow.addEventListener("click", () => {
 
-  /* Due casi: 
-  
-  1. currentIndexSlide vale 3 (cioè il massimo possibile, ULTIMA SLIDE), bisogna tornare alla slide 0
-  2. currentIndexSlide vale 0, 1, 2 e bisogna andare avanti di una slide */ 
+  /* Now we have two cases:
 
-  /* Se current index slide vale 3 => imposta la proprietà scrollLeft a 0 (= torna alla slide 0) e l'indice della slide corrente a 0 */
+  1. currentIndexSlide value is 3 (the maximum possible, it corresponds to the last slide and at the next click
+  we will go back to the first slide)
+  2. currentIndexSlide value is 0, 1, 2 (0 is the minimum possible, it corresponds to the first slide and at the next click
+  we will go forward by one slide to the third slide) */
+  
+  // If currentIndexSlide value is 3 => set scrollleft property to 0 (= comes back to the 0 index slide - the first)
   if (currentIndexSlide === maxIndexSlide) {
     slideContainer.scrollLeft = 0; 
     currentIndexSlide = 0;
     
-  /* Se current index slide vale 0, 1, 2 */
+  /* If currentIndexSlide value is 0, 1, 2 => increase scrollleft property by the width of the slide */
   } else {
     
-    // n. di pixel pari alla larghezza della slide corrente
+    // get the pixel width of the current slide
     const slideWidth = slideArray[currentIndexSlide].clientWidth; 
 
-    // imposta la proprietà scrollLeft pari a sé stessa + la larghezza della slide corrente (= sposta di +1 il contenitore slide)
+    // set scrollleft property to itself + the width of the current slide (it moves the slide conteiner by 1 slide forwards)
     slideContainer.scrollLeft += slideWidth; 
 
-    // aumenta di 1 il valore dell'indice della slide corrente 
+    // Increment the current slide index by 1
     currentIndexSlide++; 
   }
-
-  console.log("Current Index Slide:", currentIndexSlide);
-  console.log("Scroll Left Value:", slideContainer.scrollLeft);
-
 });
 
-/* Ripetiamo col pulsante sinistro, dimimnuendo lo scrollleft (q.tà negativa, indice da 3 => 0) */
+/* Repeat the same logic for the left arrow button, this time decreasing scrollLeft
+(negative quantity, index goes from 3 down to 0) */
 
 leftArrow.addEventListener("click", () => {
 
-  /* Due casi: 
+  /* Two cases:
+
+  1. If currentIndexSlide value is 0 (the minimum possible, it corresponds to the first slide), at the next click we will move to the last slide (index 3)
+  2. If currentIndexSlide is 1, 2, or 3, move one slide backward */
   
-  1. currentIndexSlide vale 0 (cioè il minimo possibile, PRIMA SLIDE), bisogna tornare all'ultima slide con indice 3
-  2. currentIndexSlide vale 1, 2, 3 e bisogna andare indietro di una slide */ 
-  
-  // n. di pixel pari alla larghezza della slide corrente
+  // get the pixel width of the current slide
   const slideWidth = slideArray[currentIndexSlide].clientWidth;  
 
-  /* Se current index slide vale 0, sposta il contenitore delle slide di -1 slide per visualizzare l'ultima slide 
-  e imposta l'indice della slide corrente uguale a quello massimo */
+  // If the index of the slide container value is 0, move it to -1 slide and set current slide index to the maximum (3). 
   if (currentIndexSlide === 0) {
 
-    // totale larghezza contenitore slide: singola larghezza corrente * numero totale delle slide (quindi indice array + 1)
+    // calculate total slide container width as: current slide width * total number of slides (so array index + 1, because their width is equal)
     totWidthContainer = slideWidth * (maxIndexSlide + 1);
 
-    // imposta la proprietà scrolleft a: totale larghezza contenitore - larghezza slide corrente (che è sempre la prima)
+    // set scrollLeft property to: total width of slides container - the width of the current slide (that is always the first)
     slideContainer.scrollLeft = totWidthContainer - slideWidth;  
     
-    // imposta l'indice della slide corrente all'ultima slide, ovvero 3
+    // set current slide index to the maximum (3)
     currentIndexSlide = maxIndexSlide; 
     
-  /* Se current index slide vale 1, 2, 3 */
+  /* If the current index slide value is 1, 2, 3 */
   } else {
     
-    // imposta la proprietà scrollLeft pari a sé stessa - la larghezza della slide corrente (= sposta di -1 il contenitore slide)
+    // set scrollLeft property to itself - the width of the current slide (it moves the slide container by 1 slide backwards)
     slideContainer.scrollLeft -= slideWidth; 
 
-    // diminuisci di 1 il valore dell'indice della slide corrente
+    // Decrease the current slide index by 1
     currentIndexSlide--; 
   }
-
-  console.log("Current Index Slide:", currentIndexSlide);
-  console.log("Scroll Left Value:", slideContainer.scrollLeft);
 
 });
 
 
-/* UTILIZZIAMO UN EVENT LISTENER CHE OSSERVA IL RESIZE DELLA FINESTRA DEL BROWSER TRAMITE LA FUNZIONE resizeHandler */
 
-// window.addEventListener('resize', resizeHandler);
+/*==================================================
+      =           Form validation             =
+====================================================*/
 
-// const resizeHandler = () => {
+// If fields are not valid, prevent the form submission
+document.querySelector("form").addEventListener("submit", function (event) {
+    if (!this.checkValidity()) {
+      event.preventDefault();
+    }
+  });
 
-//   // Aggiorna la larghezza delle slide
-//   slideWidth = slideArray[currentIndexSlide].clientWidth;
-
-//   /* Aggiorna la posizione del contenitore delle slide in base alla nuova larghezza
-
-//   Due casi:
-
-//   1. Se current index slide vale 0, lo scrollLeft rimane sempre pari a 0
-//   2. Se current index slide vale 1, 2, 3, lo scrolleft è pari all'indice della slide corrente per la larghezza della singola slide corrente */
-
-//   if (currentIndexSlide === 0) {
-//     slideContainer.scrollLeft = 0;
-//   } else {
-//     slideContainer.scrollLeft = currentIndexSlide * slideWidth;
-//   }
-// }
-
-/*=====  End of Function  ======*/
 
 
 /*==================================================

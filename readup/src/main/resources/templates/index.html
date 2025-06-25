@@ -108,18 +108,46 @@
                             <h1>Scopri un nuovo modo di leggere</h1>
                             <p>Con ReadUp trasformi ogni pagina in un’esperienza social.</p>
                         </div>
-    
-                        <div class="registration-card">
+                        
+                        <!-- Registration form (with no success registration message and login link) -->
+                        <div class="registration-card" th:if="${successMessage == null}">
                             <h5>Registrati gratuitamente in meno di 1 minuto</h5>
-                            <form th:action="@{/register}" method="get">
-                                <input type="text" id="username" name="username" placeholder="Username" autofocus/>
-                                <input type="email" name="email" placeholder="Email"/>
-                                <input type="password" name="password" placeholder="Password" />
+                            <form th:action="@{/register}" th:object="${Utente}" method="post">
+                                <!-- th:field binds the field to the model field of th:object class-->
+                                
+                                <!-- Nickname  -->
+                                <div th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="error"></div>
+                                <input th:field="*{nickname}" type="text" placeholder="Username" pattern="[a-zA-Z0-9]{3,20}" title="Solo lettere e numeri, 3–20 caratteri"
+                                required autofocus />
+                                
+                                <!-- Email -->
+                                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
+                                <input th:field="*{email}" type="email" placeholder="Email" required />
+            
+                                <!-- Password -->
+                                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
+                                <input th:field="*{password}" type="password" placeholder="Password" pattern="(?=.*[A-Z])(?=.*\d).{8,}"
+                                title="Minimo 8 caratteri, 1 maiuscola e 1 numero" required />
+
+                                <!-- Button -->
                                 <button type="submit">Registrati</button>
-                                <p class="text-center">Hai già un account? <a th:href="@{/login}">Accedi</a> </p>
+
+                                <!-- Link per login -->
+                                <p class="text-center"> Hai già un account?
+                                    <a th:href="@{/login}">Accedi</a>
+                                </p>
                             </form>
                         </div>
-                    </section>     
+
+                        <!-- Success form (with success registration message and logout button)-->
+                        <div class="registration-card text-center" th:if="${successMessage != null}">
+                            <p th:text="${successMessage}" class="success-message mb-4"></p>
+                            
+                            <form th:action="@{/logout}" method="post" style="display:inline">
+                                <button type="submit">Logout</button>
+                            </form>
+                        </div>
+                    </section>
                     <!-- / Registration form section -->
     
                     <!-- Testimonial section -->

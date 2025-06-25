@@ -6,8 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,11 +43,12 @@ public class Utente {
     // User password can't be null
     @Column(name = "password", length = 200, nullable = false)
     @NotBlank
-    @Min(8)
+    @Size(min = 8) 
     private String password;
 
     // User email is a required filed
     @Column(name = "email", length = 30, nullable = false)
+    @Email(message = "Inserisci un'email valida")
     @NotBlank
     private String email;
 
@@ -56,7 +58,7 @@ public class Utente {
 
     // User loggedIn
     @Column(name = "loggedIn", nullable = false)
-    private boolean loggedIn;
+    private boolean loggedIn = false;
 
     // User profile image, can be null
     @Column(name = "profile_image", nullable = true)
