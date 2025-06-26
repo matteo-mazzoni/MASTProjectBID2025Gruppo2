@@ -36,28 +36,21 @@ import jakarta.validation.Valid;
 @Controller
 public class ReadUpMVC {
 
-    /* SERVICES INJECTION */
-
-    // Utente Service injection
+    // Service injections
     @Autowired
     private UtenteService utenteService;
     
-    // Booklist Service injection
     @Autowired
     private BooklistService booklistService;
 
-    // Sfida Service injection
     @Autowired
     private SfidaService sfidaService;
 
-    // Libreria Services injection
     @Autowired 
     private LibreriaService libreriaService;
 
     
-    /* CONTROLLERS */
-    
-    // Home 
+    // Home Page
     @GetMapping("/")
     public String home(Model model) {
         if (!model.containsAttribute("Utente")) {
@@ -71,9 +64,8 @@ public class ReadUpMVC {
     public String processRegister(@Valid @ModelAttribute("Utente") Utente utente, BindingResult result,
     Model model, RedirectAttributes redirectAttributes, HttpSession session) {
     
-        // Form validation server-side for duplicate nickname and email
+        // Server-side validation for duplicate nickname and email
         if (!result.hasFieldErrors("nickname") && utenteService.nicknameEsistente(utente.getNickname())) {
-              
             result.rejectValue(
                 "nickname",
                 "error.nickname.duplicate",
@@ -82,7 +74,6 @@ public class ReadUpMVC {
         }
         
         if (!result.hasFieldErrors("email") && utenteService.emailEsistente(utente.getEmail())) {
-             
             result.rejectValue(
                 "email",
                 "error.email.duplicate",
@@ -90,124 +81,126 @@ public class ReadUpMVC {
             );
         }
 
-        // If there are any other errors, redirect to the registration page (home)
+        // If validation errors exist, return to registration page
         if (result.hasErrors()) {
             return "index";
         }
-       
-        // If there are no errors, register the user into the database and set the login property to "true" in database
+        
         utente.setLoggedIn(true);
-
-        // All the user data are stored in an object Utente-type called saved. The new user is added to the database
         Utente saved = utenteService.aggiungiUtente(utente);
 
-        /* Save the user data in the session.
-        This allows to have the exact primary key on later requests— it will be known which record to update, as set loggedIn to false on logout. */
+        // Store user data in session
         session.setAttribute("currentUser", saved);
-
-        // Success message (linked to the changed view in HTML)                      
+        
         redirectAttributes.addFlashAttribute("successMessage", "Benvenuto/a " + saved.getNickname() + "!");
         
-        // Redirect to the homepage
-        return "redirect:/";    
+        return "redirect:/"; 
     }
 
     // User logout
     @PostMapping("/logout")
     public String logout(HttpSession session) {
-        
-        // select the user from the session
         Utente current = (Utente) session.getAttribute("currentUser");
         
-        // if the user is logged in
         if (current != null) {
-
-            // update the property loggedIn in the database to false
             utenteService.cambiaStatusLogin(current.getIdUtente(), false);
-
-            // remove all attributes from the session (including the current user)
-            session.invalidate();
+            session.invalidate(); // Invalidate session
         }
-    
-        // Redirect to the homepage
         return "redirect:/";
     }
 
-    // Le mie Booklist
+    // Booklist page
     @GetMapping("/booklist.html")
     public String booklist(Model model) {
         return "booklist";
     }
 
-    // I miei libri
+    // Books page
     @GetMapping("/libri.html")
     public String libri(){
         return "book";
     }
 
-    // Sfide
+    // Challenges list page
     @GetMapping("/sfide.html")
     public String listaSfide(Model model, HttpSession session) {
         List<Sfida> sfide = sfidaService.getAll();
         model.addAttribute("sfide", sfide);
         model.addAttribute("currentUserId", getCurrentUserId(session));
-        model.addAttribute("sfida", new Sfida()); //creates an empty Sfida object for the form
+        model.addAttribute("sfida", new Sfida()); // Empty Sfida object for the form
         return "listaSfide";
     }
 
-    // Question and answers
+    // Save a new challenge
+    @PostMapping("/salvasfida")
+    public String salvaSfida(@ModelAttribute("sfida") Sfida sfida,
+                             @RequestParam("idCreatoreForm") Long idCreatore,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            sfidaService.aggiungiSfida(sfida.getNomeSfida(), sfida.getDescrizioneSfida(),
+                                       sfida.getDataInizio(), sfida.getDataFine(), idCreatore);
+            redirectAttributes.addFlashAttribute("successMessage", "Sfida creata con successo!");
+            return "redirect:/sfide.html";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Errore nella creazione della sfida: " + e.getMessage());
+            return "redirect:/sfide.html";
+        }
+    }
+
+    // Q&A page
     @GetMapping("/qa.html")
     public String qa() {
         return "qa";
     }
 
+    // Helper method to get current user ID from session
     private Long getCurrentUserId(HttpSession session) {
         Utente currentUser = (Utente) session.getAttribute("currentUser");
         return (currentUser != null) ? currentUser.getIdUtente() : null;
     }
     
+    // User profile page
     @GetMapping("/profilo.html")
     public String profilo(Model model, HttpSession session) {
 
         Utente currentUser = (Utente) session.getAttribute("currentUser");
-        List<Libro> libriUtente = new ArrayList<>(); // Inizializza una lista vuota per i libri dell'utente
+        List<Libro> libriUtente = new ArrayList<>(); 
 
-         if (currentUser != null) {
+        if (currentUser != null) {
             Optional<Utente> utenteOpt = utenteService.findById(currentUser.getIdUtente());
             if (utenteOpt.isPresent()) {
-                currentUser = utenteOpt.get(); // Aggiorna currentUser con i dati più recenti dal DB
-                // RECUPERA I LIBRI DELL'UTENTE
-                libriUtente = libreriaService.getLibriByUtenteId(currentUser.getIdUtente());
-            }else {
+                currentUser = utenteOpt.get(); // Refresh current user data from DB
+                libriUtente = libreriaService.getLibriByUtenteId(currentUser.getIdUtente()); // Retrieve user's books
+            } else {
                 System.err.println("ATTENZIONE: Utente in sessione con ID " + currentUser.getIdUtente() + " non trovato nel DB.");
-                // Potresti voler invalidare la sessione qui o reindirizzare al login
-                session.invalidate();
+                session.invalidate(); // Invalidate session if user not found in DB
                 model.addAttribute("errorMessage", "Sessione utente non valida. Effettua nuovamente il login.");
-                return "redirect:/"; // O una pagina di errore/login
+                return "redirect:/";
             }
-        } else {// L'utente NON è loggato 
+        } else {
             System.out.println("Utente non loggato, reindirizzamento alla homepage o al login.");
             model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare il profilo.");
-            return "redirect:/"; // O "redirect:/login" se hai una pagina di login specifica
+            return "redirect:/";
         }
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("libriUtente", libriUtente);
         return "profilo";
     }
 
+    // Handle profile image upload
     @PostMapping("/profile/upload")
-    public String handleImageUpload(@RequestParam("image") MultipartFile file, HttpSession session) { // MODIFICATO: Usa HttpSession
-        Utente currentUser = (Utente) session.getAttribute("currentUser"); // Recupera l'utente dalla sessione
+    public String handleImageUpload(@RequestParam("image") MultipartFile file, HttpSession session) {
+        Utente currentUser = (Utente) session.getAttribute("currentUser");
     
-            // Recupera l'ID utente come oggetto Long per evitare problemi di compilazione con tipi primitivi e null.
+        // Explicitly get userId as Long to prevent compilation issues with 'long' vs 'null'
         Long userId = (currentUser != null) ? currentUser.getIdUtente() : null;
 
-        if (currentUser == null || userId == null) { // Ora userId è chiaramente un Long che può essere null
-            return "redirect:/login?error=not_authenticated"; // Reindirizza se l'utente non è in sessione o l'ID è nullo
+        if (currentUser == null || userId == null) {
+            return "redirect:/login?error=not_authenticated"; // Redirect if user not in session or ID is null
         }
 
         try {
-            utenteService.saveProfileImage(currentUser.getIdUtente(), file); // Usa l'ID dell'utente dalla sessione
+            utenteService.saveProfileImage(currentUser.getIdUtente(), file);
         } catch (IllegalArgumentException e) {
             return "redirect:/profilo.html?error=" + e.getMessage();
         } catch (RuntimeException e) {
@@ -216,21 +209,23 @@ public class ReadUpMVC {
         return "redirect:/profilo.html";
     }
 
+    // Get profile image by user ID
     @GetMapping("/profile/image/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable("id") Long idUtente) {
-        byte[] image = utenteService.getProfileImage(idUtente);
+        byte[] image = utenteService.getProfileImage(idUtente); // Call the service to get the image
         if (image != null) {
+            // If the image exists in the DB, return it
             return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
         } else {
+            // Otherwise, load and return the placeholder image
             try {
-                ClassPathResource imgFile = new ClassPathResource("static/images/placeholder.png");
+                ClassPathResource imgFile = new ClassPathResource("resurces/static/imag/placeholder-profile.png");
                 byte[] placeholderImage = StreamUtils.copyToByteArray(imgFile.getInputStream());
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(placeholderImage);
             } catch (IOException e) {
-                System.err.println("Errore nel caricamento dell'immagine placeholder: " + e.getMessage());
+                System.err.println("Error loading placeholder image: " + e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
         }
     }
-    
 }
