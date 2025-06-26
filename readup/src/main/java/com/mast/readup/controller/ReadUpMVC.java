@@ -1,6 +1,6 @@
 package com.mast.readup.controller;
 
-import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mast.readup.entities.Sfida;
 import com.mast.readup.entities.Utente;
 import com.mast.readup.services.BooklistService;
 import com.mast.readup.services.SfidaService;
@@ -100,7 +101,7 @@ public class ReadUpMVC {
         return "redirect:/";    
     }
 
-    // User logout 
+    // User logout
     @PostMapping("/logout")
     public String logout(HttpSession session) {
         
@@ -141,8 +142,12 @@ public class ReadUpMVC {
 
     // Sfide
     @GetMapping("/sfide.html")
-    public String sfide(Model model) {
-        return "sfide";
+    public String listaSfide(Model model, HttpSession session) {
+        List<Sfida> sfide = sfidaService.getAll();
+        model.addAttribute("sfide", sfide);
+        model.addAttribute("currentUserId", getCurrentUserId(session));
+        model.addAttribute("sfida", new Sfida()); //creates an empty Sfida object for the form
+        return "listaSfide";
     }
 
     // Question and answers
@@ -150,32 +155,10 @@ public class ReadUpMVC {
     public String qa() {
         return "qa";
     }
-
-    @Controller
-    @RequestMapping("/profile")
-    public class FotoProfiloMVC {
-
-        @Autowired
-        private UtenteService utenteService;
-
-        @PostMapping("/upload")
-        public String handleImageUpload(@RequestParam("image") MultipartFile file, Principal principal) {
-            if (principal == null || principal.getName() == null) {
-                return "redirect:/login?error=not_authenticated";
-            }
-            utenteService.saveProfileImage(principal.getName(), file);
-            return "redirect:/profile";
-        }
-
-        @GetMapping("/image/{id}")
-        public ResponseEntity<byte[]> getImage(@PathVariable("id") Long idUtente) {
-            byte[] image = utenteService.getProfileImage(idUtente);
-            if (image != null) {
-                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
-            } else {
-                return ResponseEntity.notFound().build(); // image not found
-            }
-        }
-    }
 }
-    
+
+
+    private Long getCurrentUserId(HttpSession session) {
+        Utente currentUser = (Utente) session.getAttribute("currentUser");
+        return (currentUser != null) ? currentUser.getIdUtente() : null;
+    }
