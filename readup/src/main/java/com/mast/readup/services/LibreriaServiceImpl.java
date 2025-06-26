@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class LibreriaServiceImpl implements LibreriaService {
 
     private final LibreriaRepos libreriaRepos;
-    private final UtenteRepos utenteRepos; // Necessario per trovare l'utente
+    private final UtenteRepos utenteRepos; // Needed to find the user
 
     @Autowired
     public LibreriaServiceImpl(LibreriaRepos libreriaRepos, UtenteRepos utenteRepos) {
@@ -23,20 +23,21 @@ public class LibreriaServiceImpl implements LibreriaService {
         this.utenteRepos = utenteRepos;
     }
 
+    // Retrieves all books associated with a specific user ID
     @Override
     public List<Libro> getLibriByUtenteId(Long idUtente) {
         if (idUtente == null) {
-            throw new IllegalArgumentException("L'ID utente non può essere nullo.");
+            throw new IllegalArgumentException("User ID cannot be null.");
         }
         
-        // Trova l'utente per l'ID. Questo è importante per garantire che l'utente esista.
+        // Find the user by ID; crucial to ensure the user exists.
         Utente utente = utenteRepos.findById(idUtente)
-            .orElseThrow(() -> new IllegalArgumentException("Utente con ID " + idUtente + " non trovato."));
+            .orElseThrow(() -> new IllegalArgumentException("User with ID " + idUtente + " not found."));
 
-        // Recupera tutte le voci della libreria per l'utente specifico
+        // Retrieve all library entries for the specific user
         List<Libreria> libreriaItems = libreriaRepos.findByUtente(utente);
 
-        // Estrai solo gli oggetti Libro dalle voci della libreria
+        // Extract only the Libro objects from the library entries
         return libreriaItems.stream()
                             .map(Libreria::getLibro)
                             .collect(Collectors.toList());
