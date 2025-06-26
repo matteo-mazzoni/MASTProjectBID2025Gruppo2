@@ -1,7 +1,6 @@
 package com.mast.readup.controller;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -168,55 +167,47 @@ public class ReadUpMVC {
     }
     
     @GetMapping("/profilo.html")
-    public String profilo(Model model, Principal principal) {
-        Utente currentUser = null; // Inizializza a null
+    public String profilo(Model model, HttpSession session) {
+
+        Utente currentUser = (Utente) session.getAttribute("currentUser");
         List<Libro> libriUtente = new ArrayList<>(); // Inizializza una lista vuota per i libri dell'utente
 
-        if (principal != null && principal.getName() != null) {
-            Long userId;
-            try {
-                userId = Long.valueOf(principal.getName());
-                Optional<Utente> utenteOpt = utenteService.findById(userId);
-                if (utenteOpt.isPresent()) {
-                    currentUser = utenteOpt.get();
-                    // RECUPERA I LIBRI DELL'UTENTE QUI
-                    libriUtente = libreriaService.getLibriByUtenteId(currentUser.getIdUtente());
-                } else {
-                    System.err.println("Utente con ID " + userId + " non trovato nel DB per il Principal: " + principal.getName());
-                }
-            } catch (NumberFormatException e) {
-                System.err.println("Errore: Principal.getName() non è un ID numerico valido per la pagina profilo: " + principal.getName());
+         if (currentUser != null) {
+            Optional<Utente> utenteOpt = utenteService.findById(currentUser.getIdUtente());
+            if (utenteOpt.isPresent()) {
+                currentUser = utenteOpt.get(); // Aggiorna currentUser con i dati più recenti dal DB
+                // RECUPERA I LIBRI DELL'UTENTE
+                libriUtente = libreriaService.getLibriByUtenteId(currentUser.getIdUtente());
+            }else {
+                System.err.println("ATTENZIONE: Utente in sessione con ID " + currentUser.getIdUtente() + " non trovato nel DB.");
+                // Potresti voler invalidare la sessione qui o reindirizzare al login
+                session.invalidate();
+                model.addAttribute("errorMessage", "Sessione utente non valida. Effettua nuovamente il login.");
+                return "redirect:/"; // O una pagina di errore/login
             }
-        } else {
-             System.err.println("Principal o Principal.getName() è null nella pagina profilo.");
+        } else {// L'utente NON è loggato 
+            System.out.println("Utente non loggato, reindirizzamento alla homepage o al login.");
+            model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare il profilo.");
+            return "redirect:/"; // O "redirect:/login" se hai una pagina di login specifica
         }
-
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("libriUtente", libriUtente); // AGGIUNGI I LIBRI AL MODELLO
+        model.addAttribute("libriUtente", libriUtente);
         return "profilo";
     }
 
     @PostMapping("/profile/upload")
-    public String handleImageUpload(@RequestParam("image") MultipartFile file, Principal principal) {
-        if (principal == null || principal.getName() == null) {
-            return "redirect:/login?error=not_authenticated";
-        }
+    public String handleImageUpload(@RequestParam("image") MultipartFile file, HttpSession session) { // MODIFICATO: Usa HttpSession
+        Utente currentUser = (Utente) session.getAttribute("currentUser"); // Recupera l'utente dalla sessione
+    
+            // Recupera l'ID utente come oggetto Long per evitare problemi di compilazione con tipi primitivi e null.
+        Long userId = (currentUser != null) ? currentUser.getIdUtente() : null;
 
-        Long userId;
-        try {
-            userId = Long.valueOf(principal.getName());
-        } catch (NumberFormatException e) {
-            System.err.println("Errore: Principal.getName() non è un ID numerico valido per l'upload: " + principal.getName());
-            return "redirect:/profilo.html?error=invalid_user_id";
-        }
-
-        Optional<Utente> utenteOpt = utenteService.findById(userId);
-        if (!utenteOpt.isPresent()) {
-            return "redirect:/profilo.html?error=user_not_found";
+        if (currentUser == null || userId == null) { // Ora userId è chiaramente un Long che può essere null
+            return "redirect:/login?error=not_authenticated"; // Reindirizza se l'utente non è in sessione o l'ID è nullo
         }
 
         try {
-            utenteService.saveProfileImage(userId, file);
+            utenteService.saveProfileImage(currentUser.getIdUtente(), file); // Usa l'ID dell'utente dalla sessione
         } catch (IllegalArgumentException e) {
             return "redirect:/profilo.html?error=" + e.getMessage();
         } catch (RuntimeException e) {
@@ -225,7 +216,6 @@ public class ReadUpMVC {
         return "redirect:/profilo.html";
     }
 
-    // Metodo per recuperare l'immagine (spostato qui da FotoProfiloMVC)
     @GetMapping("/profile/image/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable("id") Long idUtente) {
         byte[] image = utenteService.getProfileImage(idUtente);
