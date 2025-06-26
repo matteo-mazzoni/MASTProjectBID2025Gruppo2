@@ -1,12 +1,20 @@
 package com.mast.readup.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mast.readup.entities.Utente;
@@ -142,4 +150,32 @@ public class ReadUpMVC {
     public String qa() {
         return "qa";
     }
+
+    @Controller
+    @RequestMapping("/profile")
+    public class FotoProfiloMVC {
+
+        @Autowired
+        private UtenteService utenteService;
+
+        @PostMapping("/upload")
+        public String handleImageUpload(@RequestParam("image") MultipartFile file, Principal principal) {
+            if (principal == null || principal.getName() == null) {
+                return "redirect:/login?error=not_authenticated";
+            }
+            utenteService.saveProfileImage(principal.getName(), file);
+            return "redirect:/profile";
+        }
+
+        @GetMapping("/image/{id}")
+        public ResponseEntity<byte[]> getImage(@PathVariable("id") Long idUtente) {
+            byte[] image = utenteService.getProfileImage(idUtente);
+            if (image != null) {
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
+            } else {
+                return ResponseEntity.notFound().build(); // image not found
+            }
+        }
+    }
 }
+    
