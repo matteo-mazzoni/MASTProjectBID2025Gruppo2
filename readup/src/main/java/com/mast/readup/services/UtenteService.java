@@ -17,7 +17,7 @@ public interface UtenteService {
     Utente modificaCitta(long idUtente, String nuovaCitta);
     Utente cambiaStatusLogin(long idUtente, boolean statoLogin);
     void eliminaUtente(long idUtente);
-    void saveProfileImage(String name, MultipartFile file);
+    void saveProfileImage(Long idUtente, MultipartFile file);
     byte[] getProfileImage(Long idUtente);
 
     boolean nicknameEsistente(String nickname);

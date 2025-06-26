@@ -12,8 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-
-@Service // Indica che questa classe è un componente di servizio di Spring
+@Service 
 public class UtenteServiceImpl implements UtenteService {
 
     @Autowired
@@ -117,16 +116,16 @@ public class UtenteServiceImpl implements UtenteService {
     }
 
     @Override
-    public void saveProfileImage(String name, MultipartFile file) {
+    public void saveProfileImage(Long idUtente, MultipartFile file) {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("Il file immagine non può essere vuoto.");
         }
         if (!file.getContentType().startsWith("image/")) {
             throw new IllegalArgumentException("Il file non è un'immagine valida.");
         }
-        Optional<Utente> utenteOpt = utenteRepos.findById(Long.valueOf(name));
+        Optional<Utente> utenteOpt = utenteRepos.findById(idUtente);
         if (!utenteOpt.isPresent()) {
-            throw new IllegalArgumentException("Utente con ID " + name + " non trovato.");
+            throw new IllegalArgumentException("Utente con ID " + idUtente + " non trovato.");
         }
         Utente utente = utenteOpt.get();
         try {
@@ -151,10 +150,7 @@ public class UtenteServiceImpl implements UtenteService {
         return image;
     }
 
-
-
-
- @Override
+    @Override
     public boolean nicknameEsistente(String nickname) {
         return utenteRepos.existsByNickname(nickname);
     }

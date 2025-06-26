@@ -35,13 +35,16 @@
                             <!--Card 1-->
                             <div class="profile-section-card">
                                 <h5>Dati utente</h5>
-                                <p>Nome: Valentina Rossi</p>
-                                <p>Email: valentina@example.com</p>
+                                <p th:if="${currentUser != null}">Nickname: <span th:text="${currentUser.nickname}"></span></p>
+                                <p th:if="${currentUser != null}">Email: <span th:text="${currentUser.email}"></span></p>
+                                <p th:if="${currentUser == null}">Dati utente non disponibili.</p>
                             </div>
                             <!--Card 2-->
                             <div class="profile-section-card">
                                 <h5>Bio</h5>
-                                <p>Appassionata di sviluppo web, design UI/UX e cappuccini ben schiumati.</p>
+                                <p th:if="${currentUser != null && currentUser.bio != null}" th:text="${currentUser.bio}"></p>
+                                <p th:if="${currentUser != null && currentUser.bio == null}">Nessuna bio impostata.</p>
+                                <p th:if="${currentUser == null}">Bio non disponibile.</p>
                             </div>
                         </div>
 
