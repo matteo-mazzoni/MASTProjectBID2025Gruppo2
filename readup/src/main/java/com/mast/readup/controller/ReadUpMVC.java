@@ -1,5 +1,7 @@
 package com.mast.readup.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mast.readup.entities.Sfida;
 import com.mast.readup.entities.Utente;
 import com.mast.readup.services.BooklistService;
 import com.mast.readup.services.SfidaService;
@@ -92,7 +95,7 @@ public class ReadUpMVC {
         return "redirect:/";    
     }
 
-    // User logout 
+    // User logout
     @PostMapping("/logout")
     public String logout(HttpSession session) {
         
@@ -133,8 +136,12 @@ public class ReadUpMVC {
 
     // Sfide
     @GetMapping("/sfide.html")
-    public String sfide(Model model) {
-        return "sfide";
+    public String listaSfide(Model model, HttpSession session) {
+        List<Sfida> sfide = sfidaService.getAll();
+        model.addAttribute("sfide", sfide);
+        model.addAttribute("currentUserId", getCurrentUserId(session));
+        model.addAttribute("sfida", new Sfida()); //creates an empty Sfida object for the form
+        return "listaSfide";
     }
 
     // Question and answers
@@ -143,3 +150,9 @@ public class ReadUpMVC {
         return "qa";
     }
 }
+
+
+    private Long getCurrentUserId(HttpSession session) {
+        Utente currentUser = (Utente) session.getAttribute("currentUser");
+        return (currentUser != null) ? currentUser.getIdUtente() : null;
+    }
