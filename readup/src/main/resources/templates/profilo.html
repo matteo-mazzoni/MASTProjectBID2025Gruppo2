@@ -28,8 +28,7 @@
                                 <label for="imageUpload" class="upload-btn">Cambia immagine</label>
                                 <input id="imageUpload" type="file" name="image" accept="image/*" onchange="this.form.submit()" />
                             </form>
-                            <h5>Dati utente</h5>
-                            <p th:if="${currentUser != null}">Nickname: <span th:text="${currentUser.nickname}"></span></p>
+                            <h5 th:if="${currentUser != null}"><span th:text="${currentUser.nickname}"></span></h5>
                             <p th:if="${currentUser == null}">Dati utente non disponibili.</p>
                         </div>
 
