@@ -1,8 +1,10 @@
 package com.mast.readup.entities;
 
-import java.util.Date;
+import java.time.Year;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.springframework.data.annotation.Transient;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -27,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "libro")
 @Data
-@NoArgsConstructor // Lombok: Generates a no-argument constructor (required by JPA
+@NoArgsConstructor // Lombok: Generates a no-argument constructor (required by JPA)
 @AllArgsConstructor // Lombok: Generates a constructor with all fields
 @EqualsAndHashCode(onlyExplicitlyIncluded = true) // Lombok: Limits equality to specified fields
 public class Libro {
@@ -38,10 +40,9 @@ public class Libro {
     @Column(name = "id_libro")
     private long idLibro; // @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    // Add the extra field of the entity
-    // Publication year (date-only), using Java 8 LocalDate
+    // Book release year
     @Column(name = "anno_uscita", nullable = true)
-    private Date annoUscita;
+    private Year annoUscita;
 
     // Number of pages, cannot be less than 40 page
     @Column(name = "num_pagine", nullable = false)
@@ -64,6 +65,10 @@ public class Libro {
     @Column(name = "casa_editrice", length = 100)
     private String casaEditrice;
 
+    // Book ISBN, required field
+    @Column(name = "ISBN", length = 13, nullable = false)
+    private String isbn;
+
     // One-to-many relationship with the Libreria entity (bridge table)
     @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Libreria> librerie = new HashSet<>();
@@ -71,5 +76,15 @@ public class Libro {
     // One-to-many relationship with the Contiene entity (another bridge table)
     @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BooklistContiene> contenuti = new HashSet<>();
+
+    // Transient field for cover (it will be ignored by JPA during ORM. There is no SQL column)
+    @Transient
+    private String coverUrl;
+
+    public String getCoverUrl() {
+    return isbn == null || isbn.isBlank()
+        ? "/images/placeholder.jpg"
+        : "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
+    }
 
 }
