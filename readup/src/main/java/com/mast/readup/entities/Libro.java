@@ -76,6 +76,14 @@ public class Libro {
     // One-to-many relationship with the Contiene entity (another bridge table)
     @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BooklistContiene> contenuti = new HashSet<>();
+
+    public String getCoverUrl() {
+        if (isbn == null || isbn.isBlank()) {
+            return "/img/outdoor-reading-group-stockcake.jpg";
+        }
+        // “-M” per dimensione Medium; puoi cambiare in S o L se preferisci
+        return "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
+    }
 }
 
 
