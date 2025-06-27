@@ -14,10 +14,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mast.readup.entities.Booklist;
 import com.mast.readup.entities.Libro;
+import com.mast.readup.entities.PartecipantiSfida;
 import com.mast.readup.entities.Sfida;
 import com.mast.readup.entities.Utente;
 import com.mast.readup.services.BooklistService;
@@ -36,7 +40,7 @@ public class ReadUpMVC {
     // Utente Service injection
     @Autowired
     private UtenteService utenteService;
-    
+
     // Booklist Service injection
     @Autowired
     private BooklistService booklistService;
@@ -58,7 +62,7 @@ public class ReadUpMVC {
         if (!model.containsAttribute("Utente")) {
             model.addAttribute("Utente", new Utente());
         }
-        List<Libro> carousel = libroService.findRandomCarousel(4);  
+        List<Libro> carousel = libroService.findRandomCarousel(4);
         model.addAttribute("libri", carousel);
         return "index";
     }
@@ -139,7 +143,7 @@ public class ReadUpMVC {
     @PostMapping("/uploadprofileimage")
     public String handleImageUpload(@RequestParam("image") MultipartFile file, Principal principal) {
         if (principal == null || principal.getName() == null) {
-            return "redirect:/login?error=not_authenticated";
+            return "redirect:/";
         }
         utenteService.saveProfileImage(principal.getName(), file);
         return "redirect:/profile";
@@ -155,29 +159,39 @@ public class ReadUpMVC {
         }
     }
 
-
-
-
-
-
-
-
     // Le mie Booklist
     @GetMapping("/booklist.html")
-    public String booklist(Model model) {
+    public String viewUserBooklists(Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/"; // Reindirizza alla home se non autenticato
+        }
+        String nickname = principal.getName();
+        List<Booklist> booklists = booklistService.getAllBooklistsByUser(nickname);
+        model.addAttribute("booklists", booklists);
+        model.addAttribute("newBooklistName", ""); // For the form to create a new booklist
         return "booklist";
     }
 
+    @PostMapping("/salvabooklist")
+    public String createBooklist(@RequestParam("name") String name, Principal principal, RedirectAttributes redirectAttributes) {
+        if (principal == null) {
+            return "redirect:/";
+        }
+        try {
+            Long userId = getCurrentUserId(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession());
+            booklistService.creaBooklist(userId, name, principal.getName());
+            redirectAttributes.addFlashAttribute("successMessage", "Booklist '" + name + "' creata con successo!");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Errore nella creazione della booklist: " + e.getMessage());
+        }
+        return "redirect:/booklist"; // returns to the booklist page
+    }
 
     // I miei libri
     @GetMapping("/libri.html")
     public String libri(){
         return "book";
     }
-
-
-
-
 
     // Sfide
     @GetMapping("/sfide.html")
@@ -187,6 +201,24 @@ public class ReadUpMVC {
         model.addAttribute("currentUserId", getCurrentUserId(session));
         model.addAttribute("sfida", new Sfida()); //creates an empty Sfida object for the form
         return "sfide";
+    }
+
+    @GetMapping("/sfide.html/{id}")
+    public String viewChallengeDetails(@PathVariable("id") Long idSfida, Model model, Principal principal) {
+        if (principal == null) {
+            return "redirect:/";
+        }
+        sfidaService.getById(idSfida)
+            .ifPresentOrElse(
+                sfida -> {
+                    model.addAttribute("sfida", sfida);
+                    // Controlla se l'utente è il creatore della sfida
+                    boolean isCreator = principal.getName().equals(sfida.getUtenteCreatore().getNickname());
+                    model.addAttribute("isCreator", isCreator);
+                },
+                () -> model.addAttribute("errorMessage", "Sfida non trovata.")
+            );
+        return "challenges/details";
     }
 
     // Salva sfida
@@ -204,6 +236,35 @@ public class ReadUpMVC {
             // Se c'è un errore, l'utente verrà reindirizzato alla pagina della lista.
             return "redirect:/sfide"; // Reindirizza alla pagina della lista, mostrando l'errore
         }
+    }
+
+    @PostMapping("/{id}/partecipa")
+    public String enrollInChallenge(@PathVariable("id") Long idSfida, Principal principal, RedirectAttributes redirectAttributes, HttpSession session) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+        try {
+            Long userId = getCurrentUserId(session);
+            sfidaService.partecipaSfida(idSfida, userId);
+            redirectAttributes.addFlashAttribute("successMessage", "Ti sei iscritto alla sfida con successo!");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/sfide";
+    }
+
+    @PostMapping("/{id}/eliminasfida")
+    public String deleteChallenge(@PathVariable("id") Long idSfida, Principal principal, RedirectAttributes redirectAttributes) {
+        if (principal == null) {
+            return "redirect:/";
+        }
+        try {
+            sfidaService.rimuoviSfida(idSfida);
+            redirectAttributes.addFlashAttribute("successMessage", "Sfida eliminata con successo!");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/challenges"; // Reindirizza alla lista delle sfide
     }
 
     // Question and answers
