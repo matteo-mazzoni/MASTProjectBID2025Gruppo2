@@ -49,46 +49,19 @@
                     
     
                                 <!-- Slide items -->
-                                <ul class="slides_container" id="slides_container">
-                                    
-                                    <!-- 1st Book -->
-                                    <li class="slide">
-                                        <h5 class="card-title pt-4">Titolo 1</h5>
-                                        <p class="card-text text-muted mb-4">Autore 1</p>
-                                        <img src="https://bookstoreromanceday.org/wp-content/uploads/2020/08/book-cover-placeholder.png" alt="book placeholder">
+                               <ul class="slides_container" id="slides_container">
+                                    <li class="slide"
+                                        th:each="libro, stats : ${libri}"
+                                        th:if="${stats.index < 4}">
+                                        <h5 class="card-title pt-4" th:text="${libro.titolo}">Titolo</h5>
+                                        <p class="card-text text-muted mb-4" th:text="${libro.autore}">Autore</p>
+                                        <img th:src="${libro.coverUrl}" alt="cover" class="card-img-top">
                                         <a href="#" class="btn btn-sm btn-action mb-2">Aggiungi ai tuoi libri preferiti</a>
                                         <a href="#" class="btn btn-sm btn-action mb-4">Aggiungi ad una booklist</a>
                                     </li>
-                                    
-                                    <!-- 2nd Book -->
-                                    <li class="slide">
-                                        <h5 class="card-title pt-4">Titolo 1</h5>
-                                        <p class="card-text text-muted mb-4">Autore 1</p>
-                                        <img src="https://blocks.astratic.com/img/user-img-big.png" class="card-img-top" alt="book placeholder">
-                                        <a href="#" class="btn btn-sm btn-action mb-2">Aggiungi ai tuoi libri preferiti</a>
-                                        <a href="#" class="btn btn-sm btn-action mb-4">Aggiungi ad una booklist</a>
-                                    </li>
-    
-                                    <!-- 3rd Book -->
-                                    <li class="slide">
-                                        <h5 class="card-title pt-4">Titolo 1</h5>
-                                        <p class="card-text text-muted mb-4">Autore 1</p>
-                                        <img src="https://bookstoreromanceday.org/wp-content/uploads/2020/08/book-cover-placeholder.png" class="card-img-top" alt="book placeholder">
-                                        <a href="#" class="btn btn-sm btn-action mb-2">Aggiungi ai tuoi libri preferiti</a>
-                                        <a href="#" class="btn btn-sm btn-action mb-4">Aggiungi ad una booklist</a>
-                                    </li>
-    
-                                    <!-- 4th Book -->
-                                    <li class="slide">
-                                        <h5 class="card-title pt-4">Titolo 1</h5>
-                                        <p class="card-text text-muted mb-4">Autore 1</p>
-                                        <img src="https://blocks.astratic.com/img/general-img-landscape.png" class="card-img-top" alt="book placeholder">
-                                        <a href="#" class="btn btn-sm btn-action mb-2">Aggiungi ai tuoi libri preferiti</a>
-                                        <a href="#" class="btn btn-sm btn-action mb-4">Aggiungi ad una booklist</a>
-                                    </li>
-                                </ul> 
-                    
-    
+                                </ul>
+                                <!-- / Slide items -->
+                                
                                 <!-- Arrow button next -->
                                 <div class="arrow_button_container">
                                     <button class="slide-arrow carousel-control-next btn-outline-secondary" id="slide-arrow-next"> 
@@ -182,3 +155,6 @@
 
      
 </html>
+
+
+
