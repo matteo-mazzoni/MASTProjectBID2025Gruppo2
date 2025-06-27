@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -61,6 +62,7 @@ public class Utente {
     private boolean loggedIn = false;
 
     // User profile image, can be null
-    @Column(name = "profile_image", nullable = true)
+    @Lob 
+    @Column(name = "profile_image", columnDefinition="MEDIUMBLOB")
     private byte[] profileImage;
 }

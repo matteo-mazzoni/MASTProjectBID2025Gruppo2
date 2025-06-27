@@ -1,7 +1,6 @@
 package com.mast.readup.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,20 +16,18 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.mast.readup.entities.Libro;
 import com.mast.readup.entities.Libro;
 import com.mast.readup.entities.Sfida;
 import com.mast.readup.entities.Utente;
 import com.mast.readup.services.BooklistService;
 import com.mast.readup.services.LibreriaService;
+import com.mast.readup.services.LibroService;
 import com.mast.readup.services.SfidaService;
 import com.mast.readup.services.UtenteService;
 
@@ -44,9 +41,11 @@ public class ReadUpMVC {
     @Autowired
     private UtenteService utenteService;
     
+    // Booklist Service injection
     @Autowired
     private BooklistService booklistService;
 
+    // Sfida Service injection
     @Autowired
     private SfidaService sfidaService;
 
@@ -54,6 +53,9 @@ public class ReadUpMVC {
     @Autowired
     private LibroService libroService;
 
+    // Libreria Service injection
+    @Autowired 
+    private LibreriaService libreriaService;
 
     /* CONTROLLERS */
 
@@ -145,7 +147,7 @@ public class ReadUpMVC {
         model.addAttribute("sfide", sfide);
         model.addAttribute("currentUserId", getCurrentUserId(session));
         model.addAttribute("sfida", new Sfida()); // Empty Sfida object for the form
-        return "listaSfide";
+        return "sfide";
     }
 
     // Save a new challenge
@@ -170,43 +172,50 @@ public class ReadUpMVC {
         return "qa";
     }
 
-    // Helper method to get current user ID from session
+   // Helper method to get current user ID from session
     private Long getCurrentUserId(HttpSession session) {
         Utente currentUser = (Utente) session.getAttribute("currentUser");
         return (currentUser != null) ? currentUser.getIdUtente() : null;
     }
     
     // User profile page
-    @GetMapping("/profilo.html")
+    @GetMapping("/profilo.html") // Mantenuto il .html come nel tuo codice
     public String profilo(Model model, HttpSession session) {
 
-        Utente currentUser = (Utente) session.getAttribute("currentUser");
-        List<Libro> libriUtente = new ArrayList<>(); 
+        Long loggedInUserId = getCurrentUserId(session); 
+        Utente currentUser = null;
 
-        if (currentUser != null) {
-            Optional<Utente> utenteOpt = utenteService.findById(currentUser.getIdUtente());
+        if (loggedInUserId != null) {
+            Optional<Utente> utenteOpt = utenteService.findById(loggedInUserId);
             if (utenteOpt.isPresent()) {
-                currentUser = utenteOpt.get(); // Refresh current user data from DB
-                libriUtente = libreriaService.getLibriByUtenteId(currentUser.getIdUtente()); // Retrieve user's books
+                currentUser = utenteOpt.get(); 
+
+                session.setAttribute("currentUser", currentUser); 
             } else {
-                System.err.println("ATTENZIONE: Utente in sessione con ID " + currentUser.getIdUtente() + " non trovato nel DB.");
-                session.invalidate(); // Invalidate session if user not found in DB
+                System.err.println("ATTENZIONE: Utente in sessione con ID " + loggedInUserId + " non trovato nel DB.");
+                session.invalidate(); 
                 model.addAttribute("errorMessage", "Sessione utente non valida. Effettua nuovamente il login.");
-                return "redirect:/";
+                return "redirect:/"; 
             }
         } else {
             System.out.println("Utente non loggato, reindirizzamento alla homepage o al login.");
             model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare il profilo.");
             return "redirect:/";
         }
+        
+        model.addAttribute("userId", currentUser.getIdUtente()); 
+        
         model.addAttribute("currentUser", currentUser);
+
+        List<Libro> libriUtente = libreriaService.getLibriByUtenteId(currentUser.getIdUtente());
         model.addAttribute("libriUtente", libriUtente);
-        return "profilo";
+
+        return "profilo"; 
     }
 
     // Handle profile image upload
-    @PostMapping("/profile/upload")
-    public String handleImageUpload(@RequestParam("image") MultipartFile file, HttpSession session) {
+    @PostMapping("/profile/uploadImage")
+    public String uploadProfileImage(@RequestParam("profileImage") MultipartFile file, HttpSession session) {
         Utente currentUser = (Utente) session.getAttribute("currentUser");
     
         // Explicitly get userId as Long to prevent compilation issues with 'long' vs 'null'
@@ -228,21 +237,31 @@ public class ReadUpMVC {
 
     // Get profile image by user ID
     @GetMapping("/profile/image/{id}")
+    @ResponseBody
     public ResponseEntity<byte[]> getImage(@PathVariable("id") Long idUtente) {
-        byte[] image = utenteService.getProfileImage(idUtente); // Call the service to get the image
-        if (image != null) {
-            // If the image exists in the DB, return it
-            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
-        } else {
-            // Otherwise, load and return the placeholder image
+        try {
+            byte[] image = utenteService.getProfileImage(idUtente);
+            
+            // Se arriviamo qui, significa che il servizio ha trovato un'immagine e non ha lanciato eccezioni.
+            // Restituiamo l'immagine con il Content-Type appropriato.
+            // Abbiamo impostato PNG per coerenza con il placeholder, ma se sai che sono sempre JPEG, usa IMAGE_JPEG.
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
+        } catch (IllegalArgumentException e) {
+            // Se il servizio lancia IllegalArgumentException (utente non trovato o senza immagine),
+            // carichiamo e restituiamo l'immagine placeholder.
             try {
-                ClassPathResource imgFile = new ClassPathResource("resurces/static/imag/placeholder-profile.png");
+                ClassPathResource imgFile = new ClassPathResource("static/img/placeholder-profile.jpg");
                 byte[] placeholderImage = StreamUtils.copyToByteArray(imgFile.getInputStream());
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(placeholderImage);
-            } catch (IOException e) {
-                System.err.println("Error loading placeholder image: " + e.getMessage());
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            } catch (IOException ioException) {
+                // Errore nel caricamento del placeholder stesso
+                System.err.println("Errore nel caricamento dell'immagine placeholder: " + ioException.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
             }
+        } catch (Exception e) {
+            // Cattura qualsiasi altra eccezione imprevista durante il processo
+            System.err.println("Errore generico nel recupero dell'immagine: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }

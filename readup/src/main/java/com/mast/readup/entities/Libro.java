@@ -4,8 +4,6 @@ import java.time.Year;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.data.annotation.Transient;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -76,10 +74,6 @@ public class Libro {
     // One-to-many relationship with the Contiene entity (another bridge table)
     @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BooklistContiene> contenuti = new HashSet<>();
-
-    // Transient field for cover (it will be ignored by JPA during ORM. There is no SQL column)
-    @Transient
-    private String coverUrl;
 
     public String getCoverUrl() {
         if (isbn == null || isbn.isBlank()) {
