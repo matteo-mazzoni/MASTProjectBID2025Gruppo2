@@ -150,13 +150,13 @@ public class UtenteServiceImpl implements UtenteService {
     public byte[] getProfileImage(Long idUtente) {
         Optional<Utente> utenteOpt = utenteRepos.findById(idUtente);
         if (!utenteOpt.isPresent()) {
-            // Lancia l'eccezione se l'utente non è trovato
+            // Launches exception if user is not found
             throw new IllegalArgumentException("Utente non trovato o non ha un'immagine del profilo.");
         }
         Utente utente = utenteOpt.get();
         byte[] image = utente.getProfileImage();
         if (image == null) {
-            // Lancia l'eccezione se l'utente esiste ma non ha un'immagine
+            // Launches exception if user exists but does not have an image
             throw new IllegalArgumentException("L'utente non ha un'immagine del profilo.");
         }
         return image;

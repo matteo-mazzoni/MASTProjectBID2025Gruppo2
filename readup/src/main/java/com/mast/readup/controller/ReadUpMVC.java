@@ -240,27 +240,25 @@ public class ReadUpMVC {
     @ResponseBody
     public ResponseEntity<byte[]> getImage(@PathVariable("id") Long idUtente) {
         try {
+            // Attempt to retrieve the user's profile image from the service.
             byte[] image = utenteService.getProfileImage(idUtente);
-            
-            // Se arriviamo qui, significa che il servizio ha trovato un'immagine e non ha lanciato eccezioni.
-            // Restituiamo l'immagine con il Content-Type appropriato.
-            // Abbiamo impostato PNG per coerenza con il placeholder, ma se sai che sono sempre JPEG, usa IMAGE_JPEG.
+            // Return user's image if found.
             return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
         } catch (IllegalArgumentException e) {
-            // Se il servizio lancia IllegalArgumentException (utente non trovato o senza immagine),
-            // carichiamo e restituiamo l'immagine placeholder.
+            // If user not found or no image, load and return a placeholder image.
             try {
+                // Path corrected to include "static/" as per project structure.
                 ClassPathResource imgFile = new ClassPathResource("static/img/placeholder-profile.jpg");
                 byte[] placeholderImage = StreamUtils.copyToByteArray(imgFile.getInputStream());
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(placeholderImage);
             } catch (IOException ioException) {
-                // Errore nel caricamento del placeholder stesso
-                System.err.println("Errore nel caricamento dell'immagine placeholder: " + ioException.getMessage());
+                // Log error if placeholder fails to load.
+                System.err.println("Error loading placeholder image: " + ioException.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
             }
         } catch (Exception e) {
-            // Cattura qualsiasi altra eccezione imprevista durante il processo
-            System.err.println("Errore generico nel recupero dell'immagine: " + e.getMessage());
+            // Catch any other unexpected errors during image retrieval.
+            System.err.println("Generic error retrieving image: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
