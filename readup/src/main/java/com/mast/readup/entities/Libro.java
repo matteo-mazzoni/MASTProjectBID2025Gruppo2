@@ -4,6 +4,7 @@ import java.time.Year;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.type.descriptor.jdbc.SmallIntJdbcType;
 import org.springframework.data.annotation.Transient;
 
 import jakarta.persistence.CascadeType;
@@ -42,7 +43,7 @@ public class Libro {
 
     // Book release year
     @Column(name = "anno_uscita", nullable = true)
-    private Year annoUscita;
+    private Short annoUscita;
 
     // Number of pages, cannot be less than 40 page
     @Column(name = "num_pagine", nullable = false)
