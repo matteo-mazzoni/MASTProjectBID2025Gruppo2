@@ -104,10 +104,10 @@ public class ReadUpMVC {
     // User logout
     @PostMapping("/logout")
     public String logout(HttpSession session) {
-        
+
         // select the user from the session
         Utente current = (Utente) session.getAttribute("currentUser");
-        
+
         // if the user is logged in
         if (current != null) {
 
@@ -117,11 +117,11 @@ public class ReadUpMVC {
             // remove all attributes from the session (including the current user)
             session.invalidate();
         }
-    
+
         // Redirect to the homepage
         return "redirect:/";
     }
-    
+
     // Profilo
     @GetMapping("/profilo.html")
     public String profilo(Model model) {

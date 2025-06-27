@@ -151,10 +151,7 @@ public class UtenteServiceImpl implements UtenteService {
         return image;
     }
 
-
-
-
- @Override
+@Override
     public boolean nicknameEsistente(String nickname) {
         return utenteRepos.existsByNickname(nickname);
     }
