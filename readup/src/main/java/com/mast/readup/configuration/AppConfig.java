@@ -28,7 +28,7 @@ public class AppConfig {
         connManager.setDefaultMaxPerRoute(20);
 
         // Retry strategy: up to 3 retries with 1s interval on I/O exceptions or 5xx
-         DefaultHttpRequestRetryStrategy    retryStrategy = new DefaultHttpRequestRetryStrategy(
+        DefaultHttpRequestRetryStrategy    retryStrategy = new DefaultHttpRequestRetryStrategy(
             3,                                  // max retry count
             TimeValue.ofSeconds(1)              // retry interval
         );

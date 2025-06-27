@@ -113,4 +113,14 @@ public class BooklistServiceImpl implements BooklistService {
         booklistRepos.deleteById(idBooklist);
     }
 
+    @Override
+    public List<Booklist> getAllBooklistsByUser(String nickname) {
+        if (nickname == null || nickname.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nickname cannot be null or empty.");
+        }
+        Utente utente = utenteRepos.findByNickname(nickname)
+            .orElseThrow(() -> new IllegalArgumentException("User not found with nickname: " + nickname));
+        return booklistRepos.findByUtenteCreatore(utente);
+    }
+
 }

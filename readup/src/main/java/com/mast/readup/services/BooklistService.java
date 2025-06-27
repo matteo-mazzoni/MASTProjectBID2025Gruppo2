@@ -13,4 +13,5 @@ public interface BooklistService {
     Booklist modificaDatiBooklist(long idBooklist, String nuovoNome, String nuovaDescrizione);
     Booklist modificaLibriBooklist(long idBooklist, List<String> nuovaListaLibri);
     void eliminaBooklist(long idBooklist);
+    List<Booklist> getAllBooklistsByUser(String nickname);
 }
