@@ -153,11 +153,14 @@ public class UtenteServiceImpl implements UtenteService {
             return null; // Return null if user not found
         }
         Utente utente = utenteOpt.get();
-        return utente.getProfileImage(); // Returns null if no image is set for the user
+        byte[] image = utente.getProfileImage();
+        if (image == null) {
+            throw new IllegalArgumentException("L'utente non ha un'immagine del profilo.");
+        }
+        return image;
     }
 
-    // Checks if a nickname already exists
-    @Override
+@Override
     public boolean nicknameEsistente(String nickname) {
         return utenteRepos.existsByNickname(nickname);
     }

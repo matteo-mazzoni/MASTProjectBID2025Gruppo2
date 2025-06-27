@@ -17,11 +17,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mast.readup.entities.Libro;
 import com.mast.readup.entities.Libro;
 import com.mast.readup.entities.Sfida;
 import com.mast.readup.entities.Utente;
@@ -46,16 +50,21 @@ public class ReadUpMVC {
     @Autowired
     private SfidaService sfidaService;
 
-    @Autowired 
-    private LibreriaService libreriaService;
+    // Libro Service injection
+    @Autowired
+    private LibroService libroService;
 
-    
-    // Home Page
+
+    /* CONTROLLERS */
+
+    // Home
     @GetMapping("/")
     public String home(Model model) {
         if (!model.containsAttribute("Utente")) {
             model.addAttribute("Utente", new Utente());
         }
+        List<Libro> carousel = libroService.findRandomCarousel(4);  
+        model.addAttribute("libri", carousel);
         return "index";
     }
 
@@ -72,7 +81,7 @@ public class ReadUpMVC {
                 "ATTENZIONE: Questo username è già in uso! RIPROVA."
             );
         }
-        
+
         if (!result.hasFieldErrors("email") && utenteService.emailEsistente(utente.getEmail())) {
             result.rejectValue(
                 "email",
@@ -85,27 +94,35 @@ public class ReadUpMVC {
         if (result.hasErrors()) {
             return "index";
         }
-        
+
+        // If there are no errors, register the user into the database and set the login property to "true" in database
         utente.setLoggedIn(true);
         Utente saved = utenteService.aggiungiUtente(utente);
 
         // Store user data in session
         session.setAttribute("currentUser", saved);
-        
+
+        // Success message (linked to the changed view in HTML)
         redirectAttributes.addFlashAttribute("successMessage", "Benvenuto/a " + saved.getNickname() + "!");
-        
-        return "redirect:/"; 
+
+        // Redirect to the homepage
+        return "redirect:/";
     }
 
     // User logout
     @PostMapping("/logout")
     public String logout(HttpSession session) {
+
+        // select the user from the session
         Utente current = (Utente) session.getAttribute("currentUser");
-        
+
+        // if the user is logged in
         if (current != null) {
             utenteService.cambiaStatusLogin(current.getIdUtente(), false);
             session.invalidate(); // Invalidate session
         }
+
+        // Redirect to the homepage
         return "redirect:/";
     }
 
@@ -115,13 +132,13 @@ public class ReadUpMVC {
         return "booklist";
     }
 
-    // Books page
+    // I miei libri
     @GetMapping("/libri.html")
     public String libri(){
         return "book";
     }
 
-    // Challenges list page
+    // Sfide
     @GetMapping("/sfide.html")
     public String listaSfide(Model model, HttpSession session) {
         List<Sfida> sfide = sfidaService.getAll();
