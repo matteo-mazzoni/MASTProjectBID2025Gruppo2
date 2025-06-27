@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mast.readup.entities.Libro;
 import com.mast.readup.entities.Sfida;
 import com.mast.readup.entities.Utente;
 import com.mast.readup.services.BooklistService;
+import com.mast.readup.services.LibroService;
 import com.mast.readup.services.SfidaService;
 import com.mast.readup.services.UtenteService;
 
@@ -43,6 +45,10 @@ public class ReadUpMVC {
     @Autowired
     private SfidaService sfidaService;
 
+    // Libro Service injection
+    @Autowired
+    private LibroService libroService;
+
 
     /* CONTROLLERS */
 
@@ -52,6 +58,8 @@ public class ReadUpMVC {
         if (!model.containsAttribute("Utente")) {
             model.addAttribute("Utente", new Utente());
         }
+        List<Libro> carousel = libroService.findRandomCarousel(4);  
+        model.addAttribute("libri", carousel);
         return "index";
     }
 
@@ -104,10 +112,10 @@ public class ReadUpMVC {
     // User logout
     @PostMapping("/logout")
     public String logout(HttpSession session) {
-        
+
         // select the user from the session
         Utente current = (Utente) session.getAttribute("currentUser");
-        
+
         // if the user is logged in
         if (current != null) {
 
@@ -117,18 +125,18 @@ public class ReadUpMVC {
             // remove all attributes from the session (including the current user)
             session.invalidate();
         }
-    
+
         // Redirect to the homepage
         return "redirect:/";
     }
-    
+
     // Profilo
     @GetMapping("/profilo.html")
     public String profilo(Model model) {
         return "profilo";
     }
 
-        @PostMapping("/uploadprofileimage")
+    @PostMapping("/uploadprofileimage")
     public String handleImageUpload(@RequestParam("image") MultipartFile file, Principal principal) {
         if (principal == null || principal.getName() == null) {
             return "redirect:/login?error=not_authenticated";
@@ -147,17 +155,29 @@ public class ReadUpMVC {
         }
     }
 
+
+
+
+
+
+
+
     // Le mie Booklist
     @GetMapping("/booklist.html")
     public String booklist(Model model) {
         return "booklist";
     }
 
+
     // I miei libri
     @GetMapping("/libri.html")
     public String libri(){
         return "book";
     }
+
+
+
+
 
     // Sfide
     @GetMapping("/sfide.html")
@@ -169,7 +189,7 @@ public class ReadUpMVC {
         return "sfide";
     }
 
-    //salva sfida
+    // Salva sfida
     @PostMapping("/salvasfida")
     public String salvaSfida(@ModelAttribute("sfida") Sfida sfida,
                             @RequestParam("idCreatoreForm") Long idCreatore,
