@@ -1,6 +1,7 @@
 package com.mast.readup.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,12 +20,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mast.readup.entities.Booklist;
 import com.mast.readup.entities.Libro;
-import com.mast.readup.entities.PartecipantiSfida;
 import com.mast.readup.entities.Sfida;
 import com.mast.readup.entities.Utente;
 import com.mast.readup.services.BooklistService;
@@ -192,24 +194,6 @@ public class ReadUpMVC {
         return "challenges/details";
     }
 
-    @GetMapping("/sfide.html/{id}")
-    public String viewChallengeDetails(@PathVariable("id") Long idSfida, Model model, Principal principal) {
-        if (principal == null) {
-            return "redirect:/";
-        }
-        sfidaService.getById(idSfida)
-            .ifPresentOrElse(
-                sfida -> {
-                    model.addAttribute("sfida", sfida);
-                    // Controlla se l'utente è il creatore della sfida
-                    boolean isCreator = principal.getName().equals(sfida.getUtenteCreatore().getNickname());
-                    model.addAttribute("isCreator", isCreator);
-                },
-                () -> model.addAttribute("errorMessage", "Sfida non trovata.")
-            );
-        return "challenges/details";
-    }
-
     // Save a new challenge
     @PostMapping("/salvasfida")
     public String salvaSfida(@ModelAttribute("sfida") Sfida sfida,
@@ -222,8 +206,7 @@ public class ReadUpMVC {
             return "redirect:/sfide.html";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Errore nella creazione della sfida: " + e.getMessage());
-            // Se c'è un errore, l'utente verrà reindirizzato alla pagina della lista.
-            return "redirect:/sfide"; // Reindirizza alla pagina della lista, mostrando l'errore
+            return "redirect:/sfide.html";
         }
     }
 
@@ -256,7 +239,7 @@ public class ReadUpMVC {
         return "redirect:/challenges"; // Reindirizza alla lista delle sfide
     }
 
-    // Question and answers
+    // Q&A page
     @GetMapping("/qa.html")
     public String qa() {
         return "qa";

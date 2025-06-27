@@ -1,11 +1,7 @@
 package com.mast.readup.entities;
 
-import java.time.Year;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.hibernate.type.descriptor.jdbc.SmallIntJdbcType;
-import org.springframework.data.annotation.Transient;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
