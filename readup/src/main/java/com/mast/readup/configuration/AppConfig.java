@@ -4,7 +4,7 @@
  * to external services (e.g. OpenLibrary Search & Covers APIs),
  * including a retry policy for transient errors.
  */
-package com.mast.readup.config;
+package com.mast.readup.configuration;
 
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;

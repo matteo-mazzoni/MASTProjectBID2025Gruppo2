@@ -46,7 +46,7 @@ public class LibroServiceImpl implements LibroService {
             String autore = libro.getAutore();
             log.info("→ Chiamata API per titolo='{}', autore='{}'", titolo, autore);
 
-            Optional<List<String>> isbns = openLibraryClient.searchIsbns(titolo, autore);
+            Optional<List<String>> isbns = openLibraryClient.populateHashSetWithAllISBN(titolo, autore);
             
             if (isbns.isEmpty()) {
                 log.warn("   Nessun risultato per '{}'", titolo);

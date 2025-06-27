@@ -1,4 +1,4 @@
-package com.mast.readup.config;
+package com.mast.readup.configuration;
 
 import com.mast.readup.services.LibroService;
 import org.slf4j.Logger;

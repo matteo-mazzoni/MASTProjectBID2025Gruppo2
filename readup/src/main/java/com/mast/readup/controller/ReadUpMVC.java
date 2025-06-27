@@ -128,7 +128,7 @@ public class ReadUpMVC {
         return "profilo";
     }
 
-        @PostMapping("/uploadprofileimage")
+    @PostMapping("/uploadprofileimage")
     public String handleImageUpload(@RequestParam("image") MultipartFile file, Principal principal) {
         if (principal == null || principal.getName() == null) {
             return "redirect:/login?error=not_authenticated";
@@ -169,7 +169,7 @@ public class ReadUpMVC {
         return "sfide";
     }
 
-    //salva sfida
+    // Salva sfida
     @PostMapping("/salvasfida")
     public String salvaSfida(@ModelAttribute("sfida") Sfida sfida,
                             @RequestParam("idCreatoreForm") Long idCreatore,
