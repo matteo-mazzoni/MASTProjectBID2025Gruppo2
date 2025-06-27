@@ -5,7 +5,15 @@
     
 package com.mast.readup.services;
 
+import java.util.List;
+
+import com.mast.readup.entities.Libro;
+
+
 public interface LibroService {
 
     void populateMissingIsbns();
+    List<Libro> findConIsbn();
+    List<Libro> findRandomCarousel(int count);
+
 }
