@@ -4,6 +4,9 @@ import com.mast.readup.entities.Utente;
 import com.mast.readup.repos.UtenteRepos;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,11 +16,11 @@ import java.util.Optional;
 
 @Service 
 public class UtenteServiceImpl implements UtenteService {
-
+    
+    @Autowired
     private final UtenteRepos utenteRepos;
 
     // Constructor injection for UtenteRepos
-    @Autowired
     public UtenteServiceImpl(UtenteRepos utenteRepos) {
         this.utenteRepos = utenteRepos;
     }
@@ -162,14 +165,18 @@ public class UtenteServiceImpl implements UtenteService {
         return image;
     }
 
-@Override
+
+    // Methods for checking data during user's registration
+    @Override
     public boolean nicknameEsistente(String nickname) {
         return utenteRepos.existsByNickname(nickname);
     }
 
-    // Checks if an email already exists
     @Override
     public boolean emailEsistente(String email) {
         return utenteRepos.existsByEmail(email);
     }
+
+    // Methods for checking data during user's login
+    
 }

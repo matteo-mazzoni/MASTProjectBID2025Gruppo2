@@ -46,21 +46,25 @@
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                     </button>
                                 </div>
-                    
-    
-                                <!-- Slide items -->
-                               <ul class="slides_container" id="slides_container">
-                                    <li class="slide"
-                                        th:each="libro, stats : ${libri}"
-                                        th:if="${stats.index < 4}">
-                                        <h5 class="card-title pt-4" th:text="${libro.titolo}">Titolo</h5>
-                                        <p class="card-text text-muted mb-4" th:text="${libro.autore}">Autore</p>
-                                        <img th:src="${libro.coverUrl}" alt="cover" class="card-img-top">
-                                        <a href="#" class="btn btn-sm btn-action mb-2">Aggiungi ai tuoi libri preferiti</a>
-                                        <a href="#" class="btn btn-sm btn-action mb-4">Aggiungi ad una booklist</a>
-                                    </li>
-                                </ul>
-                                <!-- / Slide items -->
+
+                                <!-- Slides wrapper for animation effects -->
+                                <div class="slides_wrapper">
+                                    <!-- Slide items -->
+                                    <ul class="slides_container" id="slides_container">
+                                        <li class="slide"
+                                            th:each="libro, stats : ${libri}"
+                                            th:if="${stats.index < 4}">
+                                            <h5 class="card-title pt-4" th:text="${libro.titolo}">Titolo</h5>
+                                            <p class="card-text text-muted mb-4" th:text="${libro.autore}">Autore</p>
+                                            <img th:src="${libro.coverUrl}" alt="cover" class="card-img-top">
+                                            <a href="#" class="btn btn-sm btn-action mb-2">Aggiungi ai tuoi libri preferiti</a>
+                                            <a href="#" class="btn btn-sm btn-action mb-4">Aggiungi ad una booklist</a>
+                                        </li>
+                                    </ul>
+                                    <!-- / Slide items -->
+                                </div>
+                                <!-- / Slides wrapper -->
+                                
                                 
                                 <!-- Arrow button next -->
                                 <div class="arrow_button_container">

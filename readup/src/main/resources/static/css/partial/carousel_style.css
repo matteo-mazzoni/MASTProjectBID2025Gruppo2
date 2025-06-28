@@ -21,6 +21,20 @@
   background-color: rgba(143, 169, 218, 0.3);
 }
 
+.slides_wrapper {
+  overflow: hidden;
+}
+
+.slides_container {
+  transition: transform 0.5s ease-in-out;
+}
+
+.slide-arrow {
+  z-index: 2;
+  transition: opacity 0.3s;
+}
+
+
 .slides_container {
   display: flex;
   height: auto;
@@ -89,6 +103,7 @@
   right: 0;
   padding-left: 0.3rem;
 }
+
 
 
 

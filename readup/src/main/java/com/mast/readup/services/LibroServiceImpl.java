@@ -79,7 +79,7 @@ public class LibroServiceImpl implements LibroService {
 
                 // Save the first ISBN found into the database 
                 libroRepos.save(book);
-                log.info("   salvato ISBN '{}' per libro id={}", chosenIsbn, book.getIdLibro());
+                log.info("salvato ISBN '{}' per libro id={}", chosenIsbn, book.getIdLibro());
             }
         }
 
