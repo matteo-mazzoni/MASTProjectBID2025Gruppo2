@@ -137,29 +137,30 @@ public class ReadUpMVC {
 
     // Booklist page
     @GetMapping("/booklist.html")
-    public String viewUserBooklists(Model model, Principal principal, HttpSession session) {
-        if (principal == null) {
-            return "redirect:/";
+    public String viewUserBooklists(Model model, HttpSession session) { // MODIFICATO: Rimosso Principal principal
+        Long loggedInUserId = getCurrentUserId(session);
+        if (loggedInUserId == null) {
+            model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare le booklist."); 
+            return "redirect:/"; 
         }
-        String nickname = principal.getName();
+        String nickname = ((Utente) session.getAttribute("currentUser")).getNickname();
         List<Booklist> booklists = booklistService.getAllBooklistsByUser(nickname);
         model.addAttribute("booklists", booklists);
         model.addAttribute("newBooklistName", "");
-        model.addAttribute("currentUserId", getCurrentUserId(session));
+        model.addAttribute("currentUserId", loggedInUserId);
         return "booklist";
     }
 
     @PostMapping("/salvabooklist")
-    public String createBooklist(@RequestParam("name") String name, Principal principal, RedirectAttributes redirectAttributes, HttpSession session) {
-        if (principal == null) {
-            return "redirect:/";
+    public String createBooklist(@RequestParam("name") String name, RedirectAttributes redirectAttributes, HttpSession session) { 
+        Long userId = getCurrentUserId(session);
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per creare una booklist.");
+            return "redirect:/"; 
         }
         try {
-            Long userId = getCurrentUserId(session);
-            if (userId == null) {
-                 throw new IllegalArgumentException("Utente non autenticato.");
-            }
-            booklistService.creaBooklist(userId, name, principal.getName());
+            String nickname = ((Utente) session.getAttribute("currentUser")).getNickname();
+            booklistService.creaBooklist(userId, name, nickname);
             redirectAttributes.addFlashAttribute("successMessage", "Booklist '" + name + "' creata con successo!");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Errore nella creazione della booklist: " + e.getMessage());
@@ -168,26 +169,24 @@ public class ReadUpMVC {
     }
 
     @GetMapping("/booklist/{idBooklist}")
-    public String viewBooklistDetails(@PathVariable("idBooklist") long idBooklist, Model model, Principal principal, HttpSession session) {
-        if (principal == null) {
-            return "redirect:/";
-        }
+    public String viewBooklistDetails(@PathVariable("idBooklist") long idBooklist, Model model, HttpSession session) {
         Long currentUserId = getCurrentUserId(session);
         if (currentUserId == null) {
-            return "redirect:/";
+            model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare i dettagli della booklist.");
+            return "redirect:/"; 
         }
 
         Optional<Booklist> booklistOpt = booklistRepos.findById(idBooklist);
         if (booklistOpt.isEmpty()) {
             model.addAttribute("errorMessage", "Booklist non trovata.");
-            return "error";
+            return "error"; 
         }
 
         Booklist booklist = booklistOpt.get();
 
         if (booklist.getUtenteCreatore().getIdUtente() != currentUserId) {
             model.addAttribute("errorMessage", "Non hai i permessi per visualizzare questa booklist.");
-            return "error";
+            return "error"; 
         }
 
         List<Libro> libriInBooklist = booklistService.getBooksInBooklist(idBooklist);
@@ -200,20 +199,17 @@ public class ReadUpMVC {
     @PostMapping("/booklist/{idBooklist}/add/{idLibro}")
     public String addBookToBooklist(@PathVariable("idBooklist") long idBooklist,
                                     @PathVariable("idLibro") long idLibro,
-                                    Principal principal,
                                     RedirectAttributes redirectAttributes,
-                                    HttpSession session) {
-        if (principal == null) {
-            return "redirect:/";
+                                    HttpSession session){
+        Long userId = getCurrentUserId(session);
+        if (userId == null) {
+             redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per aggiungere libri alle booklist.");
+             return "redirect:/";
         }
         try {
-            Long userId = getCurrentUserId(session);
-            if (userId == null) {
-                 throw new IllegalArgumentException("Utente non autenticato.");
-            }
             booklistService.addBookToBooklist(idBooklist, idLibro, userId);
             redirectAttributes.addFlashAttribute("successMessage", "Libro aggiunto alla booklist con successo!");
-        } catch (SecurityException | IllegalArgumentException e) { // Cattura anche SecurityException
+        } catch (SecurityException | IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Errore: " + e.getMessage());
         }
         return "redirect:/booklist/" + idBooklist;
@@ -222,20 +218,17 @@ public class ReadUpMVC {
     @PostMapping("/booklist/{idBooklist}/remove/{idLibro}")
     public String removeBookFromBooklist(@PathVariable("idBooklist") long idBooklist,
                                          @PathVariable("idLibro") long idLibro,
-                                         Principal principal,
                                          RedirectAttributes redirectAttributes,
-                                         HttpSession session) {
-        if (principal == null) {
-            return "redirect:/";
+                                         HttpSession session) { 
+        Long userId = getCurrentUserId(session);
+        if (userId == null) {
+             redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per rimuovere libri dalle booklist.");
+             return "redirect:/";
         }
         try {
-            Long userId = getCurrentUserId(session);
-            if (userId == null) {
-                 throw new IllegalArgumentException("Utente non autenticato.");
-            }
             booklistService.removeBookFromBooklist(idBooklist, idLibro, userId);
             redirectAttributes.addFlashAttribute("successMessage", "Libro rimosso dalla booklist con successo!");
-        } catch (SecurityException | IllegalArgumentException e) { // Cattura anche SecurityException
+        } catch (SecurityException | IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Errore: " + e.getMessage());
         }
         return "redirect:/booklist/" + idBooklist;
@@ -258,22 +251,30 @@ public class ReadUpMVC {
     }
 
     @GetMapping("/sfide.html/{id}")
-    public String viewChallengeDetails(@PathVariable("id") Long idSfida, Model model, Principal principal) {
-        if (principal == null) {
+    public String viewChallengeDetails(@PathVariable("id") Long idSfida, Model model, HttpSession session) {
+        Long currentUserId = getCurrentUserId(session); 
+        
+        if (currentUserId == null) { 
+            model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare i dettagli della sfida.");
             return "redirect:/";
         }
+        
+        Utente currentUser = (Utente) session.getAttribute("currentUser");
+        
+        final String nicknameForLambda = (currentUser != null) ? currentUser.getNickname() : null;
+        
         sfidaService.getById(idSfida)
             .ifPresentOrElse(
                 sfida -> {
                     model.addAttribute("sfida", sfida);
-                    // Controlla se l'utente è il creatore della sfida
-                    boolean isCreator = principal.getName().equals(sfida.getUtenteCreatore().getNickname());
+                    boolean isCreator = nicknameForLambda != null && sfida.getUtenteCreatore() != null && nicknameForLambda.equals(sfida.getUtenteCreatore().getNickname());
                     model.addAttribute("isCreator", isCreator);
                 },
                 () -> model.addAttribute("errorMessage", "Sfida non trovata.")
             );
         return "challenges/details";
     }
+
 
     // Save a new challenge
     @PostMapping("/salvasfida")
@@ -292,24 +293,28 @@ public class ReadUpMVC {
     }
 
     @PostMapping("/{id}/partecipa")
-    public String enrollInChallenge(@PathVariable("id") Long idSfida, Principal principal, RedirectAttributes redirectAttributes, HttpSession session) {
-        if (principal == null) {
-            return "redirect:/login";
+    public String enrollInChallenge(@PathVariable("id") Long idSfida, RedirectAttributes redirectAttributes, HttpSession session) { 
+        Long userId = getCurrentUserId(session);
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per partecipare alle sfide.");
+            return "redirect:/";
         }
         try {
-            Long userId = getCurrentUserId(session);
             sfidaService.partecipaSfida(idSfida, userId);
             redirectAttributes.addFlashAttribute("successMessage", "Ti sei iscritto alla sfida con successo!");
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        return "redirect:/sfide";
+        return "redirect:/sfide"; 
     }
 
+
     @PostMapping("/{id}/eliminasfida")
-    public String deleteChallenge(@PathVariable("id") Long idSfida, Principal principal, RedirectAttributes redirectAttributes) {
-        if (principal == null) {
-            return "redirect:/";
+    public String deleteChallenge(@PathVariable("id") Long idSfida, RedirectAttributes redirectAttributes, HttpSession session) { 
+        Long userId = getCurrentUserId(session); // Puoi aggiungere un controllo sull'ID utente se solo il creatore può eliminare
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per eliminare le sfide.");
+            return "redirect:/"; 
         }
         try {
             sfidaService.rimuoviSfida(idSfida);
@@ -317,8 +322,9 @@ public class ReadUpMVC {
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        return "redirect:/challenges"; // Reindirizza alla lista delle sfide
+        return "redirect:/sfide";
     }
+
 
     // Q&A page
     @GetMapping("/qa.html")
@@ -369,8 +375,8 @@ public class ReadUpMVC {
         List<Booklist> userBooklists = booklistService.getAllBooklistsByUser(currentUser.getNickname());
         model.addAttribute("userBooklists", userBooklists);
 
-         // *** NUOVO: Calcolo e aggiunta dei conteggi al modello ***
-        int numBooklists = userBooklists.size(); // Conto le booklist dalla lista già recuperata
+        // Conto delle Booklist e delle sfide
+        int numBooklists = userBooklists.size(); 
         int numChallenges = sfidaService.countSfideByPartecipante(currentUser.getIdUtente()); 
 
         model.addAttribute("numBooklists", numBooklists);
