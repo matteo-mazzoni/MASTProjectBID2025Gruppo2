@@ -157,4 +157,9 @@ public class SfidaServiceImpl implements SfidaService {
 
         return sfidaRepos.save(sfida);
     }
+
+    @Override
+    public int countSfideByPartecipante(Long idUtente) {
+        return sfidaRepos.countByPartecipanti_IdUtente(idUtente); 
+    }
 }

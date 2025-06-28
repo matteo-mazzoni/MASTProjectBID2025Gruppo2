@@ -15,13 +15,14 @@
 }
 
 .section-spacing {
-  margin-top: 2rem; 
+  margin-bottom: 3rem; 
 }
 
 .profile-photo-card {
   background-color: var(--bg_card_color);
   border-radius: 12px;
   padding: 2rem;
+  padding-bottom: 0.5rem;
   box-shadow: 0 4px 12px rgba(39, 52, 99, 0.3);
   text-align: center;
   width: 300px;
@@ -29,10 +30,6 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.profile-photo-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(39, 52, 99, 0.4);
-}
 
 .profile-photo {
   display: block;
@@ -43,28 +40,6 @@
   border-radius: 50%;
   border: 2px solid var(--stripe_color);
   align-content: center;
-}
-
-.upload-btn {
-  width: 100%;
-  padding: 0.75rem;
-  background: var(--links_color);
-  color: var(--background_color);
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.upload-btn:hover {
- background-color: var(--text_color);
-  transform: translateY(-2px);
-}
-
-.upload-btn:active {
-  transform: translateY(0);
 }
 
 input[type="file"] {
@@ -111,7 +86,8 @@ input[type="file"] {
 .profile-section-card {
   background-color: var(--bg_card_color);
   border-radius: 12px;
-  padding: 1rem;
+  padding: 1.5rem;
+  padding-bottom: 1.5rem;
   box-shadow: 0 4px 12px rgba(39, 52, 99, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -196,4 +172,45 @@ input[type="file"] {
       width: 100%; 
       height: 120px; 
   }
+}
+
+/* Stili per la sezione dei conteggi (Sfide, Booklist) */
+.profile-stats {
+    margin-top: 1.5rem; /* Spazio sopra i conteggi */
+    font-size: 1.1rem; /* Dimensione del font leggermente più grande */
+    color: var(--text_color); /* Colore del testo */
+}
+
+.profile-stats p {
+    margin-bottom: 0.5rem; /* Spazio tra i paragrafi dei conteggi */
+}
+
+.profile-stats strong {
+    color: var(--links_color); /* Colore più evidente per i numeri */
+    font-size: 1.3rem; /* Rende i numeri più grandi */
+}
+
+/* Stili per il pulsante di Logout */
+.button {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem; 
+    margin-bottom: 1rem; 
+    background: var(--links_color);
+    color: var(--background_color);
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+    background-color: var(--text_color); /* Colore al passaggio del mouse */
+    transform: translateY(-2px);
+}
+
+.button:active {
+    transform: translateY(0);
 }

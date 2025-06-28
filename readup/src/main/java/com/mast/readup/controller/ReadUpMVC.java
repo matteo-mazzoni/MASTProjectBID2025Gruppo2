@@ -60,7 +60,6 @@ public class ReadUpMVC {
     @Autowired 
     private LibreriaService libreriaService;
 
-
     // Booklist Repos injection
     @Autowired 
     private BooklistRepos booklistRepos;
@@ -362,12 +361,20 @@ public class ReadUpMVC {
         
         model.addAttribute("currentUser", currentUser);
 
+        // Recupera i libri della libreria
         List<Libro> libriUtente = libreriaService.getLibriByUtenteId(currentUser.getIdUtente());
-        model.addAttribute("libriUtente", libriUtente);
+        model.addAttribute("userLibraryBooks", libriUtente); 
 
         // Recupera le booklist
         List<Booklist> userBooklists = booklistService.getAllBooklistsByUser(currentUser.getNickname());
         model.addAttribute("userBooklists", userBooklists);
+
+         // *** NUOVO: Calcolo e aggiunta dei conteggi al modello ***
+        int numBooklists = userBooklists.size(); // Conto le booklist dalla lista già recuperata
+        int numChallenges = sfidaService.countSfideByPartecipante(currentUser.getIdUtente()); 
+
+        model.addAttribute("numBooklists", numBooklists);
+        model.addAttribute("numChallenges", numChallenges);
 
         return "profilo"; 
     }

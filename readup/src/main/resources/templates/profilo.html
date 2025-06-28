@@ -22,14 +22,26 @@
                     <div class="profile-photo-wrapper">
                         
                         <!-- Card foto profilo -->
+                        <div class="profile-photo-wrapper">
+                        
                         <div class="profile-photo-card">
                             <img th:src="@{/profile/image/{id}(id=${userId})}" class="profile-photo" alt="Foto profilo">
                             <form th:action="@{/profile/uploadImage}" method="post" enctype="multipart/form-data">
-                                <label for="imageUpload" class="upload-btn">Cambia immagine</label>
+                                <label for="imageUpload" class="button">Cambia immagine</label>
                                 <input id="imageUpload" type="file" name="profileImage" accept="image/*" onchange="this.form.submit()" />
                             </form>
                             <h5 th:if="${currentUser != null}"><span th:text="${currentUser.nickname}"></span></h5>
                             <p th:if="${currentUser == null}">Dati utente non disponibili.</p>
+                            
+                            <div class="profile-stats mt-3">
+                                <p class="mb-1"><strong th:text="${numChallenges}">0</strong> Sfide</p>
+                                <p class="mb-1"><strong th:text="${numBooklists}">0</strong> Booklist</p>
+                            </div>
+                            
+                            <form th:action="@{/logout}" method="post" class="mt-3">
+                                <button type="submit" class="button">Logout</button>
+                            </form>
+
                         </div>
 
                         <!-- Column with 2 cards -->
@@ -54,7 +66,7 @@
                                                 <div class="card-body d-flex flex-column">
                                                     <h5 class="card-title" th:text="${book.title}">Titolo Libro</h5>
                                                     <p class="card-text text-muted mb-auto" th:text="${book.author}">Autore Libro</p>
-                                                    <a th:href="@{/book/{id}(id=${book.id})}" class="btn btn-outline-primary mt-3">Dettagli</a>
+                                                    <a th:href="@{/book/{id}(id=${book.id})}" class="button btn-outline-primary mt-3">Dettagli</a>
                                                 </div>
                                             </div>
                                         </div>

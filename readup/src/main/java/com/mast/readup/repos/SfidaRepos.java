@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SfidaRepos extends JpaRepository<Sfida, Long> {
 
+    int countByPartecipanti_IdUtente(Long idUtente);
 }
