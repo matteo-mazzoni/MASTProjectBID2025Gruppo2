@@ -275,7 +275,6 @@ public class ReadUpMVC {
         return "challenges/details";
     }
 
-
     // Save a new challenge
     @PostMapping("/salvasfida")
     public String salvaSfida(@ModelAttribute("sfida") Sfida sfida,

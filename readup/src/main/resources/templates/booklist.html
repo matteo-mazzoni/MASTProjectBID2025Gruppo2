@@ -18,6 +18,95 @@
 
             <!-- Main -->
             <main>
+                 <div class="container">
+                    <h2 class="my-4 text-center">Le mie Booklist</h2>
+
+                    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:text="${successMessage}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${errorMessage}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Crea una nuova Booklist</h4>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/salvabooklist}" method="post" class="d-flex">
+                                <input type="text" name="name" class="form-control me-2" placeholder="Nome Booklist" required 
+                                    th:value="${newBooklistName}">
+                                <button type="submit" class="btn btn-primary">Salva</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Booklist create da te</h4>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${#lists.isEmpty(booklists)}" class="text-center text-muted">
+                                Non hai ancora creato nessuna Booklist.
+                            </div>
+                            <div th:each="booklist : ${booklists}" class="booklist-item">
+                                <div>
+                                    <h5 class="mb-0" th:text="${booklist.nome}">Nome Booklist</h5>
+                                    <small class="text-muted" th:text="'Libri: ' + ${#lists.size(booklist.libri)}"></small>
+                                </div>
+                                <div>
+                                    <a th:href="@{/booklist/{idBooklist}(idBooklist=${booklist.idBooklist})}" class="btn btn-info btn-sm me-2">Visualizza</a>
+                                    
+                                    <form th:action="@{/booklist/{idBooklist}/delete(idBooklist=${booklist.idBooklist})}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-danger btn-sm" 
+                                                onclick="return confirm('Sei sicuro di voler eliminare questa booklist? Tutti i libri al suo interno verranno rimossi da essa, ma rimarranno nella tua libreria.');">Elimina</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <nav class="navbar navbar-expand navbar-light bg-light fixed-bottom navbar-bottom">
+                    <div class="container-fluid">
+                        <ul class="navbar-nav nav-justified w-100">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/}">
+                                    <i class="bi bi-house-fill"></i>
+                                    <span>Home</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/libri.html}">
+                                    <i class="bi bi-book-fill"></i>
+                                    <span>I miei libri</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" th:href="@{/booklist.html}">
+                                    <i class="bi bi-collection-fill"></i>
+                                    <span>Booklist</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/sfide.html}">
+                                    <i class="bi bi-trophy-fill"></i>
+                                    <span>Sfide</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/profilo.html}">
+                                    <i class="bi bi-person-circle"></i>
+                                    <span>Profilo</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
             </main>
             <!-- / Main -->
 
