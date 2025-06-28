@@ -122,20 +122,17 @@ public class ReadUpMVC {
     @PostMapping("/logout")
     public String logout(HttpSession session) {
 
-        // select the user from the session
-        Utente current = (Utente) session.getAttribute("currentUser");
+        Utente current = (Utente) session.getAttribute("currentUser");   // select the user from the session
 
-        // if the user is logged in
-        if (current != null) {
+        if (current != null) {  // if the user is logged in
             utenteService.cambiaStatusLogin(current.getIdUtente(), false);
             session.invalidate(); // Invalidate session
         }
 
-        // Redirect to the homepage
-        return "redirect:/";
+        return "redirect:/";    // Redirect to the homepage
     }
 
-    // Booklist page
+    // Booklist page – Show user's booklists
     @GetMapping("/booklist.html")
     public String viewUserBooklists(Model model, HttpSession session) { // MODIFICATO: Rimosso Principal principal
         Long loggedInUserId = getCurrentUserId(session);
@@ -143,12 +140,13 @@ public class ReadUpMVC {
             model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare le booklist."); 
             return "redirect:/"; 
         }
-        String nickname = ((Utente) session.getAttribute("currentUser")).getNickname();
-        List<Booklist> booklists = booklistService.getAllBooklistsByUser(nickname);
-        model.addAttribute("booklists", booklists);
-        model.addAttribute("newBooklistName", "");
-        model.addAttribute("currentUserId", loggedInUserId);
-        return "booklist";
+        
+        String nickname = ((Utente) session.getAttribute("currentUser")).getNickname(); // Retrieve nickname from session-stored user object
+        List<Booklist> booklists = booklistService.getAllBooklistsByUser(nickname); // Get all booklists created by the user
+        model.addAttribute("booklists", booklists); // List of booklists
+        model.addAttribute("newBooklistName", ""); // Placeholder for creating a new booklist
+        model.addAttribute("currentUserId", loggedInUserId); // ID of the current user
+        return "booklist"; // Return the view
     }
 
     @PostMapping("/salvabooklist")
@@ -167,7 +165,8 @@ public class ReadUpMVC {
         }
         return "redirect:/booklist.html";
     }
-
+    
+    // View a specific booklist with its details
     @GetMapping("/booklist/{idBooklist}")
     public String viewBooklistDetails(@PathVariable("idBooklist") long idBooklist, Model model, HttpSession session) {
         Long currentUserId = getCurrentUserId(session);
@@ -184,18 +183,19 @@ public class ReadUpMVC {
 
         Booklist booklist = booklistOpt.get();
 
-        if (booklist.getUtenteCreatore().getIdUtente() != currentUserId) {
+        if (booklist.getUtenteCreatore().getIdUtente() != currentUserId) {  // Access control: only the owner can view their booklist
             model.addAttribute("errorMessage", "Non hai i permessi per visualizzare questa booklist.");
             return "error"; 
         }
 
         List<Libro> libriInBooklist = booklistService.getBooksInBooklist(idBooklist);
-        model.addAttribute("booklist", booklist);
-        model.addAttribute("libriInBooklist", libriInBooklist);
+        model.addAttribute("booklist", booklist); // Selected booklist
+        model.addAttribute("libriInBooklist", libriInBooklist); // Books in the booklist
         model.addAttribute("currentUserId", currentUserId);
-        return "booklist_detail";
+        return "booklist_detail"; // View for detailed booklist
     }
 
+    // Add a book to a booklist
     @PostMapping("/booklist/{idBooklist}/add/{idLibro}")
     public String addBookToBooklist(@PathVariable("idBooklist") long idBooklist,
                                     @PathVariable("idLibro") long idLibro,
@@ -206,7 +206,8 @@ public class ReadUpMVC {
              redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per aggiungere libri alle booklist.");
              return "redirect:/";
         }
-        try {
+
+        try {   // Add the book to the user's booklist
             booklistService.addBookToBooklist(idBooklist, idLibro, userId);
             redirectAttributes.addFlashAttribute("successMessage", "Libro aggiunto alla booklist con successo!");
         } catch (SecurityException | IllegalArgumentException e) {
@@ -215,6 +216,7 @@ public class ReadUpMVC {
         return "redirect:/booklist/" + idBooklist;
     }
 
+    // Remove a book from a booklist
     @PostMapping("/booklist/{idBooklist}/remove/{idLibro}")
     public String removeBookFromBooklist(@PathVariable("idBooklist") long idBooklist,
                                          @PathVariable("idLibro") long idLibro,
@@ -225,7 +227,8 @@ public class ReadUpMVC {
              redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per rimuovere libri dalle booklist.");
              return "redirect:/";
         }
-        try {
+
+        try {   // Remove the book from the user's booklist
             booklistService.removeBookFromBooklist(idBooklist, idLibro, userId);
             redirectAttributes.addFlashAttribute("successMessage", "Libro rimosso dalla booklist con successo!");
         } catch (SecurityException | IllegalArgumentException e) {
@@ -240,89 +243,96 @@ public class ReadUpMVC {
         return "book";
     }
 
-    // Sfide
+    // All challenges
     @GetMapping("/sfide.html")
     public String listaSfide(Model model, HttpSession session) {
-        List<Sfida> sfide = sfidaService.getAll();
-        model.addAttribute("sfide", sfide);
-        model.addAttribute("currentUserId", getCurrentUserId(session));
-        model.addAttribute("sfida", new Sfida()); // Empty Sfida object for the form
+        List<Sfida> sfide = sfidaService.getAll();  // Fetch all challenges from the database
+        model.addAttribute("sfide", sfide); // List of challenges
+        model.addAttribute("currentUserId", getCurrentUserId(session)); // Currently logged-in user's ID
+        model.addAttribute("sfida", new Sfida());   // Empty challenge object for form binding
         return "sfide";
     }
 
+    // View details of a specific challenge
     @GetMapping("/sfide.html/{id}")
     public String viewChallengeDetails(@PathVariable("id") Long idSfida, Model model, HttpSession session) {
         Long currentUserId = getCurrentUserId(session); 
         
-        if (currentUserId == null) { 
+        if (currentUserId == null) {    // Redirect to login if user is not authenticated
             model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare i dettagli della sfida.");
             return "redirect:/";
         }
         
-        Utente currentUser = (Utente) session.getAttribute("currentUser");
+        Utente currentUser = (Utente) session.getAttribute("currentUser");  // Retrieve current user from session
         
         final String nicknameForLambda = (currentUser != null) ? currentUser.getNickname() : null;
         
+        // Retrieve challenge by ID and add details to the model
         sfidaService.getById(idSfida)
             .ifPresentOrElse(
                 sfida -> {
                     model.addAttribute("sfida", sfida);
+                    // Determine if the current user is the creator of the challenge
                     boolean isCreator = nicknameForLambda != null && sfida.getUtenteCreatore() != null && nicknameForLambda.equals(sfida.getUtenteCreatore().getNickname());
                     model.addAttribute("isCreator", isCreator);
                 },
                 () -> model.addAttribute("errorMessage", "Sfida non trovata.")
             );
-        return "challenges/details";
+        return "challenges/details";    // Return view with challenge details
     }
 
 
-    // Save a new challenge
+    // Save a new challenge submitted via form
     @PostMapping("/salvasfida")
     public String salvaSfida(@ModelAttribute("sfida") Sfida sfida,
                              @RequestParam("idCreatoreForm") Long idCreatore,
                              RedirectAttributes redirectAttributes) {
-        try {
+        try {   // Add a new challenge using data from the form
             sfidaService.aggiungiSfida(sfida.getNomeSfida(), sfida.getDescrizioneSfida(),
                                        sfida.getDataInizio(), sfida.getDataFine(), idCreatore);
             redirectAttributes.addFlashAttribute("successMessage", "Sfida creata con successo!");
             return "redirect:/sfide.html";
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {  // Handle known validation error
             redirectAttributes.addFlashAttribute("errorMessage", "Errore nella creazione della sfida: " + e.getMessage());
             return "redirect:/sfide.html";
         }
     }
 
+    // Enroll current user in a challenge
     @PostMapping("/{id}/partecipa")
     public String enrollInChallenge(@PathVariable("id") Long idSfida, RedirectAttributes redirectAttributes, HttpSession session) { 
         Long userId = getCurrentUserId(session);
-        if (userId == null) {
+        if (userId == null) {   // Redirect to login if user is not authenticated
             redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per partecipare alle sfide.");
             return "redirect:/";
         }
-        try {
+
+        try {   // Enroll the user in the selected challenge
             sfidaService.partecipaSfida(idSfida, userId);
             redirectAttributes.addFlashAttribute("successMessage", "Ti sei iscritto alla sfida con successo!");
-        } catch (RuntimeException e) {
+        } catch (RuntimeException e) {  // Handle errors such as already participating, challenge not found, etc.
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        return "redirect:/sfide"; 
+        return "redirect:/sfide"; // Redirect back to challenge list
     }
 
-
+    // Delete a challenge (only available to the creator, ideally)
     @PostMapping("/{id}/eliminasfida")
     public String deleteChallenge(@PathVariable("id") Long idSfida, RedirectAttributes redirectAttributes, HttpSession session) { 
         Long userId = getCurrentUserId(session); // Puoi aggiungere un controllo sull'ID utente se solo il creatore può eliminare
-        if (userId == null) {
+        
+        if (userId == null) {   // Redirect to login if user is not authenticated
             redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per eliminare le sfide.");
             return "redirect:/"; 
         }
-        try {
+
+        try {   // Attempt to delete the challenge 
             sfidaService.rimuoviSfida(idSfida);
             redirectAttributes.addFlashAttribute("successMessage", "Sfida eliminata con successo!");
-        } catch (RuntimeException e) {
+        } catch (RuntimeException e) {  // Handle any error during deletion
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
-        return "redirect:/sfide";
+        return "redirect:/sfide";   // Redirect back to challenge list
     }
 
 
@@ -342,66 +352,69 @@ public class ReadUpMVC {
     @GetMapping("/profilo.html") 
     public String profilo(Model model, HttpSession session,  Principal principal) {
 
+        // Retrieve the logged-in user's ID from the session
         Long loggedInUserId = getCurrentUserId(session); 
         Utente currentUser = null;
 
         if (loggedInUserId != null) {
+            // Attempt to find the user in the database
             Optional<Utente> utenteOpt = utenteService.findById(loggedInUserId);
             if (utenteOpt.isPresent()) {
                 currentUser = utenteOpt.get(); 
 
-                session.setAttribute("currentUser", currentUser); 
+                session.setAttribute("currentUser", currentUser); // Store user info in session for later use
             } else {
+                // Handle the case where the session has a user ID not present in the DB
                 System.err.println("ATTENZIONE: Utente in sessione con ID " + loggedInUserId + " non trovato nel DB.");
-                session.invalidate(); 
+                session.invalidate(); // Invalidate session to prevent unauthorized access
                 model.addAttribute("errorMessage", "Sessione utente non valida. Effettua nuovamente il login.");
                 return "redirect:/"; 
             }
-        } else {
+        } else {    // No user is logged in; redirect to login/home
             System.out.println("Utente non loggato, reindirizzamento alla homepage o al login.");
             model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare il profilo.");
             return "redirect:/";
         }
         
+        // Pass user info to the view
         model.addAttribute("userId", currentUser.getIdUtente()); 
-        
         model.addAttribute("currentUser", currentUser);
 
-        // Recupera i libri della libreria
+        /// Fetch user's books from their personal library
         List<Libro> libriUtente = libreriaService.getLibriByUtenteId(currentUser.getIdUtente());
         model.addAttribute("userLibraryBooks", libriUtente); 
 
-        // Recupera le booklist
+        // Fetch all booklists created by the user
         List<Booklist> userBooklists = booklistService.getAllBooklistsByUser(currentUser.getNickname());
         model.addAttribute("userBooklists", userBooklists);
 
-        // Conto delle Booklist e delle sfide
+        // Count number of booklists and challenges associated with the user
         int numBooklists = userBooklists.size(); 
         int numChallenges = sfidaService.countSfideByPartecipante(currentUser.getIdUtente()); 
 
+        // Pass counts to the view for display
         model.addAttribute("numBooklists", numBooklists);
         model.addAttribute("numChallenges", numChallenges);
 
-        return "profilo"; 
+        return "profilo"; // Return the profile view template
     }
 
     // Handle profile image upload
     @PostMapping("/profile/uploadImage")
     public String uploadProfileImage(@RequestParam("profileImage") MultipartFile file, HttpSession session) {
-        Utente currentUser = (Utente) session.getAttribute("currentUser");
+        Utente currentUser = (Utente) session.getAttribute("currentUser");  // Retrieve the user object from the session
     
-        // Explicitly get userId as Long to prevent compilation issues with 'long' vs 'null'
-        Long userId = (currentUser != null) ? currentUser.getIdUtente() : null;
+        Long userId = (currentUser != null) ? currentUser.getIdUtente() : null; // Get user ID safely
 
-        if (currentUser == null || userId == null) {
-            return "redirect:/login?error=not_authenticated"; // Redirect if user not in session or ID is null
+        if (currentUser == null || userId == null) {    // Redirect to login if user is not authenticated
+            return "redirect:/login?error=not_authenticated";
         }
 
-        try {
+        try {   // Attempt to save the uploaded profile image
             utenteService.saveProfileImage(currentUser.getIdUtente(), file);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {  // Handle known validation error from service
             return "redirect:/profilo.html?error=" + e.getMessage();
-        } catch (RuntimeException e) {
+        } catch (RuntimeException e) {  // Handle any other unexpected error
             return "redirect:/profilo.html?error=Errore nel salvataggio dell'immagine.";
         }
         return "redirect:/profilo.html";
