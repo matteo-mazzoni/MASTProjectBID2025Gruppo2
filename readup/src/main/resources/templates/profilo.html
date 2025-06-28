@@ -38,10 +38,23 @@
                             <div class="profile-section-card">
                                 <h5>Libreria</h5>
                             </div>
+
                             <!--Card 2-->
-                            <div class="profile-section-card">
-                                <h5>Booklist</h5>
+                             <div class="profile-section-card">
+                                <h5>Le Tue Booklist</h5> 
+
+                                <div th:if="${#lists.isEmpty(userBooklists)}" class="d-flex justify-content-start align-items-center mt-4">
+                                    <a th:href="@{/booklist.html}" class="card text-center text-decoration-none booklist-create-card">
+                                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                            <i class="bi bi-plus-circle display-4 mb-2"></i> <p class="fw-bold mb-0">Crea una Booklist</p>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div th:unless="${#lists.isEmpty(userBooklists)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                                    </div>
                             </div>
+
                         </div>
 
                     </div>

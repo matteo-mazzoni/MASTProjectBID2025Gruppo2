@@ -1,17 +1,14 @@
 package com.mast.readup.services;
 
 import com.mast.readup.entities.Booklist;
-
+import com.mast.readup.entities.Libro;
 import java.util.List;
-import java.util.Optional;
 
 public interface BooklistService {
-    Optional<Booklist> getById(Long idBooklist);
-    List<Booklist> getAll();
-    List<Booklist> getByIdUtenteCreatore(Long idUtenteCreatore);
-    Booklist creaBooklist(Long idUtenteCreatore, String nome, String descrizione);
-    Booklist modificaDatiBooklist(long idBooklist, String nuovoNome, String nuovaDescrizione);
-    Booklist modificaLibriBooklist(long idBooklist, List<String> nuovaListaLibri);
+    Booklist creaBooklist(Long idUtenteCreatore, String nomeBooklist, String nicknameCreatore);
     void eliminaBooklist(long idBooklist);
     List<Booklist> getAllBooklistsByUser(String nickname);
+    Booklist addBookToBooklist(long idBooklist, long idLibro, long idUtente); // userId è per autorizzazione
+    void removeBookFromBooklist(long idBooklist, long idLibro, long idUtente); // userId è per autorizzazione
+    List<Libro> getBooksInBooklist(long idBooklist);
 }

@@ -106,3 +106,97 @@ input[type="file"] {
     margin: 0 auto 1.5rem auto;
   }
 }
+
+/* Card di Sezione Generica (Libreria, Booklist) */
+.profile-section-card {
+  background-color: var(--bg_card_color);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(39, 52, 99, 0.3);
+  /* Rimosso text-align: center; per non influenzare il contenuto delle singole booklist card */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Stile per la card "Crea una Booklist" quando non ci sono booklist */
+.booklist-create-card {
+    background-color: var(--bg_card_color); /* Sfondo della card */
+    border-radius: 12px; /* Raggio dei bordi coerente */
+    box-shadow: 0 4px 12px rgba(39, 52, 99, 0.3); /* Ombra coerente */
+    /* Transizioni fluide per tutti i cambi di stato */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+
+    width: 200px; /* Larghezza fissa */
+    height: 150px; /* Altezza fissa */
+    border: 2px dashed var(--links_color); /* Bordo tratteggiato, usa il colore dei link */
+    color: var(--links_color); /* Colore del testo e dell'icona, usa il colore dei link */
+    
+    /* Per centrare l'icona e il testo all'interno della card */
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.booklist-create-card:hover {
+    transform: translateY(-3px); /* Effetto di sollevamento al passaggio del mouse */
+    box-shadow: 0 6px 16px rgba(39, 52, 99, 0.4); /* Ombra più pronunciata al passaggio del mouse */
+    background-color: var(--links_color); /* Sfondo pieno con il colore dei link */
+    border-color: var(--links_color); /* Il bordo rimane dello stesso colore per uniformità */
+    color: var(--background_color); /* Testo e icona diventano del colore di sfondo per contrasto */
+}
+
+
+/* Stili per le singole Booklist Card (quelle che mostrano le booklist esistenti) */
+.profile-section-card .card {
+    background-color: var(--bg_card_color); /* Sfondo della card, coerente con le altre */
+    border-radius: 12px; /* Raggio dei bordi coerente */
+    /* Modifica ombra e bordo per maggiore visibilità */
+    box-shadow: 0 4px 12px rgba(39, 52, 99, 0.15); /* Ombra leggermente più pronunciata */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transizione fluida per l'effetto hover */
+    border: 1px solid rgba(39, 52, 99, 0.3); /* Bordo più visibile con un colore basato sull'ombra */
+    
+    text-align: left; /* Assicura che il contenuto delle singole card sia allineato a sinistra */
+    min-height: 220px; /* NUOVO: Altezza minima aumentata per dare più spazio */
+}
+
+.profile-section-card .card:hover {
+    transform: translateY(-3px); /* Effetto di sollevamento al passaggio del mouse */
+    box-shadow: 0 6px 16px rgba(39, 52, 99, 0.3); /* Ombra più pronunciata al passaggio del mouse */
+}
+
+.profile-section-card .card-title {
+    color: var(--text_color); /* Colore del titolo, usa la variabile per il testo */
+    font-size: 1.25rem; /* Dimensione standard per un titolo di card */
+    margin-bottom: 0.5rem; /* Spazio sotto il titolo */
+}
+
+.profile-section-card .card-text.text-muted {
+    color: var(--text_color); /* Assicura che il testo muto sia visibile con il tuo tema */
+    opacity: 0.7; /* Rende il testo leggermente più sbiadito */
+    font-size: 0.9rem; /* Dimensione del font più piccola per il conteggio dei libri */
+}
+
+/* Stili per il pulsante "Visualizza" all'interno delle card */
+.profile-section-card .btn-outline-primary {
+    color: var(--links_color); /* Colore del testo del pulsante */
+    border-color: var(--links_color); /* Colore del bordo del pulsante */
+}
+.profile-section-card .btn-outline-primary:hover {
+    background-color: var(--links_color); /* Sfondo al passaggio del mouse */
+    color: var(--background_color); /* Colore del testo al passaggio del mouse (per contrasto) */
+    border-color: var(--links_color); /* Mantiene il colore del bordo */
+}
+
+/* MEDIA QUERIES per la responsività */
+@media screen and (max-width: 767px) {
+  .profile-photo {
+    margin: 0 auto 1.5rem auto; /* Centra l'immagine anche su mobile */
+  }
+
+  /* Responsive adjustment per la card "Crea Booklist" su schermi piccoli */
+  .booklist-create-card {
+      width: 100%; /* La card occupa tutta la larghezza su schermi piccoli */
+      height: 120px; /* Altezza leggermente più contenuta per mobile */
+  }
+}

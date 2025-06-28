@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,6 +27,7 @@ import com.mast.readup.entities.Booklist;
 import com.mast.readup.entities.Libro;
 import com.mast.readup.entities.Sfida;
 import com.mast.readup.entities.Utente;
+import com.mast.readup.repos.BooklistRepos;
 import com.mast.readup.services.BooklistService;
 import com.mast.readup.services.LibreriaService;
 import com.mast.readup.services.LibroService;
@@ -60,6 +59,11 @@ public class ReadUpMVC {
     // Libreria Service injection
     @Autowired 
     private LibreriaService libreriaService;
+
+
+    // Booklist Repos injection
+    @Autowired 
+    private BooklistRepos booklistRepos;
 
     /* CONTROLLERS */
 
@@ -134,30 +138,108 @@ public class ReadUpMVC {
 
     // Booklist page
     @GetMapping("/booklist.html")
-    public String viewUserBooklists(Model model, Principal principal) {
+    public String viewUserBooklists(Model model, Principal principal, HttpSession session) {
         if (principal == null) {
-            return "redirect:/"; // Reindirizza alla home se non autenticato
+            return "redirect:/";
         }
         String nickname = principal.getName();
         List<Booklist> booklists = booklistService.getAllBooklistsByUser(nickname);
         model.addAttribute("booklists", booklists);
-        model.addAttribute("newBooklistName", ""); // For the form to create a new booklist
+        model.addAttribute("newBooklistName", "");
+        model.addAttribute("currentUserId", getCurrentUserId(session));
         return "booklist";
     }
 
     @PostMapping("/salvabooklist")
-    public String createBooklist(@RequestParam("name") String name, Principal principal, RedirectAttributes redirectAttributes) {
+    public String createBooklist(@RequestParam("name") String name, Principal principal, RedirectAttributes redirectAttributes, HttpSession session) {
         if (principal == null) {
             return "redirect:/";
         }
         try {
-            Long userId = getCurrentUserId(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession());
+            Long userId = getCurrentUserId(session);
+            if (userId == null) {
+                 throw new IllegalArgumentException("Utente non autenticato.");
+            }
             booklistService.creaBooklist(userId, name, principal.getName());
             redirectAttributes.addFlashAttribute("successMessage", "Booklist '" + name + "' creata con successo!");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Errore nella creazione della booklist: " + e.getMessage());
         }
-        return "redirect:/booklist"; // returns to the booklist page
+        return "redirect:/booklist.html";
+    }
+
+    @GetMapping("/booklist/{idBooklist}")
+    public String viewBooklistDetails(@PathVariable("idBooklist") long idBooklist, Model model, Principal principal, HttpSession session) {
+        if (principal == null) {
+            return "redirect:/";
+        }
+        Long currentUserId = getCurrentUserId(session);
+        if (currentUserId == null) {
+            return "redirect:/";
+        }
+
+        Optional<Booklist> booklistOpt = booklistRepos.findById(idBooklist);
+        if (booklistOpt.isEmpty()) {
+            model.addAttribute("errorMessage", "Booklist non trovata.");
+            return "error";
+        }
+
+        Booklist booklist = booklistOpt.get();
+
+        if (booklist.getUtenteCreatore().getIdUtente() != currentUserId) {
+            model.addAttribute("errorMessage", "Non hai i permessi per visualizzare questa booklist.");
+            return "error";
+        }
+
+        List<Libro> libriInBooklist = booklistService.getBooksInBooklist(idBooklist);
+        model.addAttribute("booklist", booklist);
+        model.addAttribute("libriInBooklist", libriInBooklist);
+        model.addAttribute("currentUserId", currentUserId);
+        return "booklist_detail";
+    }
+
+    @PostMapping("/booklist/{idBooklist}/add/{idLibro}")
+    public String addBookToBooklist(@PathVariable("idBooklist") long idBooklist,
+                                    @PathVariable("idLibro") long idLibro,
+                                    Principal principal,
+                                    RedirectAttributes redirectAttributes,
+                                    HttpSession session) {
+        if (principal == null) {
+            return "redirect:/";
+        }
+        try {
+            Long userId = getCurrentUserId(session);
+            if (userId == null) {
+                 throw new IllegalArgumentException("Utente non autenticato.");
+            }
+            booklistService.addBookToBooklist(idBooklist, idLibro, userId);
+            redirectAttributes.addFlashAttribute("successMessage", "Libro aggiunto alla booklist con successo!");
+        } catch (SecurityException | IllegalArgumentException e) { // Cattura anche SecurityException
+            redirectAttributes.addFlashAttribute("errorMessage", "Errore: " + e.getMessage());
+        }
+        return "redirect:/booklist/" + idBooklist;
+    }
+
+    @PostMapping("/booklist/{idBooklist}/remove/{idLibro}")
+    public String removeBookFromBooklist(@PathVariable("idBooklist") long idBooklist,
+                                         @PathVariable("idLibro") long idLibro,
+                                         Principal principal,
+                                         RedirectAttributes redirectAttributes,
+                                         HttpSession session) {
+        if (principal == null) {
+            return "redirect:/";
+        }
+        try {
+            Long userId = getCurrentUserId(session);
+            if (userId == null) {
+                 throw new IllegalArgumentException("Utente non autenticato.");
+            }
+            booklistService.removeBookFromBooklist(idBooklist, idLibro, userId);
+            redirectAttributes.addFlashAttribute("successMessage", "Libro rimosso dalla booklist con successo!");
+        } catch (SecurityException | IllegalArgumentException e) { // Cattura anche SecurityException
+            redirectAttributes.addFlashAttribute("errorMessage", "Errore: " + e.getMessage());
+        }
+        return "redirect:/booklist/" + idBooklist;
     }
 
     // I miei libri
@@ -252,8 +334,8 @@ public class ReadUpMVC {
     }
     
     // User profile page
-    @GetMapping("/profilo.html") // Mantenuto il .html come nel tuo codice
-    public String profilo(Model model, HttpSession session) {
+    @GetMapping("/profilo.html") 
+    public String profilo(Model model, HttpSession session,  Principal principal) {
 
         Long loggedInUserId = getCurrentUserId(session); 
         Utente currentUser = null;
@@ -282,6 +364,10 @@ public class ReadUpMVC {
 
         List<Libro> libriUtente = libreriaService.getLibriByUtenteId(currentUser.getIdUtente());
         model.addAttribute("libriUtente", libriUtente);
+
+        // Recupera le booklist
+        List<Booklist> userBooklists = booklistService.getAllBooklistsByUser(currentUser.getNickname());
+        model.addAttribute("userBooklists", userBooklists);
 
         return "profilo"; 
     }
