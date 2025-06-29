@@ -1,7 +1,6 @@
 package com.mast.readup.controller;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -340,7 +339,7 @@ public class ReadUpMVC {
     
     // User profile page
     @GetMapping("/profilo.html") 
-    public String profilo(Model model, HttpSession session,  Principal principal) {
+    public String profilo(Model model, HttpSession session) {
 
         Long loggedInUserId = getCurrentUserId(session); 
         Utente currentUser = null;
@@ -433,5 +432,54 @@ public class ReadUpMVC {
             System.err.println("Generic error retrieving image: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    // Endpoint per gestire l'aggiornamento delle informazioni del profilo
+    @PostMapping("/profile/update")
+    public String updateProfile(@Valid @ModelAttribute("currentUser") Utente updatedUser,
+                               BindingResult bindingResult,
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes) {
+
+        Utente currentUser = (Utente) session.getAttribute("currentUser");
+        if (currentUser == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Sessione scaduta. Effettua nuovamente il login.");
+            return "redirect:/";
+        }
+
+        if (bindingResult.hasErrors()) {
+            String errorMessage = "Errore nella compilazione del form: ";
+            if (bindingResult.hasErrors()) {
+                errorMessage += bindingResult.getAllErrors().get(0).getDefaultMessage();
+            }
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
+            return "redirect:/profilo.html";
+        }
+
+        try {
+            currentUser.setNickname(updatedUser.getNickname());
+            currentUser.setEmail(updatedUser.getEmail());
+            currentUser.setCitta(updatedUser.getCitta());
+
+            // GESTIONE PASSWORD 
+            if (updatedUser.getNewPassword() != null && !updatedUser.getNewPassword().isEmpty()) {
+                if (!updatedUser.getNewPassword().equals(updatedUser.getConfirmNewPassword())) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Le nuove password non corrispondono.");
+                    return "redirect:/profilo.html";
+                }
+                // SALVA LA PASSWORD IN CHIARO:
+                currentUser.setPassword(updatedUser.getNewPassword());
+            }
+
+            utenteService.save(currentUser);
+
+            session.setAttribute("currentUser", currentUser);
+            redirectAttributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo!");
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Errore durante l'aggiornamento del profilo: " + e.getMessage());
+        }
+
+        return "redirect:/profilo.html";
     }
 }

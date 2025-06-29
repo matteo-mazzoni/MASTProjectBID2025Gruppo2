@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -65,4 +66,13 @@ public class Utente {
     @Lob 
     @Column(name = "profile_image", columnDefinition="MEDIUMBLOB")
     private byte[] profileImage;
+
+    // ***** AGGIUNGI QUESTE PROPRIETÀ TRANSIENT PER LA PASSWORD NEL FORM *****
+    @Transient // Questo campo non verrà persistito nel database
+    @Email
+    private String newPassword;
+
+    @Transient // Questo campo non verrà persistito nel database
+    @Email
+    private String confirmNewPassword;
 }

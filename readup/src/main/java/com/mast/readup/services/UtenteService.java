@@ -16,6 +16,7 @@ public interface UtenteService {
     Utente modificaEmail(long idUtente, String nuovaEmail);
     Utente modificaCitta(long idUtente, String nuovaCitta);
     Utente cambiaStatusLogin(long idUtente, boolean statoLogin);
+    Utente save(Utente utente);
     void eliminaUtente(long idUtente);
     void saveProfileImage(Long idUtente, MultipartFile file);
     byte[] getProfileImage(Long idUtente);
