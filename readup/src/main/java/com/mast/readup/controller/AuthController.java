@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mast.readup.entities.Utente;
@@ -26,9 +27,9 @@ public class AuthController {
     private UtenteService utenteService;
 
 
-   @GetMapping("/")
+   @GetMapping({"/", "/login"})
     public String index(Model model, @ModelAttribute("successMessage") String successMessage,
-    @ModelAttribute("loginError") String loginError) {
+    @ModelAttribute("loginError") String loginError, @RequestParam(value="showLogin", required=false) Boolean showLogin) {
 
         // Carousel
         model.addAttribute("libri", libroService.findRandomCarousel(4));
@@ -40,6 +41,8 @@ public class AuthController {
         
         model.addAttribute("successMessage", successMessage);
         model.addAttribute("loginError", loginError);
+        model.addAttribute("showLogin", (showLogin != null) && showLogin);
+        
 
         return "index";
 
@@ -89,6 +92,7 @@ public class AuthController {
 
         // If there are no errors, register the user into the database and set the login property to "true" in database
         utente.setLoggedIn(true);
+        
         Utente saved = utenteService.aggiungiUtente(utente);
 
         // Store user data in session

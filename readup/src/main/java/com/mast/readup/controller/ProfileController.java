@@ -59,6 +59,7 @@ public class ProfileController {
         Long loggedInUserId = getCurrentUserId(session); 
         Utente currentUser = null;
 
+
         if (loggedInUserId != null) {
             // Attempt to find the user in the database
             Optional<Utente> utenteOpt = utenteService.findById(loggedInUserId);
@@ -105,15 +106,6 @@ public class ProfileController {
 
         return "profilo"; 
     }
-
-
-
-
-
-
-
-
-
 
     // Handle profile image upload
     @PostMapping("/profile/uploadImage")

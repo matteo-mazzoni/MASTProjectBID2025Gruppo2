@@ -1,13 +1,17 @@
 package com.mast.readup.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import com.mast.readup.entities.Utente;
+import com.mast.readup.services.UtenteService;
+
 
 @Configuration
 public class SecurityConfig {
@@ -19,16 +23,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    /**
-     * It retrieves the built-in l'AuthenticationManager configured by Spring Security,
-     * It utilise automatically all the bean UserDetailsService and PasswordEncoder. 
-    //  */
-    // @Bean
-    // public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-    //     return authConfig.getAuthenticationManager();
-    // }
-
 
     /**
      * Configure the security filter chain. This method is annotated with
@@ -53,38 +47,73 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
     
         .authorizeHttpRequests(auth -> auth
+
+        // Protected URLs
+        .requestMatchers("/profilo.html", "/libri.html", "/booklist.html").authenticated()
+        
+        // Public URLs
         .anyRequest().permitAll()
         )
-        .formLogin(form -> form.disable())
-        .httpBasic(basic -> basic.disable())
-        .logout(logout -> logout.disable());
+
+        // Rules for login
+        .formLogin(form -> form
+            .loginPage("/")
+            .loginProcessingUrl("/login")
+            .defaultSuccessUrl("/", true)
+            .successHandler(authenticationSuccessHandler())
+            .failureUrl("/?loginError=true")
+            .permitAll()
+        )
+
+        // Rules for logout
+        .logout(logout -> logout
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/?logout=true")
+            .invalidateHttpSession(true)
+            .deleteCookies("JSESSIONID")
+            .permitAll()
+        );
 
         return http.build();
     
     }
+
+
+    @Autowired 
+    private UtenteService utenteService;
+     
+
+    /**
+     * After a successful login, this handler puts the logged user into session
+     *
+     * @return the AuthenticationSuccessHandler
+     */
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return (request, response, authentication) -> {
+            String currentUserNickName = authentication.getName();
+            Utente user = utenteService.findByNickname(currentUserNickName).orElseThrow(() -> new IllegalStateException("Utente non trovato"));
+                                
+            request.getSession().setAttribute("currentUser", user);
+            System.out.println("🔥 LOGIN OK: " + currentUserNickName);
+
+            // Redirect to the home page
+            response.sendRedirect(request.getContextPath() + "/");  
+        };
+    
+    }
+
 }
     
 
-    //       .requestMatchers(
-    //           "/", "/login", "/register", "/css/**", "/js/**", "/img/**", "/favicon.ico"
-    //       ).permitAll()
-          
-            
-    //     .formLogin(form -> form
-    //         .loginPage("/")
-    //         .loginProcessingUrl("/login")
-    //         .defaultSuccessUrl("/home", true)
-    //         .failureUrl("/login?error=true")
-    //         .permitAll()
-    //     )
-    //     .logout(logout -> logout
-    //         .logoutUrl("/logout")
-    //         .logoutSuccessUrl("/login?logout=true")
-    //         .invalidateHttpSession(true)
-    //         .deleteCookies("JSESSIONID")
-    //         .permitAll()
-    //     );
 
-    //     return http.build();
-    // }
-// }
+
+
+
+
+
+
+
+    
+
+  

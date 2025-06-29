@@ -85,20 +85,23 @@
                     <li class="nav-item">
                         <a class="nav-link active" th:href="@{/}" href="index.html">Home</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" th:if="${session.currentUser != null}">
                         <a class="nav-link" th:href="@{/profilo.html}" href="profilo.html">Profilo</a>
                     </li> 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="libriDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false"> Libreria </a> 
-                        <ul class="dropdown-menu" aria-labelledby="libriDropdown">
-                            <li>
-                                <a class="dropdown-item" th:href="@{/libri.html}" href="libri.html">I miei libri</a>
-                            </li>
-                            <li >
-                                <a class="dropdown-item" th:href="@{/booklist.html}" href="booklist.html">Le mie Booklist</a>
-                            </li>
-                        </ul>
+                      <a class="nav-link dropdown-toggle" id="libriDropdown" role="button"
+                      data-bs-toggle="dropdown" aria-expanded="false"> Libreria </a> 
+                      <ul class="dropdown-menu" aria-labelledby="libriDropdown">
+                        <li>
+                          <a class="dropdown-item" th:href="@{/libriReadUp.html}">Tutti i libri di ReadUp</a>
+                        </li>
+                        <li th:if="${session.currentUser != null}">
+                          <a class="dropdown-item" th:href="@{/libri.html}">I miei libri</a>
+                        </li>
+                        <li th:if="${session.currentUser != null}">
+                          <a class="dropdown-item" th:href="@{/booklist.html}">Le mie Booklist</a>
+                        </li>
+                      </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/sfide.html}" href="sfide.html">Sfide</a></li>
@@ -176,8 +179,8 @@
               <h5 class="card-title pt-4" th:text="${libro.titolo}">Titolo</h5>
               <p class="card-text text-muted mb-4" th:text="${libro.autore}">Autore</p>
               <img th:src="@{${libro.coverUrl}}" alt="cover" class="card-img-top">
-              <a href="#" class="btn btn-sm btn-action mb-2">Aggiungi ai preferiti</a>
-              <a href="#" class="btn btn-sm btn-action mb-4">Aggiungi a una booklist</a>
+              <a href="#" class="btn btn-sm btn-action mb-2" th:if="${session.currentUser != null}">Aggiungi ai preferiti</a>
+              <a href="#" class="btn btn-sm btn-action mb-4" th:if="${session.currentUser != null}">Aggiungi a una booklist</a>
             </li>
           </ul>
           <!-- / Slides items -->
@@ -198,51 +201,88 @@
 <!-- / Carousel -->
 
 <!-- Registration/login form -->
-<div th:fragment="authForm(utente, successMessage)">
 
-  <!-- Registration form (= successMessage == null)-->  
-  <div th:if="${#strings.isEmpty(successMessage)}">
+<!-- Thymeleaf variables -->
+<div th:fragment="authForm(utente, successMessage, loginError, showLogin)">
 
-    <div class="registration-card">
-      <h5>Registrati gratuitamente in meno di 1 minuto</h5>
-      <form th:action="@{/register}" th:object="${utente}" method="post">
-        
-        <!-- th:field binds the field to the model field of th:object class-->
+  <!-- If not logged in (currentUser == null) -->
+  <div th:if="${session.currentUser == null}">
+    
+    <div class="registration-form">
+    
+      <!-- SHOW REGISTRATION FORM (card) -->
+      <div class="registration-card" th:if="${!showLogin}"> 
+        <h5>Registrati gratuitamente in meno di 1 minuto</h5>
+        <form th:action="@{/register}" th:object="${utente}" method="post">
+          <!-- th:field binds the field to the model field of th:object class-->
 
-        <!-- Nickname  -->
-        <div th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="error"></div>
-        <input th:field="*{nickname}" type="text" placeholder="Username" pattern="[a-zA-Z0-9]{3,20}" title="Solo lettere e numeri, 3–20 caratteri"
-        required autofocus />
-        
-        <!-- Email -->
-        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
-        <input th:field="*{email}" type="email" placeholder="Email" required /> 
+          <!-- Nickname  -->
+          <div th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="error"></div>
+          <input th:field="*{nickname}" type="text" placeholder="Username"
+          pattern="[a-zA-Z0-9]{3,20}" title="Solo lettere e numeri, 3–20 caratteri"
+          required autofocus />
 
-        <!-- Password -->
-        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
-        <input th:field="*{password}" type="password" placeholder="Password" pattern="(?=.*[A-Z])(?=.*\d).{8,}"
-        title="Minimo 8 caratteri, 1 maiuscola e 1 numero" required /> 
+          <!-- Email -->
+          <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
+          <input th:field="*{email}" type="email" placeholder="Email" required /> 
 
-        <!-- Button -->
-        <button type="submit">Registrati</button> 
+          <!-- Password -->
+          <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
+          <input th:field="*{password}" type="password" placeholder="Password" pattern="(?=.*[A-Z])(?=.*\d).{8,}"
+          title="Minimo 8 caratteri, 1 maiuscola e 1 numero" required /> 
+         
+          <!-- Button -->
+          <button type="submit">Registrati</button> 
 
-        <!-- Link per login -->
-        <p class="text-center"> Hai già un account?
-          <a th:href="@{/login}">Accedi</a>
-        </p>
+          <!-- Link to login form -->
+          <p class="text-center"> Hai già un account?
+            <a th:href="@{/?showLogin=true}">Accedi</a>
+          </p>
+        </form>
+      </div>
+      <!-- / SHOW REGISTRATION FORM -->
+    
+   
+      <!-- SHOW LOGIN FORM (card) -->
+      <div class="registration-card" th:if="${showLogin}">  
+        <h5>Accedi al tuo account</h5>                                          
+        <form th:action="@{/login}" method="post">
+          <!-- Mostra errore se loginError non è vuoto -->
+          <div th:if="${loginError != null}" class="error" th:text="${loginError}"></div>
+          <!-- Username -->
+          <input name="username" type="text" placeholder="Username" required autofocus />
+          <!-- Password -->
+          <input name="password" type="password" placeholder="Password" required />
+          <!-- Pulsante di invio -->
+          <button type="submit">Accedi</button>
+      
+          <!-- Link to registration form -->
+          <p class="text-center">
+            <a th:href="@{/?showLogin=false}">Torna a registrarti</a>   
+          </p>
+        </div>
+      </form>
+      <!-- / SHOW LOGIN FORM -->
+
+    </div>
+
+    <!-- Show logout (card) -->
+    <div class="registration-card text-center" th:if="${!#strings.isEmpty(successMessage)}">
+      <p th:text="${successMessage}" class="success-message mb-4"></p>
+      <form th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
       </form>
     </div>
-  </div>
 
-  <!-- Login form (= successMessage != null)-->  
-  <div class="registration-card text-center" th:if="${!#strings.isEmpty(successMessage)}">
-    <p th:text="${successMessage}"class="success-message mb-4"></p>
-    <form th:action="@{/logout}" method="post">
-      <button type="submit">Logout</button>
-    </form>
   </div>
-</div>
-<!-- / Registration/login form -->
+  
+
+  </div>
+  <!-- / Registration/login form -->
+                  
+
+      
+      
 
 
 
