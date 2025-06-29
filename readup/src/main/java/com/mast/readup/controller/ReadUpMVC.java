@@ -361,6 +361,10 @@ public class ReadUpMVC {
             model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare il profilo.");
             return "redirect:/";
         }
+
+        if (!model.containsAttribute("currentUser")) {
+            model.addAttribute("currentUser", currentUser);
+        }
         
         model.addAttribute("userId", currentUser.getIdUtente()); 
         
@@ -439,6 +443,7 @@ public class ReadUpMVC {
     public String updateProfile(@Valid @ModelAttribute("currentUser") Utente updatedUser,
                                BindingResult bindingResult,
                                HttpSession session,
+                               Model model,
                                RedirectAttributes redirectAttributes) {
 
         Utente currentUser = (Utente) session.getAttribute("currentUser");
@@ -447,13 +452,29 @@ public class ReadUpMVC {
             return "redirect:/";
         }
 
+        // --- Validazioni Personalizzate per Duplicati (Nickname e Email) ---
+        if (!updatedUser.getNickname().equalsIgnoreCase(currentUser.getNickname()) && utenteService.nicknameEsistente(updatedUser.getNickname())) {
+            bindingResult.rejectValue(
+                "nickname",
+                "error.nickname.duplicate",
+                "ATTENZIONE: Questo username è già in uso! RIPROVA."
+            );
+        }
+
+        // Verifica email solo se è cambiata e non è quella dell'utente corrente
+        if (!updatedUser.getEmail().equalsIgnoreCase(currentUser.getEmail()) && utenteService.emailEsistente(updatedUser.getEmail())) {
+            bindingResult.rejectValue(
+                "email",
+                "error.email.duplicate",
+                "ATTENZIONE: Questa email è già registrata! RIPROVA."
+            );
+        }
+
+        // --- Gestione Errore di Validazione (Jakarta.validation + Duplicati) ---
         if (bindingResult.hasErrors()) {
-            String errorMessage = "Errore nella compilazione del form: ";
-            if (bindingResult.hasErrors()) {
-                errorMessage += bindingResult.getAllErrors().get(0).getDefaultMessage();
-            }
-            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
-            return "redirect:/profilo.html";
+            model.addAttribute("currentUser", updatedUser); // Passa l'utente con gli errori al modello
+            model.addAttribute("showEditProfileModal", true); // Flag per riaprire il modale
+            return profilo(model, session); 
         }
 
         try {
@@ -467,7 +488,6 @@ public class ReadUpMVC {
                     redirectAttributes.addFlashAttribute("errorMessage", "Le nuove password non corrispondono.");
                     return "redirect:/profilo.html";
                 }
-                // SALVA LA PASSWORD IN CHIARO:
                 currentUser.setPassword(updatedUser.getNewPassword());
             }
 

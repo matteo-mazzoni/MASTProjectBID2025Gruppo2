@@ -48,7 +48,7 @@
                                 <button type="submit" class="button">Logout</button>
                             </form>
 
-                             <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -60,24 +60,29 @@
                                                 <div class="mb-3">
                                                     <label for="nickname" class="form-label">Nickname</label>
                                                     <input type="text" class="form-control" id="nickname" name="nickname" th:field="*{nickname}" required>
+                                                    <span th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="text-danger"></span>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="email" class="form-label">Email</label>
                                                     <input type="email" class="form-control" id="email" name="email" th:field="*{email}" required>
+                                                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
                                                 </div>
 
                                                 <div class="mb-3">
                                                     <label for="citta" class="form-label">Città</label>
                                                     <input type="text" class="form-control" id="citta" name="citta" th:field="*{citta}">
+                                                    <span th:if="${#fields.hasErrors('citta')}" th:errors="*{citta}" class="text-danger"></span>
                                                 </div>
 
                                                 <div class="mb-3">
                                                     <label for="newPassword" class="form-label">Nuova Password (lascia vuoto per non cambiare)</label>
                                                     <input type="password" class="form-control" id="newPassword" name="newPassword">
+                                                    <span th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" class="text-danger"></span>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="confirmNewPassword" class="form-label">Conferma Nuova Password</label>
                                                     <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword">
+                                                    <span th:if="${#fields.hasErrors('confirmNewPassword')}" th:errors="*{confirmNewPassword}" class="text-danger"></span>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -88,7 +93,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            
                         </div>
 
                         <!-- Column with 2 cards -->
