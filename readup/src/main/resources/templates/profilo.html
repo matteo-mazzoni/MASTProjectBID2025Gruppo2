@@ -5,9 +5,16 @@
     <head th:replace="~{fragments :: head(
         title='Profilo • Readup', pageCss='/css/pages/profilo_style.css', 
         extraPageCss=${null}, 
-        pageJS=${null})}">
+        pageJS='/js/profilo.js')}">
     </head>  
     <!-- / Head -->
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        // Questa variabile globale sarà disponibile per profilo.js
+        window.showEditProfileModalFlag = [[${showEditProfileModal}]] || false;
+        /*]]>*/
+    </script>
   
     <body>
         <!-- Header -->
@@ -76,12 +83,12 @@
 
                                                 <div class="mb-3">
                                                     <label for="newPassword" class="form-label">Nuova Password (lascia vuoto per non cambiare)</label>
-                                                    <input type="password" class="form-control" id="newPassword" name="newPassword">
+                                                    <input type="password" class="form-control" id="newPassword" name="newPassword" th:field="*{newPassword}">
                                                     <span th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" class="text-danger"></span>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="confirmNewPassword" class="form-label">Conferma Nuova Password</label>
-                                                    <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword">
+                                                    <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" th:field="*{confirmNewPassword}">
                                                     <span th:if="${#fields.hasErrors('confirmNewPassword')}" th:errors="*{confirmNewPassword}" class="text-danger"></span>
                                                 </div>
                                             </div>

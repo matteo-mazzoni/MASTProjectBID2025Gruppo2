@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StreamUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -324,7 +325,6 @@ public class ReadUpMVC {
         return "redirect:/sfide";
     }
 
-
     // Q&A page
     @GetMapping("/qa.html")
     public String qa() {
@@ -338,54 +338,51 @@ public class ReadUpMVC {
     }
     
     // User profile page
-    @GetMapping("/profilo.html") 
+    @GetMapping("/profilo.html")
     public String profilo(Model model, HttpSession session) {
 
-        Long loggedInUserId = getCurrentUserId(session); 
-        Utente currentUser = null;
-
-        if (loggedInUserId != null) {
-            Optional<Utente> utenteOpt = utenteService.findById(loggedInUserId);
-            if (utenteOpt.isPresent()) {
-                currentUser = utenteOpt.get(); 
-
-                session.setAttribute("currentUser", currentUser); 
-            } else {
-                System.err.println("ATTENZIONE: Utente in sessione con ID " + loggedInUserId + " non trovato nel DB.");
-                session.invalidate(); 
-                model.addAttribute("errorMessage", "Sessione utente non valida. Effettua nuovamente il login.");
-                return "redirect:/"; 
-            }
-        } else {
-            System.out.println("Utente non loggato, reindirizzamento alla homepage o al login.");
+        Utente currentUserActual = (Utente) session.getAttribute("currentUser");
+        if (currentUserActual == null) {
             model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare il profilo.");
             return "redirect:/";
         }
 
-        if (!model.containsAttribute("currentUser")) {
-            model.addAttribute("currentUser", currentUser);
+        Optional<Utente> utenteFromDbOpt = utenteService.findById(currentUserActual.getIdUtente());
+        if (utenteFromDbOpt.isEmpty()) {
+            System.err.println("ATTENZIONE: Utente in sessione con ID " + currentUserActual.getIdUtente() + " non trovato nel DB.");
+            session.invalidate();
+            model.addAttribute("errorMessage", "Sessione utente non valida. Effettua nuovamente il login.");
+            return "redirect:/";
         }
-        
-        model.addAttribute("userId", currentUser.getIdUtente()); 
-        
-        model.addAttribute("currentUser", currentUser);
+        currentUserActual = utenteFromDbOpt.get(); 
+        session.setAttribute("currentUser", currentUserActual); 
 
-        // Recupera i libri della libreria
-        List<Libro> libriUtente = libreriaService.getLibriByUtenteId(currentUser.getIdUtente());
-        model.addAttribute("userLibraryBooks", libriUtente); 
+        Utente currentUserForForm = (Utente) model.getAttribute("currentUserForForm");
+        if (currentUserForForm == null) {
+            currentUserForForm = currentUserActual;
+        }
+        model.addAttribute("currentUserForForm", currentUserForForm);
 
-        // Recupera le booklist
-        List<Booklist> userBooklists = booklistService.getAllBooklistsByUser(currentUser.getNickname());
+        model.addAttribute("currentUser", currentUserActual); 
+        model.addAttribute("userId", currentUserActual.getIdUtente());
+
+        if (!model.containsAttribute("showEditProfileModal")) {
+            model.addAttribute("showEditProfileModal", false);
+        }
+
+        List<Libro> libriUtente = libreriaService.getLibriByUtenteId(currentUserActual.getIdUtente());
+        model.addAttribute("userLibraryBooks", libriUtente);
+
+        List<Booklist> userBooklists = booklistService.getAllBooklistsByUser(currentUserActual.getNickname());
         model.addAttribute("userBooklists", userBooklists);
 
-        // Conto delle Booklist e delle sfide
-        int numBooklists = userBooklists.size(); 
-        int numChallenges = sfidaService.countSfideByPartecipante(currentUser.getIdUtente()); 
+        int numBooklists = userBooklists.size();
+        int numChallenges = sfidaService.countSfideByPartecipante(currentUserActual.getIdUtente());
 
         model.addAttribute("numBooklists", numBooklists);
         model.addAttribute("numChallenges", numChallenges);
 
-        return "profilo"; 
+        return "profilo";
     }
 
     // Handle profile image upload
@@ -455,45 +452,43 @@ public class ReadUpMVC {
         }
 
         // --- Custom Validations for Duplicate Nickname and Email ---
-
         // If nickname has changed, check for duplicates
         if (!updatedUser.getNickname().equalsIgnoreCase(currentUserInSession.getNickname())
                 && utenteService.nicknameEsistente(updatedUser.getNickname())) {
             bindingResult.rejectValue(
                 "nickname",
                 "error.nickname.duplicate",
-                "WARNING: This username is already taken! TRY AGAIN."
+                "ATTENZIONE: Questo nikname è già in uso! Metti un altro nickname" // Era "WARNING: This username is already taken! TRY AGAIN."
             );
         }
 
-        // If email has changed, check for duplicates
+        // Check if the email has changed AND is already registered
         if (!updatedUser.getEmail().equalsIgnoreCase(currentUserInSession.getEmail())
                 && utenteService.emailEsistente(updatedUser.getEmail())) {
             bindingResult.rejectValue(
                 "email",
                 "error.email.duplicate",
-                "WARNING: This email is already registered! TRY AGAIN."
+                "ATTENZIONE: Questa email è già registrata con un altro account!" // Era "WARNING: This email is already registered whit another account!"
             );
         }
 
-        // --- PASSWORD HANDLING SECTION ---
+        // Handle Password Change mismatch
         if (updatedUser.getNewPassword() != null && !updatedUser.getNewPassword().isEmpty()) {
             // Validate password confirmation
             if (!updatedUser.getNewPassword().equals(updatedUser.getConfirmNewPassword())) {
-                bindingResult.rejectValue(
-                    "confirmNewPassword", // Associate the error with the confirm field
+                    bindingResult.rejectValue(
+                    "confirmNewPassword",
                     "error.password.mismatch",
-                    "New passwords do not match."
+                    "Le nuove password non corrispondono." // Era "New passwords do not match."
                 );
             }
         }
 
         // If there are any validation errors, return to profile page and reopen the modal
         if (bindingResult.hasErrors()) {
-            model.addAttribute("currentUser", updatedUser);
-            model.addAttribute("showEditProfileModal", true);
-
-            return profilo(model, session);
+            model.addAttribute("currentUserForForm", updatedUser); 
+            model.addAttribute("showEditProfileModal", true); 
+            return profilo(model, session); 
         }
 
         try {
@@ -510,7 +505,7 @@ public class ReadUpMVC {
             utenteToUpdate.setEmail(updatedUser.getEmail());
             utenteToUpdate.setCitta(updatedUser.getCitta());
 
-            // If new password is provided and passed validation, update it
+            // Apply password change if a new password was provided and passed validation
             if (updatedUser.getNewPassword() != null && !updatedUser.getNewPassword().isEmpty()) {
                 utenteToUpdate.setPassword(updatedUser.getNewPassword());
             }
@@ -519,11 +514,11 @@ public class ReadUpMVC {
 
             // Update the session with the new user data
             session.setAttribute("currentUser", utenteToUpdate);
-            redirectAttributes.addFlashAttribute("successMessage", "Profile successfully updated!");
+            redirectAttributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo!"); // CAMBIA QUI
 
         } catch (Exception e) {
             // In case of an unexpected error during update
-            redirectAttributes.addFlashAttribute("errorMessage", "Error while updating profile: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Errore durante l'aggiornamento del profilo: " + e.getMessage()); // CAMBIA QUI
         }
 
         return "redirect:/profilo.html";    // Redirect to the profile page
