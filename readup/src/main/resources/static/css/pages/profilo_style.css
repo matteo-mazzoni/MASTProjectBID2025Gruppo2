@@ -1,3 +1,4 @@
+/* Container for the profile photo and description column */
 .profile-photo-wrapper {
   display: flex;
   justify-content: flex-start;
@@ -7,6 +8,7 @@
   gap: 2rem;
 }
 
+/* Column layout for the profile description */
 .profile-description-column {
   display: flex;
   flex-direction: column;
@@ -14,10 +16,12 @@
   flex-grow: 1;
 }
 
+/* Adds spacing between profile sections */
 .section-spacing {
   margin-bottom: 3rem; 
 }
 
+/* Card that wraps the profile photo */
 .profile-photo-card {
   background-color: var(--bg_card_color);
   border-radius: 12px;
@@ -30,7 +34,7 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-
+/* Style for the circular profile photo */
 .profile-photo {
   display: block;
   margin: 0 auto 1.5rem auto;
@@ -42,11 +46,12 @@
   align-content: center;
 }
 
+/* Hides the default file input */
 input[type="file"] {
   display: none;
 }
 
-
+/* Card layout for general profile sections (e.g., library, booklist) */
 .profile-section-card {
   background-color: var(--bg_card_color);
   border-radius: 12px;
@@ -58,6 +63,7 @@ input[type="file"] {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Responsive layout for screens smaller than 768px */
 @media screen and (max-width: 767px) {
   .profile-photo-wrapper {
     flex-direction: column;
@@ -82,7 +88,7 @@ input[type="file"] {
   }
 }
 
-/* Card di Sezione Generica (Libreria, Booklist) */
+/* Redefinition of section card with slightly different padding */
 .profile-section-card {
   background-color: var(--bg_card_color);
   border-radius: 12px;
@@ -92,129 +98,128 @@ input[type="file"] {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Stile per la card "Crea una Booklist" quando non ci sono booklist */
+/* Card used when creating a new booklist */
 .booklist-create-card {
-    background-color: var(--bg_card_color);
-    border-radius: 12px; 
-    box-shadow: 0 4px 12px rgba(39, 52, 99, 0.3); 
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-
-    width: 180px;
-    height: 130px;
-    border: 2px dashed var(--links_color); 
-    color: var(--links_color);
-    
-    /* Per centrare l'icona e il testo all'interno della card */
-    display: flex; 
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+  background-color: var(--bg_card_color);
+  border-radius: 12px; 
+  box-shadow: 0 4px 12px rgba(39, 52, 99, 0.3); 
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  width: 180px;
+  height: 130px;
+  border: 2px dashed var(--links_color); 
+  color: var(--links_color);
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
+/* Hover effect for the 'Create Booklist' card */
 .booklist-create-card:hover {
-    transform: translateY(-3px); 
-    box-shadow: 0 6px 16px rgba(39, 52, 99, 0.4); 
-    background-color: var(--links_color); 
-    border-color: var(--links_color); 
-    color: var(--background_color);
+  transform: translateY(-3px); 
+  box-shadow: 0 6px 16px rgba(39, 52, 99, 0.4); 
+  background-color: var(--links_color); 
+  border-color: var(--links_color); 
+  color: var(--background_color);
 }
 
-
-/* Stili per le singole Booklist Card (quelle che mostrano le booklist esistenti) */
+/* Card styling for existing booklists */
 .profile-section-card .card {
-    background-color: var(--bar_color); 
-    border-radius: 12px; 
-    box-shadow: 0 4px 12px rgba(39, 52, 99, 0.15); 
-    transition: transform 0.3s ease, box-shadow 0.3s ease; 
-    border: 1px solid rgba(39, 52, 99, 0.3);
-    
-    text-align: left; 
-    min-height: 220px; 
+  background-color: var(--bar_color); 
+  border-radius: 12px; 
+  box-shadow: 0 4px 12px rgba(39, 52, 99, 0.15); 
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
+  border: 1px solid rgba(39, 52, 99, 0.3);
+  text-align: left; 
+  min-height: 220px; 
 }
 
+/* Hover effect for booklist cards */
 .profile-section-card .card:hover {
-    transform: translateY(-3px); 
-    box-shadow: 0 6px 16px rgba(39, 52, 99, 0.3);
+  transform: translateY(-3px); 
+  box-shadow: 0 6px 16px rgba(39, 52, 99, 0.3);
 }
 
+/* Title of each booklist card */
 .profile-section-card .card-title {
-    color: var(--text_color);
-    font-size: 1.25rem; 
-    margin-bottom: 0.5rem; 
+  color: var(--text_color);
+  font-size: 1.25rem; 
+  margin-bottom: 0.5rem; 
 }
 
+/* Subtitle or description inside booklist card */
 .profile-section-card .card-text.text-muted {
-    color: var(--text_color);
-    opacity: 0.7; 
-    font-size: 0.9rem; 
+  color: var(--text_color);
+  opacity: 0.7; 
+  font-size: 0.9rem; 
 }
 
-/* Stili per il pulsante "Visualizza" all'interno delle card */
+/* Style for the 'View' button inside each booklist card */
 .profile-section-card .btn-outline-primary {
-    color: var(--links_color); 
-    border-color: var(--links_color);
+  color: var(--links_color); 
+  border-color: var(--links_color);
 }
 .profile-section-card .btn-outline-primary:hover {
-    background-color: var(--links_color); 
-    color: var(--background_color); 
-    border-color: var(--links_color); 
+  background-color: var(--links_color); 
+  color: var(--background_color); 
+  border-color: var(--links_color); 
 }
 
-/* MEDIA QUERIES per la responsività */
+/* Responsive behavior for the 'Create Booklist' card on small screens */
 @media screen and (max-width: 767px) {
   .profile-photo {
     margin: 0 auto 1.5rem auto; 
   }
 
-  /* Responsive adjustment per la card "Crea Booklist" su schermi piccoli */
   .booklist-create-card {
-      width: 100%; 
-      height: 120px; 
+    width: 100%; 
+    height: 120px; 
   }
 }
 
-/* Stili per la sezione dei conteggi (Sfide, Booklist) */
+/* Styling for statistics section (e.g., Challenges, Booklists count) */
 .profile-stats {
-    margin-top: 1.5rem; /* Spazio sopra i conteggi */
-    font-size: 1.1rem; /* Dimensione del font leggermente più grande */
-    color: var(--text_color); /* Colore del testo */
+  margin-top: 1.5rem; 
+  font-size: 1.1rem; 
+  color: var(--text_color); 
 }
 
 .profile-stats p {
-    margin-bottom: 0.5rem; /* Spazio tra i paragrafi dei conteggi */
+  margin-bottom: 0.5rem; 
 }
 
 .profile-stats strong {
-    color: var(--links_color); /* Colore più evidente per i numeri */
-    font-size: 1.3rem; /* Rende i numeri più grandi */
+  color: var(--links_color); 
+  font-size: 1.3rem; 
 }
 
-/* Stili per i pulsanti */
+/* General button style */
 .button {
-    width: 100%;
-    padding: 0.75rem;
-    margin-top: 0.5rem; 
-    margin-bottom: 1rem; 
-    background: var(--links_color);
-    color: var(--background_color);
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.5rem; 
+  margin-bottom: 1rem; 
+  background: var(--links_color);
+  color: var(--background_color);
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .button:hover {
-    background-color: var(--text_color); 
-    transform: translateY(-2px);
+  background-color: var(--text_color); 
+  transform: translateY(-2px);
 }
 
 .button:active {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
+/* Smaller version of the button */
 .button-small {
-    width: 50%; 
+  width: 50%; 
 }
