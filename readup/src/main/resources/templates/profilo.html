@@ -46,58 +46,71 @@
 
                         <!-- Column with 2 cards -->
                         <div class="profile-description-column">
-                            <!--Card 1-->
+                            <!--Card Libreria-->
+                                <div class="profile-section">
+                            <div class="profile-section-card">
+                                <h5 class="section-subtitle">La tua Libreria</h5> 
+                                <p class="mb-3 section-description">
+                                    Qui trovi tutti i libri che hai aggiunto alla tua libreria personale. Esplora e gestisci i tuoi libri.
+                                </p>
+                                
+                                <form th:action="@{/aggiungi-libro.html}" method="get" class="mt-3">
+                                    <button type="submit" class="button button-small">Aggiungi un Libro</button>
+                                </form>
+
+                                <div th:if="${#lists.isEmpty(userLibraryBooks)}" class="alert alert-info text-center py-4 empty-list-message">
+                                    La tua libreria è vuota. Usa il pulsante qui sopra per aggiungere un libro!
+                                </div>
+                                
+                                <div th:unless="${#lists.isEmpty(userLibraryBooks)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
+                                    <div class="col" th:each="libro : ${userLibraryBooks}">
+                                        <div class="card h-100">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title" th:text="${libro.titolo}">Titolo Libro</h5>
+                                                <p class="card-text text-muted mb-auto" th:text="${libro.autore}">Autore del Libro</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Card Booklist-->
                             <div class="profile-description-column">
                                 <div class="profile-section-card">
-                                    <h5> La Tua Libreria</h5>
-                                    
-                                    <div th:if="${#lists.isEmpty(userLibraryBooks)}" class="d-flex justify-content-start align-items-center mt-4">
-                                        <a th:href="@{/add-book.html}" class="card text-center text-decoration-none booklist-create-card">
-                                            <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                                                <i class="bi bi-plus-circle display-4 mb-2"></i> 
-                                                <p class="fw-bold mb-0">Aggiungi un Libro</p>
-                                            </div>
-                                        </a>
+                                    <h5>Le Tue Booklist</h5>
+
+                                    <p class=" mb-3 section-description">
+                                        Organizza i tuoi libri preferiti in collezioni personalizzate. Qui puoi visualizzare le tue ultime booklist.
+                                    </p>
+
+                                    <!-- Bottone semplice per aggiungere Booklist -->
+                                    <form th:action="@{/booklist.html}" method="get" class="mt-3">
+                                        <button type="submit" class="button button-small">Crea una Booklist</button>
+                                    </form>
+
+                                    <!-- Where there aren't Booklist -->
+                                    <div th:if="${#lists.isEmpty(userBooklists)}" class="alert alert-info text-center py-4 empty-list-message">
+                                        Non hai ancora creato nessuna Booklist. Usa il pulsante qui sopra per crearne una!
                                     </div>
 
-                                    <div th:unless="${#lists.isEmpty(userLibraryBooks)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                                        <div class="col" th:each="book : ${userLibraryBooks}">
+                                    <!-- List Booklist -->
+                                    <div th:unless="${#lists.isEmpty(userBooklists)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
+                                        <div class="col" th:each="booklist : ${userBooklists}">
                                             <div class="card h-100">
                                                 <div class="card-body d-flex flex-column">
-                                                    <h5 class="card-title" th:text="${book.title}">Titolo Libro</h5>
-                                                    <p class="card-text text-muted mb-auto" th:text="${book.author}">Autore Libro</p>
-                                                    <a th:href="@{/book/{id}(id=${book.id})}" class="button btn-outline-primary mt-3">Dettagli</a>
+                                                    <h5 class="card-title" th:text="${booklist.nome}">Nome Booklist</h5>
+                                                    <p class="card-text text-muted mb-auto" th:text="${'Libri: ' + #lists.size(booklist.libri)}">Libri: 0</p>
+                                                    <a th:href="@{/booklist/{idBooklist}(idBooklist=${booklist.idBooklist})}" class="button btn-outline-primary mt-3">Visualizza</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <!--Card 2-->
-                             <div class="profile-section-card">
-                                <h5>Le Tue Booklist</h5> 
-
-                                <div th:if="${#lists.isEmpty(userBooklists)}" class="d-flex justify-content-start align-items-center mt-4">
-                                    <a th:href="@{/booklist.html}" class="card text-center text-decoration-none booklist-create-card">
-                                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                                            <i class="bi bi-plus-circle display-4 mb-2"></i> <p class="fw-bold mb-0">Crea una Booklist</p>
-                                        </div>
-                                    </a>
-                                </div>
-
-                                <div th:unless="${#lists.isEmpty(userBooklists)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                                    </div>
-                            </div>
-
                         </div>
-
                     </div>
                 </div>
             </main>
             <!-- / Main -->
-
-        </div>
         
         <!-- Footer -->
         <footer th:replace="~{fragments :: footer}"></footer>
