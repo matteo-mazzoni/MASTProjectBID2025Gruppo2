@@ -6,6 +6,7 @@ import com.mast.readup.repos.UtenteRepos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service 
-public class UtenteServiceImpl implements UtenteService {
+public class UtenteServiceImpl implements UtenteService, UserDetailsService {
     
     @Autowired
     private final UtenteRepos utenteRepos;
@@ -177,6 +178,42 @@ public class UtenteServiceImpl implements UtenteService {
         return utenteRepos.existsByEmail(email);
     }
 
-    // Methods for checking data during user's login
-    
+
+    @Override
+    public Optional<Utente> findByNickname(String nickname) {
+        return utenteRepos.findByNickname(nickname);
+    }
+
+    /**
+     * SpringSecurity built-in method
+     * Load user data from database by nickname (username).
+     * 
+     * Authentication flow:
+     * 
+     *  1. User compile username + password and sends the form to /login.
+     *  2. Spring Security calls loadUserByUsername(...) on our service.
+     *  3. We compare the hashed password from the form with the password from the database.
+     *  4. If they match, we create an authenticated session in which the principal is that UserDetails object.
+     */
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        
+        // Find user in database by given nickname or throw exception
+        Utente utente = this.findByNickname(username).orElseThrow(() ->
+            new UsernameNotFoundException("Utente non trovato con username: " + username)
+        );
+
+        // Return user details from database
+        // Spring Security uses this Bean object to verify nickname + password when the user try to log in.
+        return new org.springframework.security.core.userdetails.User(
+            utente.getNickname(),      
+            utente.getPassword(),      
+            List.of(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+    }
 }
+    
+    
+
+

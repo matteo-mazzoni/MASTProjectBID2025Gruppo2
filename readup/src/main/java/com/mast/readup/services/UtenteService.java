@@ -22,4 +22,7 @@ public interface UtenteService {
 
     boolean nicknameEsistente(String nickname);
     boolean emailEsistente(String email);
+
+    Optional<Utente> findByNickname(String nickname);
+    
 }
