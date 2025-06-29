@@ -438,68 +438,94 @@ public class ReadUpMVC {
         }
     }
 
-    // Endpoint per gestire l'aggiornamento delle informazioni del profilo
+    // Endpoint to handle profile update
     @PostMapping("/profile/update")
     public String updateProfile(@Valid @ModelAttribute("currentUser") Utente updatedUser,
-                               BindingResult bindingResult,
-                               HttpSession session,
-                               Model model,
-                               RedirectAttributes redirectAttributes) {
+                                BindingResult bindingResult,
+                                HttpSession session,
+                                Model model,
+                                RedirectAttributes redirectAttributes) {
 
-        Utente currentUser = (Utente) session.getAttribute("currentUser");
-        if (currentUser == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Sessione scaduta. Effettua nuovamente il login.");
+        // Retrieve the currently logged-in user from session
+        Utente currentUserInSession = (Utente) session.getAttribute("currentUser");
+        if (currentUserInSession == null) {
+            // If session has expired, redirect to home with error message
+            redirectAttributes.addFlashAttribute("errorMessage", "Session expired. Please log in again.");
             return "redirect:/";
         }
 
-        // --- Validazioni Personalizzate per Duplicati (Nickname e Email) ---
-        if (!updatedUser.getNickname().equalsIgnoreCase(currentUser.getNickname()) && utenteService.nicknameEsistente(updatedUser.getNickname())) {
+        // --- Custom Validations for Duplicate Nickname and Email ---
+
+        // If nickname has changed, check for duplicates
+        if (!updatedUser.getNickname().equalsIgnoreCase(currentUserInSession.getNickname())
+                && utenteService.nicknameEsistente(updatedUser.getNickname())) {
             bindingResult.rejectValue(
                 "nickname",
                 "error.nickname.duplicate",
-                "ATTENZIONE: Questo username è già in uso! RIPROVA."
+                "WARNING: This username is already taken! TRY AGAIN."
             );
         }
 
-        // Verifica email solo se è cambiata e non è quella dell'utente corrente
-        if (!updatedUser.getEmail().equalsIgnoreCase(currentUser.getEmail()) && utenteService.emailEsistente(updatedUser.getEmail())) {
+        // If email has changed, check for duplicates
+        if (!updatedUser.getEmail().equalsIgnoreCase(currentUserInSession.getEmail())
+                && utenteService.emailEsistente(updatedUser.getEmail())) {
             bindingResult.rejectValue(
                 "email",
                 "error.email.duplicate",
-                "ATTENZIONE: Questa email è già registrata! RIPROVA."
+                "WARNING: This email is already registered! TRY AGAIN."
             );
         }
 
-        // --- Gestione Errore di Validazione (Jakarta.validation + Duplicati) ---
+        // --- PASSWORD HANDLING SECTION ---
+        if (updatedUser.getNewPassword() != null && !updatedUser.getNewPassword().isEmpty()) {
+            // Validate password confirmation
+            if (!updatedUser.getNewPassword().equals(updatedUser.getConfirmNewPassword())) {
+                bindingResult.rejectValue(
+                    "confirmNewPassword", // Associate the error with the confirm field
+                    "error.password.mismatch",
+                    "New passwords do not match."
+                );
+            }
+        }
+
+        // If there are any validation errors, return to profile page and reopen the modal
         if (bindingResult.hasErrors()) {
-            model.addAttribute("currentUser", updatedUser); // Passa l'utente con gli errori al modello
-            model.addAttribute("showEditProfileModal", true); // Flag per riaprire il modale
-            return profilo(model, session); 
+            model.addAttribute("currentUser", updatedUser);
+            model.addAttribute("showEditProfileModal", true);
+
+            return profilo(model, session);
         }
 
         try {
-            currentUser.setNickname(updatedUser.getNickname());
-            currentUser.setEmail(updatedUser.getEmail());
-            currentUser.setCitta(updatedUser.getCitta());
+            // Retrieve the user from the database to ensure it is a managed entity
+            Optional<Utente> utenteFromDbOpt = utenteService.findById(currentUserInSession.getIdUtente());
+            if (utenteFromDbOpt.isEmpty()) {
+                redirectAttributes.addFlashAttribute("errorMessage", "User not found for update.");
+                return "redirect:/profilo.html";
+            }
+            Utente utenteToUpdate = utenteFromDbOpt.get();
 
-            // GESTIONE PASSWORD 
+            // Update fields on the managed entity
+            utenteToUpdate.setNickname(updatedUser.getNickname());
+            utenteToUpdate.setEmail(updatedUser.getEmail());
+            utenteToUpdate.setCitta(updatedUser.getCitta());
+
+            // If new password is provided and passed validation, update it
             if (updatedUser.getNewPassword() != null && !updatedUser.getNewPassword().isEmpty()) {
-                if (!updatedUser.getNewPassword().equals(updatedUser.getConfirmNewPassword())) {
-                    redirectAttributes.addFlashAttribute("errorMessage", "Le nuove password non corrispondono.");
-                    return "redirect:/profilo.html";
-                }
-                currentUser.setPassword(updatedUser.getNewPassword());
+                utenteToUpdate.setPassword(updatedUser.getNewPassword());
             }
 
-            utenteService.save(currentUser);
+            utenteService.save(utenteToUpdate); // Save the updated user entity to the database
 
-            session.setAttribute("currentUser", currentUser);
-            redirectAttributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo!");
+            // Update the session with the new user data
+            session.setAttribute("currentUser", utenteToUpdate);
+            redirectAttributes.addFlashAttribute("successMessage", "Profile successfully updated!");
 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Errore durante l'aggiornamento del profilo: " + e.getMessage());
+            // In case of an unexpected error during update
+            redirectAttributes.addFlashAttribute("errorMessage", "Error while updating profile: " + e.getMessage());
         }
 
-        return "redirect:/profilo.html";
+        return "redirect:/profilo.html";    // Redirect to the profile page
     }
 }

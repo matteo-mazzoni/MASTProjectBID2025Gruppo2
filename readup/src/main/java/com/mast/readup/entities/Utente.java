@@ -67,12 +67,11 @@ public class Utente {
     @Column(name = "profile_image", columnDefinition="MEDIUMBLOB")
     private byte[] profileImage;
 
-    // ***** AGGIUNGI QUESTE PROPRIETÀ TRANSIENT PER LA PASSWORD NEL FORM *****
-    @Transient // Questo campo non verrà persistito nel database
-    @Email
+    // Transient field for new password input (not persisted in the DB)
+    @Transient
     private String newPassword;
 
-    @Transient // Questo campo non verrà persistito nel database
-    @Email
+    // Transient field for confirming new password (not persisted in the DB)
+    @Transient
     private String confirmNewPassword;
 }
