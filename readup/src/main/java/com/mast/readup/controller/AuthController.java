@@ -27,7 +27,7 @@ public class AuthController {
     private UtenteService utenteService;
 
 
-   @GetMapping({"/", "/login"})
+   @GetMapping({"/", "/login", "/register"})
     public String index(Model model, @ModelAttribute("successMessage") String successMessage,
     @ModelAttribute("loginError") String loginError, @RequestParam(value="showLogin", required=false) Boolean showLogin) {
 
@@ -65,9 +65,9 @@ public class AuthController {
      */
 
     @PostMapping("/register")
-    public String processRegister(@Valid @ModelAttribute("Utente") Utente utente, BindingResult result,
-    Model model, RedirectAttributes redirectAttributes, HttpSession session) {
-    
+    public String processRegister(@Valid @ModelAttribute("Utente") Utente utente,
+        BindingResult result, RedirectAttributes redirectAttributes, HttpSession session) {
+       
         // Server-side validation for duplicate nickname and email
         if (!result.hasFieldErrors("nickname") && utenteService.nicknameEsistente(utente.getNickname())) {
             result.rejectValue(
@@ -104,57 +104,4 @@ public class AuthController {
         // Redirect to the homepage
         return "redirect:/";
     }
-
-    
-    // /* ALREADY REGISTERED USER LOGIN */
-
-    // /**
-    //  * Handles the login process for a user.
-    //  * Validates the user's credentials, setting the login status and session if successful.
-    //  * If the credentials are invalid, redirects back with an error message.
-    //  * 
-    //  * @param username The username of the user attempting to log in
-    //  * @param password The password of the user
-    //  * @param redirectAttributes The redirect attributes to store any error messages
-    //  * @param session The session to store the user data in
-    //  * @return The view name to redirect to upon successful or failed login
-    //  */
-
-    // @PostMapping("/login")
-    // public String processLogin(@RequestParam String username, @RequestParam String password, RedirectAttributes redirectAttributes,
-    // HttpSession session) {        
-    //     try {
-
-    //         // Find user by nickname in the database
-    //         Utente utente = utenteService.findByNickname(session, username).orElseThrow(() -> new IllegalArgumentException("Credenziali non valide"));
-                                         
-    //         /* Compares the password with the one in the database, but as we are using SpringBootSecurity and BCrypt
-    //         we must use the passwordEncoder.matches(password, utente.getPassword()) to check the credentials */         
-    //         if (!passwordEncoder.matches(password, utente.getPassword())) {
-    //             throw new IllegalArgumentException("Credenziali non valide");
-    //         }
-            
-    //         // Check if the user is already logged in
-    //         if (utente.isLoggedIn()) {
-    //             throw new IllegalArgumentException("Utente gia loggato");
-    //         }
-
-    //         // Set the login status in the database
-    //         utenteService.cambiaStatusLogin(utente.getIdUtente(), true); 
-    //         session.setAttribute("currentUser", utente);
-
-    //         return "redirect:/";   
-    //     } catch (IllegalArgumentException e) {
-    //         redirectAttributes.addFlashAttribute("loginError", e.getMessage());
-    //         return "redirect:/";
-    //     }
-    // }
-        
-    // // User logout (manual, no use of SpringBootSecurity)
-    // @PostMapping("/logout")
-    // public String logout(HttpSession session) {
-    //     session.invalidate(); // Invalidate session
-    //     return "redirect:/?logout=true";    // Redirect to the homepage
-    // }
-
 }

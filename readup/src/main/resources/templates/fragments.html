@@ -266,18 +266,22 @@
 
     </div>
 
-    <!-- Show logout (card) -->
-    <div class="registration-card text-center" th:if="${!#strings.isEmpty(successMessage)}">
+  </div>
+
+  <!-- If you are logged in (currentUser != null) -->
+    
+  <!-- SHOW LOGOUT BUTTON  -->
+  <div th:if="${session.currentUser != null}">
+    <div class="registration-card text-center">
       <p th:text="${successMessage}" class="success-message mb-4"></p>
       <form th:action="@{/logout}" method="post">
         <button type="submit">Logout</button>
       </form>
     </div>
-
   </div>
-  
+  <!-- / LOGOUT BUTTON -->
 
-  </div>
+</div>
   <!-- / Registration/login form -->
                   
 

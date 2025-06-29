@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import com.mast.readup.entities.Utente;
 import com.mast.readup.services.UtenteService;
@@ -24,13 +25,30 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return (request, response, authentication) -> {
+            if (authentication != null) {
+                String nick = authentication.getName();
+                System.out.println("Utente aggiornato: " + nick);
+                utenteService.findByNickname(nick)
+                    .ifPresent(loggedInUser -> {
+                        loggedInUser.setLoggedIn(false);
+                        utenteService.aggiornaUtente(loggedInUser);
+                    }
+                );
+
+            }
+
+            // Redirect to the home page
+            response.sendRedirect(request.getContextPath() + "/?logout=true");
+        };
+    }
+
     /**
-     * Configure the security filter chain. This method is annotated with
-     * @Bean so that Spring Security can find it and use it to configure the
-     * SecurityFilterChain. 
      * It configures what URL are considered public and what are protected
      * (requires authentication).
-     * It also configures the logout process and the login page.
+     * It also configures the login and logout process.
      * 
      * 
      * @param http the HttpSecurity object that contains the configuration for
@@ -47,11 +65,6 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
     
         .authorizeHttpRequests(auth -> auth
-
-        // Protected URLs
-        .requestMatchers("/profilo.html", "/libri.html", "/booklist.html").authenticated()
-        
-        // Public URLs
         .anyRequest().permitAll()
         )
 
@@ -68,9 +81,10 @@ public class SecurityConfig {
         // Rules for logout
         .logout(logout -> logout
             .logoutUrl("/logout")
-            .logoutSuccessUrl("/?logout=true")
+            .logoutSuccessHandler(logoutSuccessHandler())
             .invalidateHttpSession(true)
             .deleteCookies("JSESSIONID")
+            .logoutSuccessUrl("/?logout=true")
             .permitAll()
         );
 
@@ -78,14 +92,8 @@ public class SecurityConfig {
     
     }
 
-
-    @Autowired 
-    private UtenteService utenteService;
-     
-
     /**
      * After a successful login, this handler puts the logged user into session
-     *
      * @return the AuthenticationSuccessHandler
      */
     @Bean
@@ -95,15 +103,30 @@ public class SecurityConfig {
             Utente user = utenteService.findByNickname(currentUserNickName).orElseThrow(() -> new IllegalStateException("Utente non trovato"));
                                 
             request.getSession().setAttribute("currentUser", user);
-            System.out.println("🔥 LOGIN OK: " + currentUserNickName);
-
+          
             // Redirect to the home page
             response.sendRedirect(request.getContextPath() + "/");  
         };
     
     }
 
+
+    @Autowired
+    private UtenteService utenteService;
+
+    /**
+     * Handler for successful logout events. 
+     * This handler updates the user's logged-in status to false in the database 
+     * if the user is authenticated, ensuring that the user's session is properly terminated.
+     * 
+     * @return the LogoutSuccessHandler
+     */
+  
 }
+
+
+
+
     
 
 

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+    
+    <!-- Head -->
+    <head th:replace="~{fragments :: head(
+        title='I nostri libri • Readup', pageCss='/css/pages/book_style.css', 
+        extraPageCss=${null}, 
+        pageJS=${null})}">
+    </head>  
+    <!-- / Head -->
+  
+    <body>
+        <!-- Header -->
+        <header th:replace="~{fragments :: header}"></header>
+        <!-- / Header -->
+
+        <div th:fragment="content">
+
+            <!-- Main -->
+            <main>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h1 class="text-center">I nostri libri</h1>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+            <!-- / Main -->
+
+        </div>
+        
+        <!-- Footer -->
+        <footer th:replace="~{fragments :: footer}"></footer>
+        <!-- / Footer -->
+
+    </body>
+
+</html>

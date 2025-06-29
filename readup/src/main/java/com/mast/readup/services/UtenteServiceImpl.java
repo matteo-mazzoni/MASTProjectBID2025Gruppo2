@@ -3,6 +3,8 @@ package com.mast.readup.services;
 import com.mast.readup.entities.Utente;
 import com.mast.readup.repos.UtenteRepos;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,14 +43,20 @@ public class UtenteServiceImpl implements UtenteService, UserDetailsService {
     // Adds a new user to the database
     @Override
     public Utente aggiungiUtente(Utente utente) {
+      
         if (utente == null) {
             throw new IllegalArgumentException("User cannot be null.");
         }
-        // Check if user already exists by ID (might need to check by nickname/email if ID is auto-generated)
-        if (utenteRepos.existsById(utente.getIdUtente())) {
-            throw new IllegalArgumentException("User with ID " + utente.getIdUtente() + " already exists.");
+        // Check if the nickname or email is already in use
+        if (utenteRepos.existsByNickname(utente.getNickname())) {
+            throw new IllegalArgumentException("Username already in use.");
         }
+        if (utenteRepos.existsByEmail(utente.getEmail())) {
+            throw new IllegalArgumentException("Email already registered.");
+        }
+        // Save on database: Hibernate will assign the new idUtente 
         return utenteRepos.save(utente);
+
     }
 
     // Modifies user's nickname by ID
@@ -104,6 +112,7 @@ public class UtenteServiceImpl implements UtenteService, UserDetailsService {
     }
 
     // Changes user's login status by ID
+    @Transactional
     @Override
     public Utente cambiaStatusLogin(long idUtente, boolean statoLogin) {
         Optional<Utente> utenteModify = utenteRepos.findById(idUtente);
@@ -183,6 +192,21 @@ public class UtenteServiceImpl implements UtenteService, UserDetailsService {
     public Optional<Utente> findByNickname(String nickname) {
         return utenteRepos.findByNickname(nickname);
     }
+
+
+    @Transactional
+    @Override
+    public Utente aggiornaUtente(Utente utente) {
+    if (utente == null || utente.getIdUtente() == 0) {
+        throw new IllegalArgumentException("Utente o ID utente non valido.");
+    }
+    // Save the updated user in the database
+
+    System.out.println("Utente aggiornato: " + utente);
+    return utenteRepos.save(utente);
+   
+}
+
 
     /**
      * SpringSecurity built-in method

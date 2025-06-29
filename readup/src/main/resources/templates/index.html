@@ -48,8 +48,8 @@
                             <p>Con ReadUp trasformi ogni pagina in un’esperienza social.</p>
                         </div>
 
-                        <div th:replace="~{fragments :: authForm(utente=${utente}, successMessage=${successMessage}, loginError=${loginError}, showLogin=${showLogin})}"></div>
-
+                        <div th:replace="~{fragments :: authForm(${utente}, ${successMessage}, ${loginError}, ${showLogin})}"></div>
+   
                     </section> 
                     <!-- / Registration form section -->
     

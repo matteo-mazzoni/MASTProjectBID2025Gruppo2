@@ -24,5 +24,6 @@ public interface UtenteService {
     boolean emailEsistente(String email);
 
     Optional<Utente> findByNickname(String nickname);
+    Utente aggiornaUtente(Utente utente);
     
 }
