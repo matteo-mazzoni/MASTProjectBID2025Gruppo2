@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mast.readup.entities.Utente;
+import com.mast.readup.services.LibroService;
 import com.mast.readup.services.UtenteService;
 
 import jakarta.servlet.http.HttpSession;
@@ -19,20 +20,30 @@ import jakarta.validation.Valid;
 public class AuthController {
 
     @Autowired
-    private final UtenteService utenteService;
+    private LibroService libroService;
 
-    public AuthController(UtenteService utenteService) {
-        this.utenteService = utenteService;
-    }
+    @Autowired
+    private UtenteService utenteService;
 
-    @GetMapping("/")
-    public String index(Model model) {
+
+   @GetMapping("/")
+    public String index(Model model, @ModelAttribute("successMessage") String successMessage,
+    @ModelAttribute("loginError") String loginError) {
+
+        // Carousel
+        model.addAttribute("libri", libroService.findRandomCarousel(4));
+
+
         if (!model.containsAttribute("utente")) {
             model.addAttribute("utente", new Utente());
         }
+        
+        model.addAttribute("successMessage", successMessage);
+        model.addAttribute("loginError", loginError);
+
         return "index";
+
     }
-    
     
     /* NEW USER REGISTRATION */
 

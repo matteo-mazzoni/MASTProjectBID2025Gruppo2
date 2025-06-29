@@ -129,9 +129,9 @@
     <div id="header_block" class="total_gradient"></div>
     <!-- / Header gradient color block -->    
 
-
 </header>
 <!-- / Header -->
+
 
 
 <!-- Footer -->
@@ -148,6 +148,129 @@
 
 </footer>
 <!-- / Footer -->
+
+
+<!-- /* OTHER FRAGMENTS */ -->
+
+<!-- Carousel -->
+<div th:fragment="carousel(libri)">
+  <section id="top-books-carousel">
+    <div class="carousel_container container-fluid">
+      <h2 class="mb-4 text-center">I libri consigliati della settimana</h2>
+
+      <section class="slider_carousel">
+
+        <!-- Arrow buttons prev-->
+        <div class="arrow_button_container">
+          <button class="slide-arrow carousel-control-prev btn-outline-secondary" id="slide-arrow-prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <!-- Slides wrapper for animation effects -->
+        <div class="slides_wrapper">
+
+          <!-- Slides items -->
+          <ul class="slides_container" id="slides_container">
+            <li class="slide" th:each="libro, stat : ${libri}" th:if="${stat.index < 4}">
+              <h5 class="card-title pt-4" th:text="${libro.titolo}">Titolo</h5>
+              <p class="card-text text-muted mb-4" th:text="${libro.autore}">Autore</p>
+              <img th:src="@{${libro.coverUrl}}" alt="cover" class="card-img-top">
+              <a href="#" class="btn btn-sm btn-action mb-2">Aggiungi ai preferiti</a>
+              <a href="#" class="btn btn-sm btn-action mb-4">Aggiungi a una booklist</a>
+            </li>
+          </ul>
+          <!-- / Slides items -->
+
+        </div>
+        <!-- / Slides wrapper for animation effects -->
+
+        <!-- Arrow buttons next -->
+        <div class="arrow_button_container">
+          <button class="slide-arrow carousel-control-next btn-outline-secondary" id="slide-arrow-next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </section>
+    </div>
+  </section>
+</div>
+<!-- / Carousel -->
+
+<!-- Registration/login form -->
+<div th:fragment="authForm(utente, successMessage)">
+
+  <!-- Registration form (= successMessage == null)-->  
+  <div th:if="${#strings.isEmpty(successMessage)}">
+
+    <div class="registration-card">
+      <h5>Registrati gratuitamente in meno di 1 minuto</h5>
+      <form th:action="@{/register}" th:object="${utente}" method="post">
+        
+        <!-- th:field binds the field to the model field of th:object class-->
+
+        <!-- Nickname  -->
+        <div th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="error"></div>
+        <input th:field="*{nickname}" type="text" placeholder="Username" pattern="[a-zA-Z0-9]{3,20}" title="Solo lettere e numeri, 3–20 caratteri"
+        required autofocus />
+        
+        <!-- Email -->
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></div>
+        <input th:field="*{email}" type="email" placeholder="Email" required /> 
+
+        <!-- Password -->
+        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error"></div>
+        <input th:field="*{password}" type="password" placeholder="Password" pattern="(?=.*[A-Z])(?=.*\d).{8,}"
+        title="Minimo 8 caratteri, 1 maiuscola e 1 numero" required /> 
+
+        <!-- Button -->
+        <button type="submit">Registrati</button> 
+
+        <!-- Link per login -->
+        <p class="text-center"> Hai già un account?
+          <a th:href="@{/login}">Accedi</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Login form (= successMessage != null)-->  
+  <div class="registration-card text-center" th:if="${!#strings.isEmpty(successMessage)}">
+    <p th:text="${successMessage}"class="success-message mb-4"></p>
+    <form th:action="@{/logout}" method="post">
+      <button type="submit">Logout</button>
+    </form>
+  </div>
+</div>
+<!-- / Registration/login form -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+  
+
+
+
 
   
 

@@ -23,11 +23,11 @@ public class SecurityConfig {
     /**
      * It retrieves the built-in l'AuthenticationManager configured by Spring Security,
      * It utilise automatically all the bean UserDetailsService and PasswordEncoder. 
-     */
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
+    //  */
+    // @Bean
+    // public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    //     return authConfig.getAuthenticationManager();
+    // }
 
 
     /**
@@ -45,31 +45,46 @@ public class SecurityConfig {
      * @throws Exception if an error occurs while building the
      *                   SecurityFilterChain
      */
+    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-        // Disabled CSRF (SpringBoot 6.1+)
+        // Disabled CSRF (SpringBoot 6.1+)  
         .csrf(csrf -> csrf.disable())
-        
+    
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll()
-            .anyRequest().authenticated()
+        .anyRequest().permitAll()
         )
-        .formLogin(form -> form
-            .loginPage("/")
-            .loginProcessingUrl("/login")
-            .defaultSuccessUrl("/dashboard", true)
-            .failureUrl("/login?error=true")
-            .permitAll()
-        )
-        .logout(logout -> logout
-            .logoutUrl("/logout")
-            .logoutSuccessUrl("/login?logout=true")
-            .invalidateHttpSession(true)
-            .deleteCookies("JSESSIONID")
-            .permitAll()
-        );
+        .formLogin(form -> form.disable())
+        .httpBasic(basic -> basic.disable())
+        .logout(logout -> logout.disable());
 
         return http.build();
+    
     }
 }
+    
+
+    //       .requestMatchers(
+    //           "/", "/login", "/register", "/css/**", "/js/**", "/img/**", "/favicon.ico"
+    //       ).permitAll()
+          
+            
+    //     .formLogin(form -> form
+    //         .loginPage("/")
+    //         .loginProcessingUrl("/login")
+    //         .defaultSuccessUrl("/home", true)
+    //         .failureUrl("/login?error=true")
+    //         .permitAll()
+    //     )
+    //     .logout(logout -> logout
+    //         .logoutUrl("/logout")
+    //         .logoutSuccessUrl("/login?logout=true")
+    //         .invalidateHttpSession(true)
+    //         .deleteCookies("JSESSIONID")
+    //         .permitAll()
+    //     );
+
+    //     return http.build();
+    // }
+// }

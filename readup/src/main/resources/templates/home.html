@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+
+  <head th:replace="~{fragments :: head(
+      title='HomePage • ReadUp',
+      pageCss='/css/pages/index_style.css',
+      extraPageCss='/css/partial/carousel_style.css',
+      pageJS='/js/index.js'
+  )}">
+  </head>
+
+  <body>
+   
+        <!-- Header -->
+        <header th:replace="~{fragments :: header}"></header>
+        <!-- / Header -->
+
+        <div th:fragment="content">
+
+            <!-- Main -->
+            <main>
+                <div class="container_90 py-5">
+          
+                   <div th:replace="~{fragments :: carousel(${libri})}"></div>
+
+                    <hr/>
+
+                    <!-- Registration form\login -->
+                    <div th:replace="~{fragments :: authForm(${utente}, ${successMessage})}"></div>
+          
+                  <hr/>
+          
+                  <!-- Card section -->     
+                  <section class="user-library my-4">
+                    <h3>I tuoi libri</h3>
+                    <div class="row">
+                      <div class="col-md-3 mb-3" th:each="libro : ${userLibraryBooks}">
+                        <div class="card h-100">
+                          <img th:src="@{${libro.coverUrl}}" class="card-img-top" alt="copertina"/>
+                          <div class="card-body">
+                            <h5 class="card-title" th:text="${libro.titolo}">Titolo</h5>
+                            <p class="card-text text-muted" th:text="${libro.autore}">Autore</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+          
+                </div>
+            </main>
+            <!-- / Main --> 
+
+        </div>
+    
+    <footer th:replace="~{fragments :: footer}"></footer>
+  </body>
+</html>
