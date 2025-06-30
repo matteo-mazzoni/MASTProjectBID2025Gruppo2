@@ -203,9 +203,10 @@ public class UtenteServiceImpl implements UtenteService, UserDetailsService {
     // Save the updated user in the database
 
     System.out.println("Utente aggiornato: " + utente);
+    utente.setLoggedIn(false);
     return utenteRepos.save(utente);
    
-}
+    }
 
 
     /**

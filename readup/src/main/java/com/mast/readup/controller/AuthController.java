@@ -38,7 +38,7 @@ public class AuthController {
         if (!model.containsAttribute("utente")) {
             model.addAttribute("utente", new Utente());
         }
-        
+
         model.addAttribute("successMessage", successMessage);
         model.addAttribute("loginError", loginError);
         model.addAttribute("showLogin", (showLogin != null) && showLogin);
@@ -104,4 +104,19 @@ public class AuthController {
         // Redirect to the homepage
         return "redirect:/";
     }
+
+
+    /* USER LOGOUT */
+    @PostMapping("/logout")
+    public String customLogout(HttpSession session) {
+        Utente u = (Utente) session.getAttribute("currentUser");
+        if (u != null) {
+            u.setLoggedIn(false);
+            utenteService.aggiornaUtente(u);   
+        }
+        session.invalidate();                   
+        return "redirect:/?logout=true";       
+    }
 }
+
+
