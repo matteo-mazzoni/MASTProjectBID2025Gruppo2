@@ -35,12 +35,19 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
+
     /**
-     * Qui definiamo le regole di sicurezza:
-     * - CSRF off (solo per sviluppo)
-     * - /profile, /myBooks e /booklists richiedono autenticazione
-     * - formLogin personalizzato (/ con nickname e password)
-     */
+     * It configures what URL are considered public and what are protected
+     * (requires authentication).
+     * It also configures the login and logout process.
+     *
+     *
+     * @param http the HttpSecurity object that contains the configuration for
+     *             the SecurityFilterChain
+     * @return the SecurityFilterChain object configured by this method
+     * @throws Exception if an error occurs while building the
+     *                   SecurityFilterChain
+    */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -66,9 +73,10 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /**
-     * Dopo login ok: settiamo loggedIn=true, salviamo e mettiamo in sessione
-     */
+   /**
+    * After a successful login, this handler puts the logged user into session
+    * @return the AuthenticationSuccessHandler
+    */
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return (HttpServletRequest request,
@@ -87,134 +95,6 @@ public class SecurityConfig {
         };
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// package com.mast.readup.configuration;
-
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.context.annotation.Bean;
-// import org.springframework.context.annotation.Configuration;
-// import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.security.web.SecurityFilterChain;
-// import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
-// import com.mast.readup.entities.Utente;
-// import com.mast.readup.services.UtenteService;
-
-
-// @Configuration
-// public class SecurityConfig {
-//     @Autowired
-//     private UtenteService utenteService;
-    
-//     /**
-//      * BCryptPasswordEncoder for password encoding
-//      */
-//     @Bean
-//     public PasswordEncoder passwordEncoder() {
-//         return new BCryptPasswordEncoder();
-//     }
-
-//      /**
-//      * It configures what URL are considered public and what are protected
-//      * (requires authentication).
-//      * It also configures the login and logout process.
-//      *
-//      *
-//      * @param http the HttpSecurity object that contains the configuration for
-//      *             the SecurityFilterChain
-//      * @return the SecurityFilterChain object configured by this method
-//      * @throws Exception if an error occurs while building the
-//      *                   SecurityFilterChain
-//      */
-
-//     @Bean
-//     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-       
-
-//         // Ruler for requesting pages
-//         http
-//         // Disabled CSRF (SpringBoot 6.1+)
-//         .csrf(csrf -> csrf.disable())
-//             .authorizeHttpRequests(auth -> auth
-//             .requestMatchers("/profile", "/myBooks", "/booklists").authenticated()
-//             .anyRequest().permitAll()
-//         )
-
-//         // Rules for login
-//         .formLogin(form -> form
-//             .loginPage("/")
-//             .loginProcessingUrl("/login")
-//             .usernameParameter("nickname")   // default is: username for SpringBoot Security
-//             .passwordParameter("password")
-//             .defaultSuccessUrl("/", true)
-//             .successHandler(authenticationSuccessHandler())
-//             .failureUrl("/?loginError=true")
-//             .permitAll()
-//         )
-
-//         // Rules for logout (logout disabled, it will be managed by controller)
-//         .logout(logout -> logout.disable());
-     
-//         return http.build();
-
-//     }
-
-
-//     /**
-//      * After a successful login, this handler puts the logged user into session
-//      * @return the AuthenticationSuccessHandler
-//      */
-//     @Bean
-//     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-//         return (request, response, authentication) -> {
-//             String currentUserNickName = authentication.getName();
-//             Utente user = utenteService.findByNickname(currentUserNickName).orElseThrow(() -> new IllegalStateException("Utente non trovato"));
-
-//             user.setLoggedIn(true);
-//             utenteService.aggiornaUtente(user);
-
-//             request.getSession().setAttribute("currentUser", user);
-
-//             // Redirect to the home page
-//             response.sendRedirect(request.getContextPath() + "/");
-//         };
-
-//     }
-
-
-
-
-
-// }
 
 
 

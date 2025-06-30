@@ -9,8 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class PasswordConfig {
 
     /**
-     * Bean per la codifica delle password con BCrypt.
+     * Configures a PasswordEncoder bean using BCrypt hashing algorithm.
+     * Provides password encoding functionality with a default strength.
+     * This bean is used for encrypting and verifying passwords.
      */
+  
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
