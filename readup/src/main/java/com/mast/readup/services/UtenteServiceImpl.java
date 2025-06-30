@@ -68,6 +68,11 @@ public class UtenteServiceImpl implements UtenteService, UserDetailsService {
 
     }
 
+    @Override
+    public Utente save(Utente utente) {
+        return utenteRepos.save(utente);
+    }
+
     // Modifies user's nickname by ID
     @Override
     public Utente modificaNickname(long idUtente, String nuovoNickname) {

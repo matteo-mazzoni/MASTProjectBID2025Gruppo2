@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -65,4 +66,12 @@ public class Utente {
     @Lob 
     @Column(name = "profile_image", columnDefinition="MEDIUMBLOB")
     private byte[] profileImage;
+
+    // Transient field for new password input (not persisted in the DB)
+    @Transient
+    private String newPassword;
+
+    // Transient field for confirming new password (not persisted in the DB)
+    @Transient
+    private String confirmNewPassword;
 }
