@@ -32,6 +32,7 @@
 
 
                         <h5 th:if="${currentUser != null}"><span th:text="${currentUser.nickname}"></span></h5>
+                        <p th:if="${currentUser != null and currentUser.citta != null and currentUser.citta.length() > 0}" class=""><span th:text="${currentUser.citta}"></span></p>
                         <p th:if="${currentUser == null}">Dati utente non disponibili.</p>
 
                         <div class="profile-stats mt-3">
