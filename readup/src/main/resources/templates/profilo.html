@@ -1,169 +1,150 @@
 <!DOCTYPE html>
 <html lang="it">
-    
-    <!-- Head -->
-    <head th:replace="~{fragments :: head(
-        title='Profilo • Readup', pageCss='/css/pages/profilo_style.css', 
-        extraPageCss=${null}, 
+
+<head th:replace="~{fragments :: head(
+        title='Profilo • Readup', pageCss='/css/pages/profilo_style.css',
+        extraPageCss=${null},
         pageJS='/js/profilo.js')}">
-    </head>  
-    <!-- / Head -->
+</head>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // Questa variabile globale sarà disponibile per profilo.js
+    window.showEditProfileModalFlag = [[${showEditProfileModal}]] || false;
+    /*]]>*/
+</script>
 
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        // Questa variabile globale sarà disponibile per profilo.js
-        window.showEditProfileModalFlag = [[${showEditProfileModal}]] || false;
-        /*]]>*/
-    </script>
-  
-    <body>
-        <!-- Header -->
-        <header th:replace="~{fragments :: header}"></header>
-        <!-- / Header -->
+<body>
+    <header th:replace="~{fragments :: header}"></header>
+    <div th:fragment="content">
 
-        <div th:fragment="content">
+        <main>
+           <div class="section-spacing">
+                <div class="profile-photo-wrapper">
 
-            <!-- Main -->
-            <main>
-               <div class="section-spacing">
                     <div class="profile-photo-wrapper">
-                        
-                        <!-- Card foto profilo -->
-                        <div class="profile-photo-wrapper">
-                        
-                        <div class="profile-photo-card">
-                            <img th:src="@{/profile/image/{id}(id=${userId})}" class="profile-photo" alt="Foto profilo">
-                            <form th:action="@{/profile/uploadImage}" method="post" enctype="multipart/form-data">
-                                <label for="imageUpload" class="button">Cambia immagine</label>
-                                <input id="imageUpload" type="file" name="profileImage" accept="image/*" onchange="this.form.submit()" />
-                            </form>
 
-                            
-                            <h5 th:if="${currentUser != null}"><span th:text="${currentUser.nickname}"></span></h5>
-                            <p th:if="${currentUser == null}">Dati utente non disponibili.</p>
-                            
-                            <div class="profile-stats mt-3">
-                                <p class="mb-1"><strong th:text="${numChallenges}">0</strong> Sfide</p>
-                                <p class="mb-1"><strong th:text="${numBooklists}">0</strong> Booklist</p>
-                            </div>
+                    <div class="profile-photo-card">
+                        <img th:src="@{/profile/image/{id}(id=${userId})}" class="profile-photo" alt="Foto profilo">
+                        <form th:action="@{/profile/uploadImage}" method="post" enctype="multipart/form-data">
+                            <label for="imageUpload" class="button">Cambia immagine</label>
+                            <input id="imageUpload" type="file" name="profileImage" accept="image/*" onchange="this.form.submit()" />
+                        </form>
 
-                            <button type="button" class="button btn-outline-primary btn-sm profile-edit-btn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                                Modifica Profilo
-                            </button>
-                            
-                            <form th:action="@{/logout}" method="post" class="mt-3">
-                                <button type="submit" class="button">Logout</button>
-                            </form>
 
-                            <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="editProfileModalLabel">Modifica Informazioni Profilo</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <form th:action="@{/profile/update}" method="post" th:object="${currentUser}">
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <label for="nickname" class="form-label">Nickname</label>
-                                                    <input type="text" class="form-control" id="nickname" name="nickname" th:field="*{nickname}" required>
-                                                    <span th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="text-danger"></span>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="email" class="form-label">Email</label>
-                                                    <input type="email" class="form-control" id="email" name="email" th:field="*{email}" required>
-                                                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
-                                                </div>
+                        <h5 th:if="${currentUser != null}"><span th:text="${currentUser.nickname}"></span></h5>
+                        <p th:if="${currentUser == null}">Dati utente non disponibili.</p>
 
-                                                <div class="mb-3">
-                                                    <label for="citta" class="form-label">Città</label>
-                                                    <input type="text" class="form-control" id="citta" name="citta" th:field="*{citta}">
-                                                    <span th:if="${#fields.hasErrors('citta')}" th:errors="*{citta}" class="text-danger"></span>
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label for="newPassword" class="form-label">Nuova Password (lascia vuoto per non cambiare)</label>
-                                                    <input type="password" class="form-control" id="newPassword" name="newPassword" th:field="*{newPassword}">
-                                                    <span th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" class="text-danger"></span>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="confirmNewPassword" class="form-label">Conferma Nuova Password</label>
-                                                    <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" th:field="*{confirmNewPassword}">
-                                                    <span th:if="${#fields.hasErrors('confirmNewPassword')}" th:errors="*{confirmNewPassword}" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                                                <button type="submit" class="btn btn-primary">Salva Modifiche</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            
+                        <div class="profile-stats mt-3">
+                            <p class="mb-1"><strong th:text="${numChallenges}">0</strong> Sfide</p>
+                            <p class="mb-1"><strong th:text="${numBooklists}">0</strong> Booklist</p>
                         </div>
 
-                        <!-- Column with 2 cards -->
-                        <div class="profile-description-column">
-                            <!--Card Libreria-->
-                            <div class="profile-section">
-                                <div class="profile-section-card">
-                                    <h5 class="section-subtitle">La tua Libreria</h5> 
-                                    <p class="mb-3 section-description">
-                                        Qui trovi tutti i libri che hai aggiunto alla tua libreria personale. Esplora e gestisci i tuoi libri.
-                                    </p>
-                                    
-                                    <!-- Simple button to redirect in Libreria -->
-                                    <form th:action="@{/libreria.html}" method="get" class="mt-3">
-                                        <button type="submit" class="button button-small">Aggiungi un Libro</button>
-                                    </form>
+                        <button type="button" class="button btn-outline-primary btn-sm profile-edit-btn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            Modifica Profilo
+                        </button>
 
-                                    <!-- when there is no Book -->
-                                    <div th:if="${#lists.isEmpty(userLibraryBooks)}" class="alert alert-info text-center py-4 empty-list-message">
-                                        La tua libreria è vuota. Usa il pulsante qui sopra per aggiungere un libro!
+                        <form th:action="@{/logout}" method="post" class="mt-3">
+                            <button type="submit" class="button">Logout</button>
+                        </form>
+
+                        <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                            <h5 class="modal-title" id="editProfileModalLabel">Modifica Informazioni Profilo</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    
-                                    <!-- List of Book -->
-                                    <div th:unless="${#lists.isEmpty(userLibraryBooks)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
-                                        <div class="col" th:each="libro : ${userLibraryBooks}">
-                                            <div class="card h-100">
-                                                <div class="card-body d-flex flex-column">
-                                                    <h5 class="card-title" th:text="${libro.titolo}">Titolo Libro</h5>
-                                                    <p class="card-text text-muted mb-auto" th:text="${libro.autore}">Autore del Libro</p>
-                                                </div>
+                                    <form th:action="@{/profile/update}" method="post" th:object="${currentUserForForm}">
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="nickname" class="form-label">Nickname</label>
+                                                <input type="text" class="form-control" id="nickname" name="nickname" th:field="*{nickname}" required>
+                                                <span th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}" class="text-danger"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email" th:field="*{email}" required>
+                                                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="citta" class="form-label">Città</label>
+                                                <input type="text" class="form-control" id="citta" name="citta" th:field="*{citta}">
+                                                <span th:if="${#fields.hasErrors('citta')}" th:errors="*{citta}" class="text-danger"></span>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="newPassword" class="form-label">Nuova Password (lascia vuoto per non cambiare)</label>
+                                                <input type="password" class="form-control" id="newPassword" name="newPassword" th:field="*{newPassword}">
+                                                <span th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" class="text-danger"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="confirmNewPassword" class="form-label">Conferma Nuova Password</label>
+                                                <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" th:field="*{confirmNewPassword}">
+                                                <span th:if="${#fields.hasErrors('confirmNewPassword')}" th:errors="*{confirmNewPassword}" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                                            <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="profile-description-column">
+                        <div class="profile-section">
+                            <div class="profile-section-card">
+                                <h5 class="section-subtitle">La tua Libreria</h5>
+                                <p class="mb-3 section-description">
+                                    Qui trovi tutti i libri che hai aggiunto alla tua libreria personale. Esplora e gestisci i tuoi libri.
+                                </p>
+
+                                <form th:action="@{/libreria.html}" method="get" class="mt-3">
+                                    <button type="submit" class="button button-small">Aggiungi un Libro</button>
+                                </form>
+
+                                <div th:if="${#lists.isEmpty(userLibraryBooks)}" class="alert alert-info text-center py-4 empty-list-message">
+                                    La tua libreria è vuota. Usa il pulsante qui sopra per aggiungere un libro!
+                                </div>
+
+                                <div th:unless="${#lists.isEmpty(userLibraryBooks)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
+                                    <div class="col" th:each="libro : ${userLibraryBooks}">
+                                        <div class="card h-100">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title" th:text="${libro.titolo}">Titolo Libro</h5>
+                                                <p class="card-text text-muted mb-auto" th:text="${libro.autore}">Autore del Libro</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!--Card Booklist-->
-                            <div class="profile-description-column">
-                                <div class="profile-section-card">
-                                    <h5>Le Tue Booklist</h5>
+                        </div>
+                        <div class="profile-description-column">
+                            <div class="profile-section-card">
+                                <h5>Le Tue Booklist</h5>
 
-                                    <p class=" mb-3 section-description">
-                                        Organizza i tuoi libri preferiti in collezioni personalizzate. Qui puoi visualizzare le tue ultime booklist.
-                                    </p>
+                                <p class=" mb-3 section-description">
+                                    Organizza i tuoi libri preferiti in collezioni personalizzate. Qui puoi visualizzare le tue ultime booklist.
+                                </p>
 
-                                    <!-- Simple button to redirect in Booklist -->
-                                    <form th:action="@{/booklist.html}" method="get" class="mt-3">
-                                        <button type="submit" class="button button-small">Crea una Booklist</button>
-                                    </form>
+                                <form th:action="@{/booklist.html}" method="get" class="mt-3">
+                                    <button type="submit" class="button button-small">Crea una Booklist</button>
+                                </form>
 
-                                    <!-- when there is no Booklist -->
-                                    <div th:if="${#lists.isEmpty(userBooklists)}" class="alert alert-info text-center py-4 empty-list-message">
-                                        Non hai ancora creato nessuna Booklist. Usa il pulsante qui sopra per crearne una!
-                                    </div>
+                                <div th:if="${#lists.isEmpty(userBooklists)}" class="alert alert-info text-center py-4 empty-list-message">
+                                    Non hai ancora creato nessuna Booklist. Usa il pulsante qui sopra per crearne una!
+                                </div>
 
-                                    <!-- List of Booklist -->
-                                    <div th:unless="${#lists.isEmpty(userBooklists)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
-                                        <div class="col" th:each="booklist : ${userBooklists}">
-                                            <div class="card h-100">
-                                                <div class="card-body d-flex flex-column">
-                                                    <h5 class="card-title" th:text="${booklist.nome}">Nome Booklist</h5>
-                                                    <p class="card-text text-muted mb-auto" th:text="${'Libri: ' + #lists.size(booklist.libri)}">Libri: 0</p>
-                                                    <a th:href="@{/booklist/{idBooklist}(idBooklist=${booklist.idBooklist})}" class="button btn-outline-primary mt-3">Visualizza</a>
-                                                </div>
+                                <div th:unless="${#lists.isEmpty(userBooklists)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
+                                    <div class="col" th:each="booklist : ${userBooklists}">
+                                        <div class="card h-100">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title" th:text="${booklist.nome}">Nome Booklist</h5>
+                                                <p class="card-text text-muted mb-auto" th:text="${'Libri: ' + #lists.size(booklist.libri)}">Libri: 0</p>
+                                                <a th:href="@{/booklist/{idBooklist}(idBooklist=${booklist.idBooklist})}" class="button btn-outline-primary mt-3">Visualizza</a>
                                             </div>
                                         </div>
                                     </div>
@@ -172,13 +153,9 @@
                         </div>
                     </div>
                 </div>
-            </main>
-            <!-- / Main -->
-        
-        <!-- Footer -->
+           </div>
+        </main>
         <footer th:replace="~{fragments :: footer}"></footer>
-        <!-- / Footer -->
-
     </body>
 
 </html>
