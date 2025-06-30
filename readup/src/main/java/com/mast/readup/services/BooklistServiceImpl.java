@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 
 @Service
 public class BooklistServiceImpl implements BooklistService {
-
+    
+    @Autowired
     private final BooklistRepos booklistRepos;
     private final UtenteRepos utenteRepos;
     private final LibroRepos libroRepos;
 
-    @Autowired
     public BooklistServiceImpl(BooklistRepos booklistRepos, UtenteRepos utenteRepos, LibroRepos libroRepos) {
         this.booklistRepos = booklistRepos;
         this.utenteRepos = utenteRepos;

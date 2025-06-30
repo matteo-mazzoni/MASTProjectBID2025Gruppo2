@@ -21,7 +21,6 @@ public class SecurityConfig {
     private final UtenteService utenteService;
 
     public SecurityConfig(@Lazy UtenteService utenteService) {
-        // @Lazy qui evita comunque eventuali cicli residui
         this.utenteService = utenteService;
     }
 
@@ -88,7 +87,7 @@ public class SecurityConfig {
                 .orElseThrow(() -> new IllegalStateException("Utente non trovato"));
 
             u.setLoggedIn(true);
-            utenteService.aggiornaUtente(u);
+            utenteService.cambiaStatusLogin(u.getIdUtente(), true);
 
             request.getSession().setAttribute("currentUser", u);
             response.sendRedirect(request.getContextPath() + "/");

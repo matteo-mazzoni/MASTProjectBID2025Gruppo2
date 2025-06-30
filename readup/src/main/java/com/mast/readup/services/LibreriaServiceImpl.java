@@ -14,10 +14,11 @@ import java.util.stream.Collectors;
 @Service
 public class LibreriaServiceImpl implements LibreriaService {
 
+    @Autowired
     private final LibreriaRepos libreriaRepos;
     private final UtenteRepos utenteRepos; // Needed to find the user
 
-    @Autowired
+   
     public LibreriaServiceImpl(LibreriaRepos libreriaRepos, UtenteRepos utenteRepos) {
         this.libreriaRepos = libreriaRepos;
         this.utenteRepos = utenteRepos;
