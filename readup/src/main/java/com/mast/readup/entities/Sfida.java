@@ -74,7 +74,7 @@ public class Sfida implements JsonStringListConverter { // Considera se JsonStri
     // Se la relazione Many-to-Many è la fonte della verità per i partecipanti,
     // questo campo potrebbe essere ridondante o creare incoerenze.
     // Potrebbe servire solo per una visualizzazione denormalizzata.
-    @Column(name = "nome_partecipanti_json", columnDefinition = "json") // Rinominato per chiarezza, se lo tieni
+    @Column(name = "nome_partecipanti", columnDefinition = "json") // Rinominato per chiarezza, se lo tieni
     private String nomePartecipantiJson; // Sarà una stringa JSON, non una List<String> direttamente mappata
 
     // Se tieni nomePartecipantiJson, puoi avere dei metodi helper:
