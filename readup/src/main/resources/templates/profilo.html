@@ -112,7 +112,7 @@
                                 </div>
 
                                 <div th:unless="${#lists.isEmpty(userLibraryBooks)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
-                                    <div class="col" th:each="libro : ${userLibraryBooks}">
+                                    <div class="col" th:each="libro : ${#lists.size(userLibraryBooks) > 5 ? #lists.sublist(userLibraryBooks, #lists.size(userLibraryBooks) - 5, #lists.size(userLibraryBooks)) : userLibraryBooks}">
                                         <div class="card h-100">
                                             <div class="card-body d-flex flex-column">
                                                 <h5 class="card-title" th:text="${libro.titolo}">Titolo Libro</h5>
@@ -140,7 +140,7 @@
                                 </div>
 
                                 <div th:unless="${#lists.isEmpty(userBooklists)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-2">
-                                    <div class="col" th:each="booklist : ${userBooklists}">
+                                    <div class="col" th:each="booklist : ${#lists.size(userBooklists) > 5 ? #lists.sublist(userBooklists, #lists.size(userBooklists) - 5, #lists.size(userBooklists)) : userBooklists}">
                                         <div class="card h-100">
                                             <div class="card-body d-flex flex-column">
                                                 <h5 class="card-title" th:text="${booklist.nome}">Nome Booklist</h5>
