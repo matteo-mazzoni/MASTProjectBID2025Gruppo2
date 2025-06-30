@@ -31,7 +31,7 @@ public class ChallengeController {
         return (u != null) ? u.getIdUtente() : null;
     }
 
-    @GetMapping("/sfide")
+    @GetMapping("/sfide.html")
     public String listaSfide(Model model, HttpSession session) {
 
         // Fetch all challenges from the database
