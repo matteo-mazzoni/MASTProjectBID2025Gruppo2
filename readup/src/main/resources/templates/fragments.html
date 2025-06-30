@@ -250,9 +250,9 @@
           <!-- Mostra errore se loginError non è vuoto -->
           <div th:if="${loginError != null}" class="error" th:text="${loginError}"></div>
           <!-- Username -->
-          <input name="username" type="text" placeholder="Username" required autofocus />
+          <input type="text" name="nickname" placeholder="Username"pattern="[a-zA-Z0-9]{3,20}" required autofocus>
           <!-- Password -->
-          <input name="password" type="password" placeholder="Password" required />
+          <input type="password" name="password" placeholder="Password" pattern="(?=.*[A-Z])(?=.*\d).{8,}" required>
           <!-- Pulsante di invio -->
           <button type="submit">Accedi</button>
       

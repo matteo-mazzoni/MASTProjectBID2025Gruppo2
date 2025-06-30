@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,11 +23,14 @@ public class UtenteServiceImpl implements UtenteService, UserDetailsService {
     
     @Autowired
     private final UtenteRepos utenteRepos;
+    private final PasswordEncoder passwordEncoder;
 
     // Constructor injection for UtenteRepos
-    public UtenteServiceImpl(UtenteRepos utenteRepos) {
-        this.utenteRepos = utenteRepos;
+    public UtenteServiceImpl(UtenteRepos utenteRepos,PasswordEncoder passwordEncoder) {
+        this.utenteRepos      = utenteRepos;
+        this.passwordEncoder  = passwordEncoder;
     }
+
 
     // Retrieves all users (idUtente parameter is unused, consider removing if not needed)
     @Override
@@ -54,6 +58,11 @@ public class UtenteServiceImpl implements UtenteService, UserDetailsService {
         if (utenteRepos.existsByEmail(utente.getEmail())) {
             throw new IllegalArgumentException("Email already registered.");
         }
+
+        // Encrypt password
+        String raw = utente.getPassword();
+        utente.setPassword(passwordEncoder.encode(raw));
+
         // Save on database: Hibernate will assign the new idUtente 
         return utenteRepos.save(utente);
 
@@ -73,17 +82,14 @@ public class UtenteServiceImpl implements UtenteService, UserDetailsService {
     }
 
     // Modifies user's password by ID
-    @Override
+   @Override
     public Utente modificaPassword(long idUtente, String nuovaPassword) {
-        Optional<Utente> utenteModify = utenteRepos.findById(idUtente);
-        if (utenteModify.isPresent()) {
-            Utente utente = utenteModify.get();
-            utente.setPassword(nuovaPassword);
-            return utenteRepos.save(utente);
-        } else {
-            throw new IllegalArgumentException("User with ID " + idUtente + " not found.");
-        }
-    }
+    Utente utente = utenteRepos.findById(idUtente)
+        .orElseThrow(() -> new IllegalArgumentException("User with ID " + idUtente + " not found."));
+    // Encrypt password
+    utente.setPassword(passwordEncoder.encode(nuovaPassword));
+    return utenteRepos.save(utente);
+}
 
     // Modifies user's email by ID
     @Override
