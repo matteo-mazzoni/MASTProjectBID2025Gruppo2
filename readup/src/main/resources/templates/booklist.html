@@ -49,8 +49,8 @@
                                 </p>
                                 <div class="card-actions">
                                     <a th:href="@{/booklist/{id}(id=${booklist.idBooklist})}" class="button-action button-info">Dettagli</a>
-                                    <form th:action="@{/{id}/delete(id=${booklist.idBooklist})}" method="post" style="display:inline;"
-                                            onsubmit="return confirm('Sei sicuro di voler eliminare questa booklist?');">
+                                    <form th:action="@{/booklist/{id}/delete(id=${booklist.idBooklist})}" method="post" style="display:inline;"
+                                        onsubmit="return confirm('Sei sicuro di voler eliminare questa booklist?');">
                                         <button type="submit" class="button-action button-danger">Elimina</button>
                                     </form>
                                 </div>

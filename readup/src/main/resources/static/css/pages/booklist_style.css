@@ -1,131 +1,312 @@
-/* Contenitore principale della pagina, simile a profile-photo-wrapper ma per la booklist intera */
+/*====================================*/
+/* Globali e Utilities                */
+/*====================================*/
+
+/* Contenitore principale della pagina */
 main.container {
     padding-top: 2rem;
-    padding-bottom: 4rem; /* Aumentato il padding inferiore per più spazio */
+    padding-bottom: 4rem;
     display: flex;
-    justify-content: center; /* Centra il contenuto della main */
-    align-items: flex-start; /* Allinea il contenuto all'inizio verticalmente */
-    width: 100%; /* Assicura che la main occupi la larghezza del suo parent */
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
 }
 
 .page-container {
-    max-width: 1200px; /* Limita la larghezza massima per leggibilità, come il profilo */
-    width: 100%; /* Assicura che occupi tutta la larghezza disponibile all'interno del max-width */
-    margin: 0 3rem; /* Margini laterali consistenti con il profilo */
+    width: 90%;
+    margin: 0 1.5rem; /* Riduci il margine laterale per farla espandere */
 }
 
-/* Stile per la card principale che avvolge tutto il contenuto della pagina */
+/* Card principale che avvolge il contenuto */
 .main-content-card {
     background-color: var(--bg_card_color);
-    border-radius: 16px; /* Bordi più arrotondati, come le card del profilo */
-    padding: 3rem 4rem; /* Padding interno generoso per una card principale più grande */
-    box-shadow: 0 8px 25px rgba(39, 52, 99, 0.2); /* Ombra più pronunciata e morbida */
+    border-radius: 16px;
+    padding: 3rem 4rem;
+    box-shadow: 0 8px 25px rgba(39, 52, 99, 0.2);
     transition: box-shadow 0.3s ease;
-    width: 100%; /* Assicura che la card principale occupi tutta la larghezza del contenitore */
+    width: 100%;
 }
 
 .main-content-card:hover {
-    box-shadow: 0 10px 30px rgba(39, 52, 99, 0.3); /* Leggero aumento ombra al hover */
-}
-
-/* Stili per i titoli e descrizioni della pagina */
-.page-title {
-    color: var(--title_color); /* Usato --title_color per consistenza */
-    font-size: 2.6rem; /* Titolo più grande per enfasi */
-    margin-bottom: 0.8rem;
-    font-weight: 700;
-    text-align: center; /* Centra il titolo principale */
-}
-
-.page-description {
-    color: var(--text_color);
-    opacity: 0.8;
-    font-size: 1.15rem;
-    line-height: 1.6;
-    margin-bottom: 2.5rem;
-    text-align: center;
-    max-width: 800px; /* Limita la larghezza per leggibilità */
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Separatore orizzontale */
-.custom-hr {
-    border-top: 1px solid rgba(39, 52, 99, 0.15); /* Bordo sottile e discreto */
-    margin: 3rem 0; /* Più spazio intorno */
+    box-shadow: 0 10px 30px rgba(39, 52, 99, 0.3);
 }
 
 /* Messaggi di stato (alert Bootstrap) */
 #alertContainer {
-    margin-bottom: 2rem; /* Spazio sotto il contenitore degli alert */
+    margin-bottom: 2rem;
 }
+
 .alert {
-    border-radius: 10px; /* Più arrotondati */
+    border-radius: 10px;
     font-size: 1rem;
-    padding: 1rem 1.5rem; /* Più padding */
-    margin-bottom: 1rem; /* Meno spazio tra gli alert se ce ne sono più di uno */
-    box-shadow: 0 2px 8px rgba(39, 52, 99, 0.1); /* Ombra discreta */
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(39, 52, 99, 0.1);
 }
 
 .alert-success {
-    background-color: rgba(25, 135, 84, 0.15); /* Verde Bootstrap più opaco */
+    background-color: rgba(25, 135, 84, 0.15);
     color: #198754;
     border-color: rgba(25, 135, 84, 0.3);
 }
 
 .alert-danger {
-    background-color: rgba(220, 53, 69, 0.15); /* Rosso Bootstrap più opaco */
+    background-color: rgba(220, 53, 69, 0.15);
     color: #dc3545;
     border-color: rgba(220, 53, 69, 0.3);
 }
 
 .alert-info.empty-list-message {
-    background-color: rgba(var(--links_color-rgb), 0.18); /* Colore link più opaco */
+    background-color: rgba(var(--links_color-rgb), 0.18);
     color: var(--links_color);
     border-color: rgba(var(--links_color-rgb), 0.3);
     text-align: center;
-    padding: 2.5rem; /* Più padding */
+    padding: 2.5rem;
     font-size: 1.2rem;
     font-weight: 500;
-    border-radius: 12px; /* Più arrotondato */
+    border-radius: 12px;
 }
+
 .alert-info.empty-list-message p {
     margin-bottom: 0;
 }
 
-/* Stili per i bottoni generali (Crea Nuova Booklist) */
+/* Separatore orizzontale */
+.custom-hr {
+    border-top: 1px solid rgba(39, 52, 99, 0.15);
+    margin: 3rem 0;
+}
+
+/*====================================*/
+/* Tipografia e Titoli                */
+/*====================================*/
+
+/* Breadcrumb personalizzato (se ancora usato, altrimenti lascia così) */
+.custom-breadcrumb {
+    margin-bottom: 2rem;
+    padding-left: 0;
+}
+
+.custom-breadcrumb .breadcrumb-item {
+    font-size: 1rem;
+}
+
+.custom-breadcrumb .breadcrumb-item a {
+    color: var(--links_color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.custom-breadcrumb .breadcrumb-item a:hover {
+    text-decoration: underline;
+}
+
+.custom-breadcrumb .breadcrumb-item.active {
+    color: var(--text_color);
+    font-weight: 600;
+    opacity: 0.8;
+}
+
+/* Titolo principale della pagina */
+.page-title-details {
+    color: var(--text_color);
+    font-size: 2.4rem;
+    margin-bottom: 0.6rem;
+    font-weight: 700;
+    text-align: center; /* **Modifica qui: Centra il titolo** */
+}
+
+/* Descrizione della pagina */
+.page-description-details {
+    color: var(--text_color);
+    opacity: 0.8;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    text-align: center; 
+}
+
+/* Titoli di sezione (se ancora usati, altrimenti lascia così) */
+.section-title {
+    color: var(--title_color);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+/*====================================*/
+/* Stili per i Libri                  */
+/*====================================*/
+
+/* Card del singolo libro (se usata per i libri) */
+.book-card {
+    background-color: var(--bar_color); /* Lascia così se i libri DEVONO essere azzurrini */
+    /* Se le card dei libri DEVONO essere GRIGIE, imposta qui background-color: #f1f3f5; o un'altra variabile per il grigio */
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(39, 52, 99, 0.15);
+    border: 1px solid rgba(39, 52, 99, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(39, 52, 99, 0.25);
+}
+
+.book-card .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.book-card .card-title {
+    color: var(--text_color);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.book-card .card-author {
+    color: var(--text_color);
+    opacity: 0.75;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.book-card .card-isbn {
+    color: var(--text_color);
+    opacity: 0.9;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+/* Contenitore e immagine della copertina */
+.book-card .book-cover-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    min-height: 150px;
+}
+
+.book-card .book-cover {
+    max-width: 100%;
+    max-height: 200px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(39, 52, 99, 0.15);
+}
+
+.book-card .no-cover-placeholder {
+    text-align: center;
+    color: var(--stripe_color);
+    opacity: 0.8;
+}
+
+/*====================================*/
+/* Stili per le Booklist              */
+/*====================================*/
+
+/* Card delle Booklist */
+.booklist-card { /* Usiamo la classe specifica del tuo HTML */
+    background-color: var(--bar_color); /* Ora usa la variabile per l'azzurrino */
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(39, 52, 99, 0.15);
+    border: 1px solid rgba(39, 52, 99, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.booklist-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(39, 52, 99, 0.25);
+}
+
+.booklist-card .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.booklist-card .card-title {
+    color: var(--text_color);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.booklist-card .card-text.description-text { /* Stile per la descrizione */
+    color: var(--text_color);
+    opacity: 0.75;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    /* font-style: italic; rimuovi italic se non lo vuoi per la descrizione */
+}
+
+.booklist-card .card-text.stats-text { /* Stile per "Libri: X" */
+    color: var(--text_color);
+    opacity: 0.9;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: flex; /* Per allineare icona e testo se aggiungi un'icona */
+    align-items: center;
+    gap: 0.3rem; /* Spazio tra icona e testo */
+}
+
+/* Stile per le azioni (bottoni) all'interno delle card delle booklist */
+.booklist-card .card-actions {
+    display: flex;
+    justify-content: space-between; /* Spinge il primo a sx, l'ultimo a dx */
+    align-items: center; /* Allinea verticalmente */
+    gap: 0.8rem;
+    margin-top: auto; /* Spinge i bottoni in fondo alla card */
+    padding-top: 1rem;
+}
+
+
+/*====================================*/
+/* Bottoni Generali e di Azione       */
+/*====================================*/
+
+/* Stili per i bottoni generali */
 .button {
-    padding: 0.9rem 2rem; /* Bottoni più grandi */
+    padding: 0.9rem 2rem;
     background: var(--links_color);
     color: var(--background_color);
     border: none;
-    border-radius: 10px; /* Più arrotondato */
+    border-radius: 10px;
     font-size: 1.05rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 3px 10px rgba(39, 52, 99, 0.25); /* Ombra più pronunciata */
+    box-shadow: 0 3px 10px rgba(39, 52, 99, 0.25);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     text-align: center;
-    /* margin: 0 auto 2.5rem auto;  Centrato e più spazio sotto, ora gestito dal genitore */
 }
 
-/* Container per il bottone di creazione, per centrarlo correttamente */
 .d-flex.justify-content-center {
     display: flex;
     justify-content: center;
-    margin-bottom: 2.5rem; /* Spazio sotto il bottone */
+    margin-bottom: 2.5rem;
 }
-
 
 .button:hover {
     background-color: var(--text_color);
-    transform: translateY(-3px); /* Effetto hover più evidente */
-    box-shadow: 0 6px 18px rgba(39, 52, 99, 0.35); /* Ombra più grande al hover */
-    color: var(--background_color); /* Assicurati che il colore del testo sia leggibile su hover */
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(39, 52, 99, 0.35);
+    color: var(--background_color);
 }
 
 .button:active {
@@ -133,7 +314,6 @@ main.container {
     box-shadow: 0 2px 5px rgba(39, 52, 99, 0.25);
 }
 
-/* Variazioni di colore per i bottoni */
 .button-primary {
     background-color: var(--links_color);
 }
@@ -141,28 +321,20 @@ main.container {
     background-color: var(--text_color);
 }
 
-/* Stili per i bottoni d'azione nelle card (Dettagli, Elimina) */
-.booklist-card .card-actions {
-    display: flex;
-    justify-content: flex-end; /* Allinea i bottoni a destra */
-    gap: 0.8rem; /* Spazio tra i bottoni */
-    margin-top: auto; /* Spinge i bottoni in fondo alla card */
-    padding-top: 1.2rem; /* Spazio sopra i bottoni */
-}
-
+/* Stile per i bottoni d'azione */
 .button-action {
-    padding: 0.7rem 1.4rem; /* Bottoni d'azione più grandi */
-    font-size: 0.98rem; /* Font leggermente più grande */
-    border-radius: 8px; /* Più arrotondato */
+    padding: 0.7rem 1.4rem;
+    font-size: 0.98rem;
+    border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s ease, transform 0.1s ease;
     text-decoration: none;
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: none; /* Rimuove l'ombra per i bottoni d'azione */
-    transform: none; /* Rimuove la trasformazione all'hover per i bottoni d'azione */
+    align-items: center; /* Centra il testo all'interno del bottone */
+    justify-content: center; /* Centra il testo all'interno del bottone */
+    box-shadow: none;
+    transform: none;
 }
 
 /* Stile per il bottone "Dettagli" */
@@ -178,80 +350,36 @@ main.container {
 
 /* Stile per il bottone "Elimina" */
 .button-action.button-danger {
-    background-color: #dc3545; /* Rosso di Bootstrap */
+    background-color: #dc3545;
     color: var(--background_color);
     border: none;
 }
+
 .button-action.button-danger:hover {
-    background-color: #c82333; /* Rosso più scuro al hover */
+    background-color: #c82333;
 }
 
 
-/* Stili per le card delle singole booklist, basato su .profile-section-card .card */
-.booklist-card {
-    background-color: var(--bar_color); /* Sfondo leggermente più scuro della card principale, come le card del profilo */
-    border-radius: 12px; /* Coerente con le card del profilo */
-    box-shadow: 0 5px 18px rgba(39, 52, 99, 0.15); /* Ombra più delicata e diffusa */
-    border: 1px solid rgba(39, 52, 99, 0.2); /* Bordo sottile e discreto */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    height: 100%; /* Importante per l'allineamento delle card in griglia */
-    display: flex;
-    flex-direction: column; /* Organizza il contenuto in colonna */
-}
+/*====================================*/
+/* Modal Aggiungi Libro               */
+/*====================================*/
 
-.booklist-card:hover {
-    transform: translateY(-5px); /* Effetto hover più pronunciato */
-    box-shadow: 0 8px 25px rgba(39, 52, 99, 0.25); /* Ombra più visibile all'hover */
-}
-
-.booklist-card .card-body {
-    padding: 1.8rem; /* Padding interno leggermente aumentato */
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* Permette al body di espandersi */
-}
-
-.booklist-card .card-title {
-    color: var(--text_color);
-    font-size: 1.65rem; /* Titolo della card più grande */
-    margin-bottom: 0.75rem;
-    font-weight: 600;
-}
-
-.booklist-card .description-text {
-    color: var(--text_color);
-    opacity: 0.75;
-    font-size: 1rem; /* Leggermente più grande */
-    margin-bottom: 1.2rem; /* Più spazio sotto la descrizione */
-    flex-grow: 1; /* Permette alla descrizione di occupare spazio */
-}
-
-.booklist-card .stats-text {
-    color: var(--links_color);
-    font-size: 1.05rem;
-    font-weight: 500;
-    margin-top: 0.7rem;
-    margin-bottom: 1.6rem;
-}
-
-
-/* Stili per la modal di creazione, coerenti con il resto del design */
 .modal-content {
-    border-radius: 16px; /* Più arrotondati */
-    box-shadow: 0 10px 35px rgba(39, 52, 99, 0.35); /* Ombra più forte */
-    background-color: var(--bg_card_color);
+    border-radius: 16px;
+    box-shadow: 0 10px 35px rgba(39, 52, 99, 0.35);
+    background-color: var(--stripe_color);
     color: var(--text_color);
 }
 
 .modal-header {
     border-bottom: 1px solid rgba(39, 52, 99, 0.15);
-    padding: 1.8rem;
+    padding: 2rem;
 }
 
 .modal-title {
     color: var(--text_color);
-    font-weight: 600;
-    font-size: 1.5rem; /* Titolo modal più grande */
+    font-weight: 700;
+    font-size: 2rem;
 }
 
 .modal-body {
@@ -261,53 +389,29 @@ main.container {
 .modal-footer {
     border-top: 1px solid rgba(39, 52, 99, 0.15);
     padding: 1.2rem 1.8rem;
-    display: flex; /* Assicurati che i bottoni siano allineati correttamente */
-    justify-content: flex-end; /* Allinea a destra */
-    gap: 0.8rem; /* Spazio tra i bottoni */
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
 }
 
 .modal-footer .btn-secondary {
-    background-color: #6c757d;
-    border-color: #6c757d;
+    background-color: var(--links_color);
+    border-color: var(--links_color);
     color: var(--background_color);
     font-weight: 600;
     border-radius: 8px;
     transition: background-color 0.2s ease, border-color 0.2s ease;
-    padding: 0.75rem 1.5rem; /* Bottoni del footer più grandi */
+    padding: 0.75rem 1.5rem;
 }
 
 .modal-footer .btn-secondary:hover {
-    background-color: #5c636a;
-    border-color: #5c636a;
-}
-
-.modal-footer .button-primary { /* Usa la classe button-primary definita sopra */
-    background-color: var(--links_color);
-    border: none;
-    color: var(--background_color);
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 0.75rem 1.5rem;
-    box-shadow: none;
-    transform: none;
-}
-
-.modal-footer .button-primary:hover {
     background-color: var(--text_color);
-    transform: none;
-    box-shadow: none;
+    border-color: var(--text_color);
 }
 
-/* Stili per i campi del form nella modal */
-.form-label {
-    color: var(--text_color);
-    font-weight: 500;
-    margin-bottom: 0.6rem;
-    font-size: 1rem;
-}
-
-.form-control {
-    background-color: var(--background_color);
+/* Campo di ricerca nella modal */
+.search-input-group .form-control {
+    background-color: var(--stripe_color);
     border: 1px solid rgba(39, 52, 99, 0.2);
     border-radius: 10px;
     color: var(--text_color);
@@ -315,57 +419,205 @@ main.container {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-control::placeholder {
+.search-input-group .form-control::placeholder {
     color: var(--text_color);
-    opacity: 0.6;
+    opacity: 0.8;
 }
 
-.form-control:focus {
+.search-input-group .form-control:focus {
     border-color: var(--links_color);
     box-shadow: 0 0 0 0.3rem rgba(var(--links_color-rgb), 0.3);
-    background-color: var(--background_color);
+    background-color: var(--stripe_color);
     color: var(--text_color);
 }
 
-.form-text {
+/* Bottone di ricerca */
+.search-input-group .button-secondary-outline {
+    background-color: transparent;
+    border: 1px solid var(--links_color);
+    color: var(--links_color);
+    border-radius: 10px;
+    padding: 0.85rem 1.5rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    box-shadow: none;
+    transform: none;
+}
+
+.search-input-group .button-secondary-outline:hover {
+    background-color: var(--links_color);
+    color: var(--background_color);
+    border-color: var(--links_color);
+}
+
+/* Risultati di ricerca nella modal */
+.search-results-list {
+    margin-top: 1.5rem;
+    border: 1px solid rgba(39, 52, 99, 0.1);
+    border-radius: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0.5rem 0;
+}
+
+/* Stile per ogni singolo elemento del risultato di ricerca */
+.search-results-list .list-group-item {
+    background-color: var(--stripe_color);
+    border: none;
+    border-bottom: 1px solid rgba(39, 52, 99, 0.08);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+/* Stile specifico per l'elemento selezionato nella modal (se presente) */
+.search-results-list .list-group-item.selected {
+    background-color: #cce5ff; /* Un azzurro chiaro per l'highlight, puoi usare un'altra variabile se ne hai una specifica */
+}
+
+.search-results-list .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.search-results-list .list-group-item:hover {
+    background-color: var(--bar_color); /* Potrebbe essere l'azzurrino delle card booklist al hover */
+    cursor: pointer;
+}
+
+/* Stile per il contenitore di titolo e autore */
+.search-results-list .list-group-item > div:first-child {
+    flex-grow: 1;
+    padding-right: 0.5rem;
+    margin-bottom: 0;
+}
+
+/* Stile per il titolo del libro nei risultati */
+.search-results-list .list-group-item .result-title {
+    font-weight: 600;
     color: var(--text_color);
-    opacity: 0.75;
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+}
+
+/* Stile per l'autore del libro nei risultati */
+.search-results-list .list-group-item .result-author {
+    color: var(--text_color);
+    opacity: 0.95;
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+/* Bottone "Aggiungi" nei risultati */
+.search-results-list .list-group-item .add-book-button {
+    padding: 0.6rem 1.2rem;
     font-size: 0.9rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: var(--links_color);
+    color: var(--background_color);
+    border: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    flex-shrink: 0;
+    width: auto;
 }
 
-/* Media Queries per la responsività */
-@media screen and (max-width: 991px) { /* Adattamento per tablet e schermi più piccoli di lg */
+.search-results-list .list-group-item .add-book-button:hover {
+    background-color: var(--text_color);
+    transform: translateY(-2px);
+}
+
+/* Messaggio "Nessun libro trovato" */
+.search-results-list #noResultsMessage {
+    padding: 1.5rem;
+    font-style: italic;
+    color: var(--text_color);
+    opacity: 0.9;
+    text-align: center;
+}
+
+/* Stili per la scrollbar (solo per browser basati su WebKit, Chrome/Safari/Edge) */
+.search-results-list::-webkit-scrollbar {
+    width: 8px; /* Larghezza della scrollbar */
+}
+
+.search-results-list::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Colore dello sfondo della traccia */
+    border-radius: 10px;
+}
+
+.search-results-list::-webkit-scrollbar-thumb {
+    background: #888; /* Colore della barra di scorrimento */
+    border-radius: 10px;
+}
+
+.search-results-list::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Colore della barra di scorrimento al hover */
+}
+
+/*====================================*/
+/* Media Queries per la Responsività */
+/*====================================*/
+
+@media screen and (max-width: 991px) {
     .page-container {
         margin: 0 2rem;
     }
     .main-content-card {
         padding: 2.5rem 3rem;
     }
-    .page-title {
-        font-size: 2.3rem;
+    .page-title-details {
+        font-size: 2.1rem;
     }
-    .page-description {
-        font-size: 1.1rem;
+    .page-description-details {
+        font-size: 1.05rem;
     }
-    .d-flex.justify-content-center {
-        margin-bottom: 2rem; /* Ridotto il margine sotto il bottone */
+    .section-title {
+        font-size: 1.6rem;
+    }
+    .custom-hr {
+        margin: 2.5rem 0;
     }
     .button {
         padding: 0.8rem 1.8rem;
         font-size: 1rem;
     }
+    /* Applica gli stili delle card booklist qui */
     .booklist-card .card-body {
-        padding: 1.5rem;
+        padding: 1.2rem;
     }
     .booklist-card .card-title {
-        font-size: 1.5rem;
+        font-size: 1.35rem;
     }
-    .booklist-card .description-text {
-        font-size: 0.95rem;
+    .booklist-card .card-text.description-text {
+        font-size: 0.9rem;
     }
-    .booklist-card .stats-text {
-        font-size: 1rem;
+    .booklist-card .card-text.stats-text {
+        font-size: 0.85rem;
     }
+    .booklist-card .card-actions {
+        padding-top: 0.8rem;
+    }
+    /* Se hai .book-card e sono diverse dalle booklist-card, dovresti avere selettori separati anche qui */
+    .book-card .card-body { /* Mantenuto per compatibilità, ma se `.book-card` non esiste o è diverso, potresti rimuoverlo */
+        padding: 1.2rem;
+    }
+    .book-card .card-title {
+        font-size: 1.35rem;
+    }
+    .book-card .card-author {
+        font-size: 0.9rem;
+    }
+    .book-card .card-isbn {
+        font-size: 0.85rem;
+    }
+    .book-card .book-cover {
+        max-height: 180px;
+    }
+
     .button-action {
         padding: 0.6rem 1.2rem;
         font-size: 0.95rem;
@@ -376,85 +628,107 @@ main.container {
     .modal-title {
         font-size: 1.4rem;
     }
-    .form-control {
-        padding: 0.8rem 1rem;
+    .search-input-group .form-control,
+    .search-input-group .button-secondary-outline {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.95rem;
     }
-    .modal-footer .btn-secondary, .modal-footer .button-primary {
-        padding: 0.7rem 1.4rem;
+    .search-results-list .list-group-item {
+        padding: 0.8rem 1.2rem;
+    }
+    .search-results-list .list-group-item .result-title {
+        font-size: 1rem;
+    }
+    .search-results-list .list-group-item .result-author {
+        font-size: 0.9rem;
+    }
+    .search-results-list .list-group-item .add-book-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
     }
 }
 
-
-@media screen and (max-width: 767px) { /* Adattamento per mobile */
+@media screen and (max-width: 767px) {
     main.container {
-        padding-top: 1.5rem; /* Ridotto il padding top per mobile */
-        padding-bottom: 2.5rem; /* Ridotto il padding bottom per mobile */
+        padding-top: 1.5rem;
+        padding-bottom: 2.5rem;
     }
     .page-container {
         padding: 0 1rem;
-        margin: 0; /* Rimuovi i margini per piena larghezza su mobile */
+        margin: 0;
     }
-
     .main-content-card {
-        padding: 1.5rem; /* Ulteriore riduzione del padding per mobile */
-        border-radius: 12px; /* Bordi leggermente meno arrotondati su mobile */
+        padding: 1.5rem;
+        border-radius: 12px;
     }
-
-    .page-title {
-        font-size: 1.8rem; /* Titolo ancora più piccolo per mobile */
+    .custom-breadcrumb {
+        margin-bottom: 1.5rem;
+    }
+    .custom-breadcrumb .breadcrumb-item {
+        font-size: 0.9rem;
+    }
+    .page-title-details {
+        font-size: 1.8rem;
         margin-bottom: 0.4rem;
     }
-
-    .page-description {
+    .page-description-details {
         font-size: 0.95rem;
         margin-bottom: 1.5rem;
     }
-
+    .section-title {
+        font-size: 1.4rem;
+        margin-bottom: 1.2rem;
+    }
+    .custom-hr {
+        margin: 2rem 0;
+    }
     .d-flex.justify-content-center {
-        margin-bottom: 1.5rem; /* Ulteriore riduzione del margine sotto il bottone */
+        margin-bottom: 1.5rem;
     }
     .button {
         padding: 0.6rem 1.2rem;
         font-size: 0.9rem;
-        width: 100%; /* Bottone a piena larghezza su mobile */
+        width: 100%;
     }
-
-    .custom-hr {
-        margin: 1.5rem 0;
-    }
-
-    .alert {
-        padding: 0.8rem 1rem;
-        font-size: 0.9rem;
-    }
-    .alert-info.empty-list-message {
-        padding: 1.5rem;
-        font-size: 1rem;
-    }
-
-    .booklist-card .card-title {
-        font-size: 1.25rem;
-    }
-
+    /* Applica gli stili delle card booklist qui */
     .booklist-card .card-body {
         padding: 1rem;
     }
-
+    .booklist-card .card-title {
+        font-size: 1.25rem;
+    }
+    .booklist-card .card-text.description-text {
+        font-size: 0.85rem;
+    }
+    .booklist-card .card-text.stats-text {
+        font-size: 0.8rem;
+    }
     .booklist-card .card-actions {
-        flex-direction: column; /* Bottoni impilati su mobile */
+        flex-direction: column;
         gap: 0.5rem;
-        padding-top: 0.8rem;
+        padding-top: 0.6rem;
+    }
+    /* Se hai .book-card e sono diverse dalle booklist-card, dovresti avere selettori separati anche qui */
+    .book-card .card-body { /* Mantenuto per compatibilità, ma se `.book-card` non esiste o è diverso, potresti rimuoverlo */
+        padding: 1rem;
+    }
+    .book-card .card-title {
+        font-size: 1.25rem;
+    }
+    .book-card .card-author {
+        font-size: 0.85rem;
+    }
+    .book-card .card-isbn {
+        font-size: 0.8rem;
+    }
+    .book-card .book-cover {
+        max-height: 150px;
     }
 
     .button-action {
-        width: 100%; /* Bottoni d'azione a piena larghezza */
+        width: 100%;
         padding: 0.5rem 1rem;
         font-size: 0.85rem;
-    }
-
-    /* Stili per la modal di creazione su mobile */
-    .modal-content {
-        border-radius: 10px;
     }
     .modal-header, .modal-body, .modal-footer {
         padding: 0.8rem;
@@ -462,23 +736,52 @@ main.container {
     .modal-title {
         font-size: 1.1rem;
     }
-    .form-label {
-        font-size: 0.85rem;
+    .search-input-group {
+        flex-direction: column;
+        gap: 0.8rem;
     }
-    .form-control {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.85rem;
+    .search-input-group .form-control,
+    .search-input-group .button-secondary-outline {
+        width: 100%;
+        padding: 0.65rem 1rem;
+        font-size: 0.9rem;
     }
-    .form-text {
-        font-size: 0.75rem;
+    .search-input-group .form-control {
+        margin-bottom: 0;
+    }
+    .search-results-list .list-group-item {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.7rem 1rem;
+        gap: 0.8rem;
+    }
+    .search-results-list .list-group-item > div:first-child {
+        padding-right: 0.3rem;
+    }
+    .search-results-list .list-group-item .add-book-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        margin-top: 0;
+        width: auto;
+    }
+    .search-results-list .list-group-item .result-title {
+        font-size: 1rem;
+    }
+    .search-results-list .list-group-item .result-author {
+        font-size: 0.9rem;
+    }
+    .search-results-list #noResultsMessage {
+        padding: 1rem;
+        font-size: 0.9rem;
     }
     .modal-footer {
-        flex-direction: column; /* Bottoni modal impilati su mobile */
+        flex-direction: column;
         gap: 0.5rem;
     }
-    .modal-footer .btn-secondary, .modal-footer .button-primary {
-        width: 100%; /* Bottoni a piena larghezza */
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
+    .modal-footer .btn-secondary {
+        width: 100%;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
     }
 }
