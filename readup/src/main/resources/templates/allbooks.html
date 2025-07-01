@@ -2,11 +2,12 @@
 <html lang="it">
     
     <!-- Head -->
-    <head th:replace="~{fragments :: head(
-        title='I nostri libri • Readup', pageCss='/css/pages/allbooks_style.css', 
+   <head th:replace="
+        ~{fragments :: head(title='I nostri libri • Readup', 
+        pageCss='/css/pages/allbooks_style.css', 
         extraPageCss=${null}, 
-        pageJS=${null})}">
-    </head>  
+        pageJS='/js/allbooks.js')}">
+    </head>
     <!-- / Head -->
   
     <body>
@@ -31,10 +32,37 @@
                     </div>
                     <!-- / Tagline -->
 
+                    <!-- Filters -->
+                    <div class="row justify-content-center mb-4 gx-3">
+                        <div class="col-md-4 mb-2">
+                             <input id="titleFilter" type="text" placeholder="Filtra per titolo…">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <input id="authorFilter" type="text" placeholder="Filtra per autore…">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                           <select id="genreFilter">
+                                <!-- Thymeleaf: generates an <option> for each genre available -->
+                                <option value="">Tutti i generi</option>
+                                <option th:each="g : ${genres}"th:value="${g.toLowerCase()}"th:text="${g}"></option>
+                            </select>
+                            
+                        </div>
+                    </div>
+                    <!-- /Filters -->
+
+                   
+                    <!-- No results message -->
+                    <div id="no-results" class="alert alert-warning text-center" style="display:none;">
+                        Nessun libro corrisponde ai filtri.
+                    </div>
+                    <!-- / No results message -->
+
                     <!-- Book catalogue -->
                     <div class="row">
-                        <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4" th:each="book : ${books}">
-                            
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 book-card"
+                        th:each="book : ${books}" th:attr="  data-title=${#strings.toLowerCase(book.titolo)},
+                        data-author=${#strings.toLowerCase(book.autore)}, data-genre=${#strings.toLowerCase(book.genere)}">
 
                             <!-- Single card -->
                             <div class="card h-100">
@@ -63,8 +91,10 @@
                                     <!-- / Book details -->
 
                                     <!-- Buttons-->
-                                    <a th:href="@{/books/add/{id}(id=${book.idLibro})}" class="btn btn-secondary mt-auto">Aggiungi ai miei libri</a>                                
-                                    <a th:href="@{/books/add/{id}(id=${book.idLibro})}"  class="btn btn-secondary mt-auto">Aggiungi a una sfida</a>
+                                    <div th:if="${session.currentUser != null}" class="mt-auto d-flex flex-column justify-content-center gap-2">
+                                        <a th:href="@{/books/add/{id}(id=${book.idLibro})}" class="btn btn-secondary mt-auto">Aggiungi ai miei libri</a>                                
+                                        <a th:href="@{/books/add/{id}(id=${book.idLibro})}"  class="btn btn-secondary mt-auto">Aggiungi a una sfida</a>
+                                    </div>
                                     <!-- / Buttons --> 
                                                                
                                 </div>

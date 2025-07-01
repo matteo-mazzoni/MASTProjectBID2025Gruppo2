@@ -116,4 +116,13 @@ public class LibroServiceImpl implements LibroService {
         return allIsbnBooks.stream().limit(count).collect(Collectors.toList());
 
     }
+
+
+    @Override
+    public List<String> findAllGenres() {
+        // chiama il metodo del repository che restituisce i generi distinti
+        return libroRepos.findDistinctGenres();
+    }
+
+
 }

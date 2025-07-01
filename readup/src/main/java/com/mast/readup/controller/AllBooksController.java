@@ -29,6 +29,9 @@ public class AllBooksController {
         // Retrieve all books from the service and inject them into the view
         List<Libro> libri = libroService.findAll();
         model.addAttribute("books", libri);
+
+        List<String> genres = libroService.findAllGenres(); 
+        model.addAttribute("genres", genres);
         return "allbooks";
     }
 }

@@ -16,4 +16,7 @@ public interface LibroRepos extends JpaRepository<Libro, Long> {
     // 1b) Find all books with ISBN 
     List<Libro> findAllByIsbnNotNull();
 
+    // 2) Find all the genres of books in the database
+    @Query("SELECT DISTINCT l.genere FROM Libro l WHERE l.genere IS NOT NULL")
+    List<String> findDistinctGenres();
 }

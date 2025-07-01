@@ -16,4 +16,5 @@ public interface LibroService {
     List<Libro> findConIsbn();
     List<Libro> findRandomCarousel(int count);
     List<Libro> findAll();
+    List<String> findAllGenres(); 
 }
