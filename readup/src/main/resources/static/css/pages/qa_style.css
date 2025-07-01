@@ -1,0 +1,17 @@
+/* Q&A CSS - Styles for the question and answer page */
+/* Version: 1.0.0 */
+/* Author: Romina Trazzi */
+
+hr {
+  margin: 2rem 0 3rem 0;
+}
+
+p > a {
+  color: var(--bs-link-color);
+  text-decoration: none;
+}
+
+.tagline {
+  padding-top: 3rem; 
+  padding-bottom: 3rem;
+}
