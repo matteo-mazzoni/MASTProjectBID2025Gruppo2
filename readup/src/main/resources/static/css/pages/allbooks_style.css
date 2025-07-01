@@ -1,30 +1,35 @@
+/* Image at the top of the card with max height and contained scaling */
 .card-img-top {
   max-height: 200px;
   object-fit: contain;   
   margin: auto; 
 }
 
+/* Smooth transition for transform and shadow on the card */
 .card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Hover effect: slight lift and shadow */
 .card:hover {
   transform: translateY(-8px);       
   box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
 }
 
+/* Card body layout: vertical flexbox spaced between */
 .card-body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
+/* Centered card image with pointer cursor */
 .card-img {
   margin: auto;
   cursor: pointer;
 } 
 
-
+/* Bottom margin for links inside card body */
 .card-body a {
   margin-bottom: 1rem;
 }

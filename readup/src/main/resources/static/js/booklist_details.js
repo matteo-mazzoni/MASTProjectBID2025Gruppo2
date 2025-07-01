@@ -5,19 +5,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const noResultsMessage = document.getElementById('noResultsMessage');
     const addBookModalElement = document.getElementById('addBookModal');
     const addBookModal = new bootstrap.Modal(addBookModalElement);
-    const alertContainer = document.getElementById('alertContainer'); // Contenitore per i messaggi dinamici
+    const alertContainer = document.getElementById('alertContainer');
 
-    // Recupera i dati passati dal backend tramite data-attributes del body
+    // Get data from body attributes injected by the backend
     const booklistId = document.body.dataset.booklistId;
     const initialErrorMessage = document.body.dataset.errorMessage;
     const initialSuccessMessage = document.body.dataset.successMessage;
 
-    // Funzione per mostrare/nascondere il messaggio "Nessun risultato"
+    // Show/hide "no results" message
     function toggleNoResultsMessage(show) {
         noResultsMessage.style.display = show ? 'block' : 'none';
     }
 
-    // Funzione per mostrare un messaggio di allerta
+    // Display alert message in the alert container
     function showAlert(message, type) {
         const alertHtml = `
             <div class="alert alert-${type} alert-dismissible fade show" role="alert">
@@ -25,33 +25,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         `;
-        // Pulisce messaggi precedenti dello stesso tipo se vuoi mostrare solo l'ultimo
-        // alertContainer.innerHTML = ''; 
         alertContainer.insertAdjacentHTML('afterbegin', alertHtml);
     }
 
-    // Inizialmente mostra il messaggio "Nessun libro trovato"
+    // Show default "no books found" message
     toggleNoResultsMessage(true);
 
-    // Gestione dell'invio del form di ricerca libri
+    // Handle book search form submission
     searchBookForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // Impedisce il submit del form standard
+        event.preventDefault();
         const query = bookSearchQuery.value.trim();
 
-        if (query.length < 2) { // Evita ricerche troppo brevi
+        if (query.length < 2) {
             searchResults.innerHTML = '';
             toggleNoResultsMessage(true);
             return;
         }
 
-        searchResults.innerHTML = ''; // Pulisce i risultati precedenti
-        toggleNoResultsMessage(false); // Nasconde il messaggio "Nessun libro trovato"
+        searchResults.innerHTML = '';
+        toggleNoResultsMessage(false);
 
-        // Esegui la ricerca via API
+        // Perform search via API
         fetch('/api/libri/search?query=' + encodeURIComponent(query))
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Errore di rete o server');
+                    throw new Error('Network or server error');
                 }
                 return response.json();
             })
@@ -71,28 +69,29 @@ document.addEventListener('DOMContentLoaded', function() {
                         `;
                         searchResults.appendChild(listItem);
                     });
-                    // Allega l'event listener ai form di aggiunta libro appena creati
+
+                    // Attach event listener to each add-book form
                     document.querySelectorAll('.add-libro-form').forEach(form => {
                         form.addEventListener('submit', handleAddBookFormSubmit);
                     });
                 } else {
-                    toggleNoResultsMessage(true); // Mostra il messaggio se nessun risultato
+                    toggleNoResultsMessage(true);
                 }
             })
             .catch(error => {
-                console.error('Errore durante la ricerca dei libri:', error);
-                searchResults.innerHTML = '<div class="alert alert-danger mt-3">Errore durante la ricerca. Riprova più tardi.</div>';
-                toggleNoResultsMessage(false); // Nasconde il messaggio di nessun risultato in caso di errore
+                console.error('Error while searching books:', error);
+                searchResults.innerHTML = '<div class="alert alert-danger mt-3">Search error. Please try again later.</div>';
+                toggleNoResultsMessage(false);
             });
     });
 
-    // Gestione dell'invio del form di aggiunta libro (via AJAX)
+    // Handle book add form submission via AJAX
     function handleAddBookFormSubmit(event) {
         event.preventDefault();
         const form = event.target;
-        const libroId = form.dataset.libroId; // Recupera l'ID del libro dal data-attribute del form
+        const libroId = form.dataset.libroId;
 
-        // Recupera il token CSRF di Spring Security per le richieste POST
+        // Get Spring Security CSRF token and header
         const csrfToken = document.querySelector('meta[name="_csrf"]').content;
         const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 
@@ -100,39 +99,34 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                [csrfHeader]: csrfToken // Aggiunge il token CSRF
+                [csrfHeader]: csrfToken
             },
-            body: `libroId=${encodeURIComponent(libroId)}` // Invia l'ID del libro come parametro del form
+            body: `libroId=${encodeURIComponent(libroId)}`
         })
         .then(response => {
             if (!response.ok) {
-                // Se il backend risponde con un errore HTTP (es. 400, 403)
-                return response.text().then(text => { throw new Error(text || 'Errore sconosciuto'); });
+                return response.text().then(text => { throw new Error(text || 'Unknown error'); });
             }
-            // Se tutto va bene, il backend dovrebbe reindirizzare o inviare un messaggio JSON di successo
-            // Per semplicità con l'attuale backend che reindirizza, ricarichiamo la pagina
-            window.location.reload(); 
+            window.location.reload();
         })
         .catch(error => {
-            console.error('Errore durante l\'aggiunta del libro:', error);
-            // Visualizza un messaggio di errore nella modal o nella pagina
-            // Qui assumiamo che il messaggio dell'errore contenga il motivo (es. "Libro già presente")
-            const errorMessageText = error.message.includes('Libro già presente') ? 
-                                     'Il libro è già presente in questa booklist.' : 
-                                     'Si è verificato un errore durante l\'aggiunta del libro.';
+            console.error('Error while adding book:', error);
+            const errorMessageText = error.message.includes('Libro già presente') ?
+                                     'This book is already in the booklist.' :
+                                     'An error occurred while adding the book.';
             showAlert(errorMessageText, 'danger');
-            addBookModal.show(); // Ri-apre la modal per permettere all'utente di correggere
+            addBookModal.show();
         });
     }
 
-    // Logica per ri-aprire la modal e mostrare messaggi all'avvio della pagina (dopo un redirect)
+    // Reopen modal if redirect included error message
     if (initialErrorMessage) {
         if (initialErrorMessage.includes('Libro già presente') || initialErrorMessage.includes('non trovato con ID')) {
-            addBookModal.show(); // Ri-apre la modal se l'errore è dovuto a libro già presente o ID non trovato
+            addBookModal.show();
         }
     }
-    
-    // Puoi anche mostrare initialSuccessMessage se vuoi che appaia anche dopo un ricarica
+
+    // Show success message on page load if available
     if (initialSuccessMessage) {
         showAlert(initialSuccessMessage, 'success');
     }

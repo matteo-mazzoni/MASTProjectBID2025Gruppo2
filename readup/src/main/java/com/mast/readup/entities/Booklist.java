@@ -20,8 +20,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * This class represents the "booklist" entity in the database.
- * It uses Lombok to reduce boilerplate code and JPA annotations for ORM
- * mapping.
+ * It uses Lombok to reduce boilerplate code and JPA annotations for ORM mapping.
  */
 
 @Entity
@@ -32,28 +31,28 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true) // Lombok: Limits equality to specified fields
 public class Booklist {
 
-    // Primary key class Booklist
+    // Primary key of the Booklist entity
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_booklist")
     @EqualsAndHashCode.Include
     private long idBooklist;
 
-    // Add the extra field of the entity
-    // Booklist name
+    // Name of the booklist
     @Column(name = "nome", length = 30, nullable = true)
     private String nome;
 
-    // Booklist description
+    // Description of the booklist
     @Column(name = "descrizione", length = 400, nullable = true)
     private String descrizione;
 
-    // Creator of the booklist (foreign key referencing Utente)
+    // Creator of the booklist (foreign key to Utente)
     @ManyToOne
     @JoinColumn(name = "id_utente_creatore", nullable = true)
     private Utente utenteCreatore;
 
-    @ManyToMany // Una booklist può avere molti libri, un libro può essere in molte booklist
+    // Many-to-many relationship with Libro
+    @ManyToMany
     @JoinTable(
         name = "booklist_contiene", 
         joinColumns = @JoinColumn(name = "id_booklist"),
@@ -61,7 +60,7 @@ public class Booklist {
     )
     private Set<Libro> libri = new HashSet<>();
 
-    // Costruttore personalizzato per la creazione iniziale (opzionale, ma utile)
+    // Custom constructor for initial creation
     public Booklist(String nome, String descrizione, Utente utenteCreatore) {
         this.nome = nome;
         this.descrizione = descrizione;

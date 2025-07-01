@@ -2,28 +2,28 @@ document.addEventListener('DOMContentLoaded', function() {
     var confirmDeleteModal = document.getElementById('confirmDeleteModal');
     if (confirmDeleteModal) {
         confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
-            // Bottone che ha attivato la modal
+            // Button that triggered the modal
             var button = event.relatedTarget;
 
-            // Estrai le informazioni dagli attributi data-* del bottone
+            // Extract information from data-* attributes
             var booklistId = button.getAttribute('data-booklist-id');
             var booklistName = button.getAttribute('data-booklist-name');
 
-            // Aggiorna il testo nella modal con il nome della booklist
+            // Update the modal content with the booklist name
             var modalBodyName = confirmDeleteModal.querySelector('#booklistNameToDelete');
             if (modalBodyName) {
                 modalBodyName.textContent = booklistName;
             }
 
-            // Imposta l'azione del form di eliminazione all'interno della modal
+            // Set the action URL for the delete form
             var deleteForm = confirmDeleteModal.querySelector('#deleteBooklistForm');
             if (deleteForm) {
-                deleteForm.action = '/booklist/' + booklistId + '/delete'; // Assicurati che questo URL corrisponda al tuo controller
+                deleteForm.action = '/booklist/' + booklistId + '/delete';
             }
         });
     }
 
-    // Qui puoi mettere anche il tuo script esistente per riaprire la modal di creazione in caso di errore
+    // Reopen the create modal in case of a booklist creation error
     var errorMessage = /*[[${errorMessage}]]*/ null;
     if (errorMessage && errorMessage.includes("Errore nella creazione della booklist:")) {
         var myModal = new bootstrap.Modal(document.getElementById('createBooklistModal'));
