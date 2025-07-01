@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface LibroRepos extends JpaRepository<Libro, Long> {
 
@@ -19,4 +20,6 @@ public interface LibroRepos extends JpaRepository<Libro, Long> {
     // 2) Find all the genres of books in the database
     @Query("SELECT DISTINCT l.genere FROM Libro l WHERE l.genere IS NOT NULL")
     List<String> findDistinctGenres();
+
+    Optional<Libro> findByTitoloIgnoreCase(String titolo);
 }

@@ -43,8 +43,6 @@ public class LibroServiceImpl implements LibroService {
         this.openLibraryClient = openLibraryClient;
     }
 
-
-
     // Retrieves all books from the database
     @Override
     public List<Libro> findAll() {
@@ -117,6 +115,11 @@ public class LibroServiceImpl implements LibroService {
 
     }
 
+    @Override
+    public Optional<Libro> findByTitolo(String titolo) {
+        // Chiama il metodo corrispondente nel repository per trovare il libro per titolo (case-insensitive)
+        return libroRepos.findByTitoloIgnoreCase(titolo);
+    }
 
     @Override
     public List<String> findAllGenres() {

@@ -1,104 +1,100 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le mie Booklist</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            padding-top: 20px;
-            background-color: #f8f9fa;
-        }
-        .container {
-            max-width: 800px;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #343a40;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        .booklist-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #e9ecef;
-        }
-        .booklist-item:last-child {
-            border-bottom: none;
-        }
-        .booklist-name a {
-            font-size: 1.2em;
-            color: #007bff;
-            text-decoration: none;
-        }
-        .booklist-name a:hover {
-            text-decoration: underline;
-        }
-        .form-create {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e9ecef;
-        }
-        .alert {
-            margin-bottom: 20px;
-        }
-    </style>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: head(
+        title='Le Tue Booklist • Readup', pageCss='/css/pages/booklist_style.css',
+        extraPageCss=${null}, pageJS='/js/booklist.js')}">
 </head>
+
 <body>
-    <div class="container">
-        <h1 class="mb-4">Le mie Booklist</h1>
+    <header th:replace="~{fragments :: header}"></header>
 
-        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+    <main class="container my-4">
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
             <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
             <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        <div th:if="${booklists.isEmpty()}" class="alert alert-info">
-            Non hai ancora creato nessuna booklist. Inizia creandone una!
-        </div>
+        <h2 class="mb-4">Le Tue Booklist</h2>
 
-        <div th:unless="${booklists.isEmpty()}">
-            <h2 class="mb-3">Le tue booklist esistenti:</h2>
-            <ul class="list-unstyled">
-                <li th:each="booklist : ${booklists}" class="booklist-item">
-                    <div class="booklist-name">
-                        <a th:href="@{/booklist/{id}(id=${booklist.idBooklist})}" th:text="${booklist.name}">Nome Booklist</a>
-                    </div>
-                    <div class="booklist-actions">
-                        <form th:action="@{/booklist/{id}/delete(id=${booklist.idBooklist})}" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questa booklist?');">Elimina</button>
+        <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#createBooklistModal">
+            Crea Nuova Booklist
+        </button>
+
+        <div th:if="${#lists.isEmpty(booklists)}" class="alert alert-info">
+            Non hai ancora creato nessuna booklist. Clicca sul pulsante sopra per crearne una!
+        </div>
+        <div th:unless="${#lists.isEmpty(booklists)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="col" th:each="booklist : ${booklists}">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${booklist.nome}">Nome Booklist</h5>
+                        <p class="card-text text-muted" th:if="${booklist.description}" th:text="${booklist.description}">Descrizione della booklist.</p>
+                        <p class="card-text text-muted" th:unless="${booklist.description}">Nessuna descrizione.</p>
+                        <p class="card-text">
+                            Libri: <span th:text="${booklist.libri != null ? booklist.libri.size() : 0}">0</span>
+                        </p>
+                        <a th:href="@{/booklist/{id}(id=${booklist.idBooklist})}" class="btn btn-sm btn-info">Dettagli</a>
+                        <form th:action="@{/{id}/delete(id=${booklist.idBooklist})}" method="post" style="display:inline;"
+                              onsubmit="return confirm('Sei sicuro di voler eliminare questa booklist?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Elimina</button>
                         </form>
                     </div>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
 
-        <div class="form-create">
-            <h2 class="mb-3">Crea una nuova Booklist</h2>
-            <form th:action="@{/salvabooklist}" method="post" class="row g-3 align-items-end">
-                <div class="col-md-8">
-                    <label for="newBooklistName" class="form-label visually-hidden">Nome Booklist</label>
-                    <input type="text" class="form-control" id="newBooklistName" name="name" th:value="${newBooklistName}" placeholder="Inserisci il nome della nuova booklist" required>
-                </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary w-100">Crea Booklist</button>
-                </div>
-            </form>
-        </div>
+    </main>
 
-        <div class="mt-4 text-center">
-            <a href="/" class="btn btn-secondary">Torna alla Home</a>
+    <div class="modal fade" id="createBooklistModal" tabindex="-1" aria-labelledby="createBooklistModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createBooklistModalLabel">Crea una Nuova Booklist</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createBooklistForm" th:action="@{/salvabooklist}" method="post">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nome Booklist</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Descrizione (opzionale)</label>
+                            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                            <small class="form-text text-muted">Una breve descrizione della tua booklist.</small>
+                        </div>
+                        
+                        <div th:if="${errorMessageModal}" class="alert alert-danger" role="alert">
+                            <span th:text="${errorMessageModal}"></span>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                            <button type="submit" class="btn btn-primary">Crea Booklist</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <footer th:replace="~{fragments :: footer}"></footer>
+
+    <script th:if="${errorMessage}" th:inline="javascript">
+        /*<![CDATA[*/
+        // Se c'è un messaggio di errore dopo un redirect, riapri la modal di creazione
+        var errorMessage = /*[[${errorMessage}]]*/ null;
+        if (errorMessage && errorMessage.includes("Errore nella creazione della booklist:")) {
+            var myModal = new bootstrap.Modal(document.getElementById('createBooklistModal'));
+            myModal.show();
+        }
+        /*]]>*/
+    </script>
 </body>
 </html>

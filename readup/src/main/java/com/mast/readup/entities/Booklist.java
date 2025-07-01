@@ -36,11 +36,11 @@ public class Booklist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_booklist")
+    @EqualsAndHashCode.Include
     private long idBooklist;
 
     // Add the extra field of the entity
     // Booklist name
-    @EqualsAndHashCode.Include 
     @Column(name = "nome", length = 30, nullable = true)
     private String nome;
 
@@ -55,31 +55,32 @@ public class Booklist {
 
     @ManyToMany // Una booklist può avere molti libri, un libro può essere in molte booklist
     @JoinTable(
-        name = "booklist_libri", 
+        name = "booklist_contiene", 
         joinColumns = @JoinColumn(name = "id_booklist"),
         inverseJoinColumns = @JoinColumn(name = "id_libro")
     )
     private Set<Libro> libri = new HashSet<>();
 
-    public String getName() {
-        return nome;
+    // Costruttore personalizzato per la creazione iniziale (opzionale, ma utile)
+    public Booklist(String nome, String descrizione, Utente utenteCreatore) {
+        this.nome = nome;
+        this.descrizione = descrizione;
+        this.utenteCreatore = utenteCreatore;
     }
 
-    // Se l'errore menziona anche utenteCreatore dopo aver risolto name
-    public Utente getUtenteCreatore() {
-        return utenteCreatore;
-    }
     public void addLibro(Libro libro) {
         this.libri.add(libro);
-        if (libro != null) { // Aggiunto controllo null per sicurezza
-            libro.getBooklists().add(this);
-        }
     }
 
     public void removeLibro(Libro libro) {
         this.libri.remove(libro);
-        if (libro != null) { // Aggiunto controllo null per sicurezza
-            libro.getBooklists().remove(this);
-        }
+    }
+
+    public String getDescription() {
+        return descrizione;
+    }
+
+    public void setDescription(String description) {
+        this.descrizione = description;
     }
 }
