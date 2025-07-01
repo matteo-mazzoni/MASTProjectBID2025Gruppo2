@@ -64,6 +64,10 @@ public class ProfileController {
             return "redirect:/";
         }
 
+        List<Booklist> userBooklists = booklistService.getAllBooklistsByUser(currentUserActual.getNickname());
+
+        model.addAttribute("userBooklists", userBooklists);
+
         Optional<Utente> utenteFromDbOpt = utenteService.findById(currentUserActual.getIdUtente());
         if (utenteFromDbOpt.isEmpty()) {
             System.err.println("ATTENZIONE: Utente in sessione con ID " + currentUserActual.getIdUtente() + " non trovato nel DB.");
@@ -91,7 +95,6 @@ public class ProfileController {
         List<Libro> libriUtente = libreriaService.getLibriByUtenteId(currentUserActual.getIdUtente());
         model.addAttribute("userLibraryBooks", libriUtente);
 
-        List<Booklist> userBooklists = booklistService.getAllBooklistsByUser(currentUserActual.getNickname());
         model.addAttribute("userBooklists", userBooklists);
 
         int numBooklists = userBooklists.size();
