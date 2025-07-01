@@ -189,8 +189,9 @@ public class BooklistController {
     @GetMapping("/api/libri/search")
     @ResponseBody 
     public List<Libro> searchLibri(@RequestParam String query) {
-        return libroService.findByTitoloIgnoreCase(query)
-                .map(List::of)
-                .orElse(List.of());
+        if (query == null || query.trim().isEmpty()) {
+            return List.of(); 
+        }
+        return libroService.searchLibriByTitolo(query.trim()); 
     }
 }

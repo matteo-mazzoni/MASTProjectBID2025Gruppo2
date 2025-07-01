@@ -8,17 +8,22 @@
         pageJS='/js/booklist_details.js')}">
 </head>
 
-<body>
+<body th:data-booklist-id="${booklist.idBooklist}"
+      th:data-success-message="${successMessage}"
+      th:data-error-message="${errorMessage}">
+
     <header th:replace="~{fragments :: header}"></header>
 
     <main class="container my-4">
-        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <span th:text="${successMessage}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <span th:text="${errorMessage}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div id="alertContainer">
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         </div>
 
         <nav aria-label="breadcrumb">
@@ -29,8 +34,7 @@
         </nav>
 
         <h2 class="mb-3" th:text="${booklist.nome}">Nome Booklist</h2>
-        <p class="text-muted" th:if="${booklist.description}" th:text="${booklist.description}">Descrizione.</p>
-        <p class="text-muted" th:unless="${booklist.description}">Nessuna descrizione per questa booklist.</p>
+        <p class="text-muted" th:text="${booklist.description ?: 'Nessuna descrizione per questa booklist.'}"></p>
 
         <hr>
 
@@ -47,9 +51,17 @@
                         <p class="card-text text-muted" th:text="${libro.autore}">Autore</p>
                         <p class="card-text">ISBN: <span th:text="${libro.isbn != null ? libro.isbn : 'N/A'}"></span></p>
                         <div th:if="${libro.isbn != null}">
-                            <img th:src="@{'http://covers.openlibrary.org/b/isbn/' + ${libro.isbn} + '-M.jpg'}" alt="Cover" class="img-fluid book-cover mb-2">
+                            <img th:src="@{'http://covers.openlibrary.org/b/isbn/' + ${libro.isbn} + '-M.jpg'}" alt="Copertina del libro" class="img-fluid book-cover mb-2">
                         </div>
+                        <div th:unless="${libro.isbn != null}" class="text-center text-muted">
+                            <i class="bi bi-book-half" style="font-size: 4rem;"></i> 
+                            <p>Copertina non disponibile</p>
                         </div>
+                        <form th:action="@{/booklist/{idBooklist}/remove-libro(idBooklist=${booklist.idBooklist})}" method="post">
+                            <input type="hidden" name="libroId" th:value="${libro.idLibro}">
+                            <button type="submit" class="btn btn-danger btn-sm mt-2">Rimuovi</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -72,18 +84,18 @@
                     <div class="modal-body">
                         <form id="searchBookForm" class="mb-4">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="bookSearchQuery" placeholder="Cerca libro per titolo...">
+                                <input type="text" class="form-control" id="bookSearchQuery" placeholder="Cerca libro per titolo o autore...">
                                 <button class="btn btn-outline-secondary" type="submit">Cerca</button>
                             </div>
                         </form>
                         
                         <div id="searchResults" class="list-group">
-                            <p class="text-muted text-center" id="noResultsMessage">Nessun libro trovato. Prova un'altra ricerca.</p>
-                        </div>
+                            <p class="text-muted text-center" id="noResultsMessage">Nessun libro trovato. Inizia a digitare per cercare.</p>
+                            </div>
                         
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
                     </div>
                 </div>
             </div>
@@ -92,76 +104,5 @@
     </main>
 
     <footer th:replace="~{fragments :: footer}"></footer>
-
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchBookForm = document.getElementById('searchBookForm');
-            const bookSearchQuery = document.getElementById('bookSearchQuery');
-            const searchResults = document.getElementById('searchResults');
-            const noResultsMessage = document.getElementById('noResultsMessage');
-            const booklistId = /*[[${booklist.idBooklist}]]*/ null; // Ottieni l'ID della booklist dal modello Thymeleaf
-
-            // Funzione per mostrare/nascondere il messaggio "Nessun risultato"
-            function toggleNoResultsMessage(show) {
-                noResultsMessage.style.display = show ? 'block' : 'none';
-            }
-
-            toggleNoResultsMessage(true); // Inizialmente mostra il messaggio
-
-            searchBookForm.addEventListener('submit', function(event) {
-                event.preventDefault(); // Impedisce il submit del form standard
-                const query = bookSearchQuery.value.trim();
-
-                if (query.length < 2) { // Evita ricerche troppo brevi
-                    searchResults.innerHTML = '';
-                    toggleNoResultsMessage(true);
-                    return;
-                }
-
-                fetch('/api/libri/search?query=' + encodeURIComponent(query))
-                    .then(response => response.json())
-                    .then(data => {
-                        searchResults.innerHTML = ''; // Pulisce i risultati precedenti
-                        if (data.length > 0) {
-                            toggleNoResultsMessage(false);
-                            data.forEach(libro => {
-                                const listItem = document.createElement('div');
-                                listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
-                                listItem.innerHTML = `
-                                    <div>
-                                        <h6 class="mb-1">${libro.titolo}</h6>
-                                        <small class="text-muted">${libro.autore}</small>
-                                    </div>
-                                    <form action="/booklist/${booklistId}/add-libro" method="post" class="add-libro-form">
-                                        <input type="hidden" name="libroId" value="${libro.idLibro}">
-                                        <button type="submit" class="btn btn-sm btn-primary">Aggiungi</button>
-                                    </form>
-                                `;
-                                searchResults.appendChild(listItem);
-                            });
-                        } else {
-                            toggleNoResultsMessage(true);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Errore durante la ricerca dei libri:', error);
-                        searchResults.innerHTML = '<div class="alert alert-danger">Errore durante la ricerca. Riprova più tardi.</div>';
-                        toggleNoResultsMessage(false); // Nasconde il messaggio di nessun risultato in caso di errore di rete
-                    });
-            });
-
-            // Gestione del reindirizzamento dopo l'aggiunta di un libro
-            // Questo script si esegue quando la pagina viene caricata dopo un redirect
-            const addLibroModal = new bootstrap.Modal(document.getElementById('addBookModal'));
-            if (/*[[${errorMessage}]]*/ null && /*[[${errorMessage}]].includes('Libro già presente')*/ false) {
-                 addLibroModal.show(); // Ri-apre la modal se l'errore è dovuto a libro già presente
-            }
-             if (/*[[${errorMessage}]]*/ null && /*[[${errorMessage}]].includes('non trovato con ID')*/ false) {
-                 addLibroModal.show(); // Ri-apre la modal se l'errore è dovuto a ID non trovato
-            }
-        });
-        /*]]>*/
-    </script>
 </body>
 </html>
