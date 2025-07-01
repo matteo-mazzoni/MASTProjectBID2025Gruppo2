@@ -1,0 +1,39 @@
+/* Media query per schermi ≤ 576px */
+
+@media (max-width: 768px) {
+  .container_90 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .accordion {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  hr {
+    margin: 1.5rem 0 2rem 0;
+  }
+}
+
+
+
+@media (max-width: 576px) {
+  .container_90 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .accordion {
+    margin-top: 1.5rem;   
+    margin-bottom: 1.5rem;
+  }
+  hr {
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  P {
+    padding-bottom: 5rem;
+  }
+
+}

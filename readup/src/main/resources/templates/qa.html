@@ -5,7 +5,7 @@
     <!-- Head -->
     <head th:replace="~{fragments :: head(
         title='Q&A • Readup', pageCss='/css/pages/qa_style.css', 
-        extraPageCss=${null}, 
+        extraPageCss='/css/mediaquery/mq_qa.css', 
         pageJS=${null})}">
     </head>  
     <!-- / Head -->
@@ -20,7 +20,7 @@
             <!-- Main -->
             <main>
 
-                <div class="col-12 tagline text-center py-5">
+                <div class="col-12 tagline text-center py-lg-5 py-md-4 py-sm-3 py-2">
                     <h1 class="primary_title">Le domande più frequenti</h1>
                     <h3 class="secondary_title">Un libro alla volta, un punto alla volta</h3>
                     <h6 class="description">La piattaforma dove ogni libro diventa un’esperienza condivisa.</h6>
@@ -31,7 +31,7 @@
                 <div class="container_90">
 
                     <!-- Bootstrap accordeon -->
-                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                    <div class="accordion mt-5 mb-5" id="accordionPanelsStayOpenExample">
 
                         <!-- 1 -->
                         <div class="accordion-item">
@@ -162,8 +162,14 @@
                     </div>
                     <!-- / Bootstrap Accordion -->
                    
+                    <hr>
+    
+                    <p class="text-center mb-sm-5 mt-sm-5 mt-lg-3 mb-lg-3">
+                        Hai altre domande per noi? Vuoi darci suggerimenti o veder aggiunti nuovi libri? Non esitare a contattarci e scrivici una mail a: <a href="mailto:readup@mastproject.it">readup@mastproject.it</a>
+                    </p>
 
                 </div>
+
             </main>
             <!-- / Main -->
 
