@@ -20,4 +20,18 @@ public interface LibroService {
     List<String> findAllGenres(); 
 
     Optional<Libro> findByTitolo(String titolo);
+
+    Optional<Libro> findById(Long id);
+    Libro save(Libro libro);
+    void deleteById(Long id);
+
+    // Mantieni questo per corrispondenza esatta se serve altrove
+    Optional<Libro> findByTitoloIgnoreCase(String titolo);
+
+    // NUOVO: Metodo per la ricerca "globale" che restituisce una lista
+    List<Libro> searchLibriByTitolo(String query);
+
+    // Potresti voler esporre anche la ricerca per autore o combinata
+    List<Libro> searchLibriByAutore(String query);
+    List<Libro> searchLibriByTitoloOrAutore(String query);
 }

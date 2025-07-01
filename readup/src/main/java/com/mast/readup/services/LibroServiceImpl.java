@@ -49,6 +49,46 @@ public class LibroServiceImpl implements LibroService {
         return libroRepos.findAll();
     }    
 
+    @Override
+    public Optional<Libro> findById(Long id) {
+        return libroRepos.findById(id);
+    }
+
+    @Override
+    public Libro save(Libro libro) {
+        return libroRepos.save(libro);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        libroRepos.deleteById(id);
+    }
+
+    @Override
+    public Optional<Libro> findByTitoloIgnoreCase(String titolo) {
+        return libroRepos.findByTitoloIgnoreCase(titolo);
+    }
+
+    @Override
+    public List<Libro> searchLibriByTitolo(String query) {
+        return libroRepos.findByTitoloContainingIgnoreCase(query);
+    }
+
+    @Override
+    public List<Libro> searchLibriByAutore(String query) {
+        return libroRepos.findByAutoreContainingIgnoreCase(query);
+    }
+
+    @Override
+    public List<Libro> searchLibriByTitoloOrAutore(String query) {
+        // Per una ricerca più flessibile, puoi concatenare i risultati o usare un metodo JpaRepository combinato
+        // return libroRepos.findByTitoloContainingIgnoreCaseOrAutoreContainingIgnoreCase(query, query);
+        // Oppure, se non hai un metodo combinato nel repo:
+        List<Libro> byTitolo = libroRepos.findByTitoloContainingIgnoreCase(query);
+        List<Libro> byAutore = libroRepos.findByAutoreContainingIgnoreCase(query);
+        byTitolo.addAll(byAutore); // Aggiungi tutti i libri trovati per autore
+        return byTitolo.stream().distinct().collect(java.util.stream.Collectors.toList()); // Rimuovi duplicati
+    }
      /**
      * 1) Queries the database for all books missing an ISBN.
      * 2) For each book, invokes OpenLibraryClient to retrieve possible ISBNs.

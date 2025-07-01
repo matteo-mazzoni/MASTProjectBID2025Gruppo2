@@ -9,7 +9,6 @@ import java.util.Optional;
 
 public interface LibroRepos extends JpaRepository<Libro, Long> {
 
-
     // 1a) Find all books without ISBN (used for ISBN population at the application start)
     @Query("SELECT l FROM Libro l WHERE l.isbn IS NULL OR l.isbn = ''")
     List<Libro> findLibriSenzaIsbn();
@@ -21,5 +20,15 @@ public interface LibroRepos extends JpaRepository<Libro, Long> {
     @Query("SELECT DISTINCT l.genere FROM Libro l WHERE l.genere IS NOT NULL")
     List<String> findDistinctGenres();
 
+    // Metodo per trovare un libro per titolo esatto (utile per la creazione di booklist)
     Optional<Libro> findByTitoloIgnoreCase(String titolo);
+
+    // NUOVO/MODIFICATO: Metodo per la ricerca parziale e case-insensitive
+    List<Libro> findByTitoloContainingIgnoreCase(String titolo);
+
+    // Puoi aggiungere anche ricerca per autore se necessario
+    List<Libro> findByAutoreContainingIgnoreCase(String autore);
+
+    // Puoi combinare:
+    List<Libro> findByTitoloContainingIgnoreCaseOrAutoreContainingIgnoreCase(String titolo, String autore);
 }
