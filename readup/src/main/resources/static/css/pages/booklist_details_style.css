@@ -1,0 +1,672 @@
+/*====================================*/
+/* Globali e Utilities               */
+/*====================================*/
+
+/* Contenitore principale della pagina */
+main.container {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.page-container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 3rem;
+}
+
+/* Card principale che avvolge il contenuto */
+.main-content-card {
+    background-color: var(--bg_card_color);
+    border-radius: 16px;
+    padding: 3rem 4rem;
+    box-shadow: 0 8px 25px rgba(39, 52, 99, 0.2);
+    transition: box-shadow 0.3s ease;
+    width: 100%;
+}
+
+.main-content-card:hover {
+    box-shadow: 0 10px 30px rgba(39, 52, 99, 0.3);
+}
+
+/* Messaggi di stato (alert Bootstrap) */
+#alertContainer {
+    margin-bottom: 2rem;
+}
+
+.alert {
+    border-radius: 10px;
+    font-size: 1rem;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(39, 52, 99, 0.1);
+}
+
+.alert-success {
+    background-color: rgba(25, 135, 84, 0.15);
+    color: #198754;
+    border-color: rgba(25, 135, 84, 0.3);
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: #dc3545;
+    border-color: rgba(220, 53, 69, 0.3);
+}
+
+.alert-info.empty-list-message {
+    background-color: rgba(var(--links_color-rgb), 0.18);
+    color: var(--links_color);
+    border-color: rgba(var(--links_color-rgb), 0.3);
+    text-align: center;
+    padding: 2.5rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-radius: 12px;
+}
+
+.alert-info.empty-list-message p {
+    margin-bottom: 0;
+}
+
+/* Separatore orizzontale */
+.custom-hr {
+    border-top: 1px solid rgba(39, 52, 99, 0.15);
+    margin: 3rem 0;
+}
+
+/*====================================*/
+/* Tipografia e Titoli                */
+/*====================================*/
+
+/* Breadcrumb personalizzato */
+.custom-breadcrumb {
+    margin-bottom: 1.5rem;
+    padding-left: 0;
+}
+
+.custom-breadcrumb .breadcrumb-item {
+    font-size: 1.5rem;
+}
+
+.custom-breadcrumb .breadcrumb-item a {
+    color: var(--links_color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.custom-breadcrumb .breadcrumb-item a:hover {
+    text-decoration: underline;
+}
+
+.custom-breadcrumb .breadcrumb-item.active {
+    color: var(--text_color);
+    font-weight: 600;
+    opacity: 0.8;
+}
+
+/* Titolo principale della pagina */
+.page-title-details {
+    color: var(--title_color);
+    font-size: 2.4rem;
+    margin-bottom: 0.6rem;
+    font-weight: 700;
+    text-align: left;
+}
+
+/* Descrizione della pagina */
+.page-description-details {
+    color: var(--text_color);
+    opacity: 0.8;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+/* Titoli di sezione */
+.section-title {
+    color: var(--title_color);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+/*====================================*/
+/* Stili per i Libri                  */
+/*====================================*/
+
+/* Card del singolo libro */
+.book-card {
+    background-color: var(--bar_color);
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(39, 52, 99, 0.15);
+    border: 1px solid rgba(39, 52, 99, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(39, 52, 99, 0.25);
+}
+
+.book-card .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.book-card .card-title {
+    color: var(--text_color);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.book-card .card-author {
+    color: var(--text_color);
+    opacity: 0.75;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.book-card .card-isbn {
+    color: var(--text_color);
+    opacity: 0.9;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+/* Contenitore e immagine della copertina */
+.book-card .book-cover-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    min-height: 150px;
+}
+
+.book-card .book-cover {
+    max-width: 100%;
+    max-height: 200px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(39, 52, 99, 0.15);
+}
+
+.book-card .no-cover-placeholder {
+    text-align: center;
+    color: var(--stripe_color);
+    opacity: 0.8;
+}
+
+/*====================================*/
+/* Bottoni Generali e di Azione       */
+/*====================================*/
+
+/* Stili per i bottoni generali */
+.button {
+    padding: 0.9rem 2rem;
+    background: var(--links_color);
+    color: var(--background_color);
+    border: none;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 3px 10px rgba(39, 52, 99, 0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    text-align: center;
+}
+
+.d-flex.justify-content-center {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+}
+
+.button:hover {
+    background-color: var(--text_color);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(39, 52, 99, 0.35);
+    color: var(--background_color);
+}
+
+.button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(39, 52, 99, 0.25);
+}
+
+.button-primary {
+    background-color: var(--links_color);
+}
+.button-primary:hover {
+    background-color: var(--text_color);
+}
+
+/* Stile per i bottoni d'azione all'interno delle card libro */
+.book-card .card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    margin-top: auto;
+    padding-top: 1rem;
+}
+
+.button-action {
+    padding: 0.7rem 1.4rem;
+    font-size: 0.98rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+    transform: none;
+}
+
+.button-action.button-danger {
+    background-color: #dc3545; /* Rosso per l'azione di rimozione */
+    color: var(--background_color);
+    border: none;
+}
+
+.button-action.button-danger:hover {
+    background-color: #c82333; /* Rosso più scuro al hover */
+}
+
+
+/*====================================*/
+/* Modal Aggiungi Libro               */
+/*====================================*/
+
+.modal-content {
+    border-radius: 16px;
+    box-shadow: 0 10px 35px rgba(39, 52, 99, 0.35);
+    background-color: var(--stripe_color);
+    color: var(--text_color);
+}
+
+.modal-header {
+    border-bottom: 1px solid rgba(39, 52, 99, 0.15);
+    padding: 2rem;
+}
+
+.modal-title {
+    color: var(--text_color);
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+.modal-body {
+    padding: 1.8rem;
+}
+
+.modal-footer {
+    border-top: 1px solid rgba(39, 52, 99, 0.15);
+    padding: 1.2rem 1.8rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+}
+
+.modal-footer .btn-secondary {
+    background-color: var(--links_color);
+    border-color: var(--links_color);
+    color: var(--background_color);
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    padding: 0.75rem 1.5rem;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: var(--text_color);
+    border-color: var(--text_color);
+}
+
+/* Campo di ricerca nella modal */
+.search-input-group .form-control {
+    background-color: var(--stripe_color);
+    border: 1px solid rgba(39, 52, 99, 0.2);
+    border-radius: 10px;
+    color: var(--text_color);
+    padding: 0.85rem 1.1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input-group .form-control::placeholder {
+    color: var(--text_color);
+    opacity: 0.8;
+}
+
+.search-input-group .form-control:focus {
+    border-color: var(--links_color);
+    box-shadow: 0 0 0 0.3rem rgba(var(--links_color-rgb), 0.3);
+    background-color: var(--stripe_color);
+    color: var(--text_color);
+}
+
+/* Bottone di ricerca */
+.search-input-group .button-secondary-outline {
+    background-color: transparent;
+    border: 1px solid var(--links_color);
+    color: var(--links_color);
+    border-radius: 10px;
+    padding: 0.85rem 1.5rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    box-shadow: none;
+    transform: none;
+}
+
+.search-input-group .button-secondary-outline:hover {
+    background-color: var(--links_color);
+    color: var(--background_color);
+    border-color: var(--links_color);
+}
+
+/* Risultati di ricerca nella modal */
+.search-results-list {
+    margin-top: 1.5rem;
+    border: 1px solid rgba(39, 52, 99, 0.1);
+    border-radius: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0.5rem 0;
+}
+
+/* Stile per ogni singolo elemento del risultato di ricerca */
+.search-results-list .list-group-item {
+    background-color: var(--stripe_color);
+    border: none;
+    border-bottom: 1px solid rgba(39, 52, 99, 0.08);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.search-results-list .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.search-results-list .list-group-item:hover {
+    background-color: var(--bar_color);
+    cursor: pointer;
+}
+
+/* Stile per il contenitore di titolo e autore */
+.search-results-list .list-group-item > div:first-child {
+    flex-grow: 1;
+    padding-right: 0.5rem;
+    margin-bottom: 0;
+}
+
+/* Stile per il titolo del libro nei risultati */
+.search-results-list .list-group-item .result-title {
+    font-weight: 600;
+    color: var(--text_color);
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+}
+
+/* Stile per l'autore del libro nei risultati */
+.search-results-list .list-group-item .result-author {
+    color: var(--text_color);
+    opacity: 0.95;
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+/* Bottone "Aggiungi" nei risultati */
+.search-results-list .list-group-item .add-book-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: var(--links_color);
+    color: var(--background_color);
+    border: none;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    flex-shrink: 0;
+    width: auto;
+}
+
+.search-results-list .list-group-item .add-book-button:hover {
+    background-color: var(--text_color);
+    transform: translateY(-2px);
+}
+
+/* Messaggio "Nessun libro trovato" */
+.search-results-list #noResultsMessage {
+    padding: 1.5rem;
+    font-style: italic;
+    color: var(--text_color);
+    opacity: 0.9;
+    text-align: center;
+}
+
+
+/*====================================*/
+/* Media Queries per la Responsività */
+/*====================================*/
+
+@media screen and (max-width: 991px) {
+    .page-container {
+        margin: 0 2rem;
+    }
+    .main-content-card {
+        padding: 2.5rem 3rem;
+    }
+    .page-title-details {
+        font-size: 2.1rem;
+    }
+    .page-description-details {
+        font-size: 1.05rem;
+    }
+    .section-title {
+        font-size: 1.6rem;
+    }
+    .custom-hr {
+        margin: 2.5rem 0;
+    }
+    .button {
+        padding: 0.8rem 1.8rem;
+        font-size: 1rem;
+    }
+    .book-card .card-body {
+        padding: 1.2rem;
+    }
+    .book-card .card-title {
+        font-size: 1.35rem;
+    }
+    .book-card .card-author {
+        font-size: 0.9rem;
+    }
+    .book-card .card-isbn {
+        font-size: 0.85rem;
+    }
+    .book-card .book-cover {
+        max-height: 180px;
+    }
+    .book-card .card-actions {
+        padding-top: 0.8rem;
+    }
+    .button-action {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.95rem;
+    }
+    .modal-header, .modal-body, .modal-footer {
+        padding: 1.5rem;
+    }
+    .modal-title {
+        font-size: 1.4rem;
+    }
+    .search-input-group .form-control,
+    .search-input-group .button-secondary-outline {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.95rem;
+    }
+    .search-results-list .list-group-item {
+        padding: 0.8rem 1.2rem;
+    }
+    .search-results-list .list-group-item .result-title {
+        font-size: 1rem;
+    }
+    .search-results-list .list-group-item .result-author {
+        font-size: 0.9rem;
+    }
+    .search-results-list .list-group-item .add-book-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    main.container {
+        padding-top: 1.5rem;
+        padding-bottom: 2.5rem;
+    }
+    .page-container {
+        padding: 0 1rem;
+        margin: 0;
+    }
+    .main-content-card {
+        padding: 1.5rem;
+        border-radius: 12px;
+    }
+    .custom-breadcrumb {
+        margin-bottom: 1.5rem;
+    }
+    .custom-breadcrumb .breadcrumb-item {
+        font-size: 0.9rem;
+    }
+    .page-title-details {
+        font-size: 1.8rem;
+        margin-bottom: 0.4rem;
+    }
+    .page-description-details {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+    .section-title {
+        font-size: 1.4rem;
+        margin-bottom: 1.2rem;
+    }
+    .custom-hr {
+        margin: 2rem 0;
+    }
+    .d-flex.justify-content-center {
+        margin-bottom: 1.5rem;
+    }
+    .button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+        width: 100%;
+    }
+    .book-card .card-body {
+        padding: 1rem;
+    }
+    .book-card .card-title {
+        font-size: 1.25rem;
+    }
+    .book-card .card-author {
+        font-size: 0.85rem;
+    }
+    .book-card .card-isbn {
+        font-size: 0.8rem;
+    }
+    .book-card .book-cover {
+        max-height: 150px;
+    }
+    .book-card .card-actions {
+        padding-top: 0.6rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .button-action {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+    .modal-header, .modal-body, .modal-footer {
+        padding: 0.8rem;
+    }
+    .modal-title {
+        font-size: 1.1rem;
+    }
+    .search-input-group {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .search-input-group .form-control,
+    .search-input-group .button-secondary-outline {
+        width: 100%;
+        padding: 0.65rem 1rem;
+        font-size: 0.9rem;
+    }
+    .search-input-group .form-control {
+        margin-bottom: 0;
+    }
+    /* Regole specifiche per i risultati di ricerca su schermi piccoli */
+    .search-results-list .list-group-item {
+        flex-direction: row; /* Mantieni riga anche su mobile per questo elemento */
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.7rem 1rem;
+        gap: 0.8rem; /* Riduci il gap su schermi piccoli */
+    }
+
+    .search-results-list .list-group-item > div:first-child {
+        padding-right: 0.3rem; /* Riduci il padding a destra su schermi piccoli */
+    }
+
+    .search-results-list .list-group-item .add-book-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        margin-top: 0; /* Assicurati che non ci sia margine superiore */
+        width: auto; /* Evita che il bottone occupi tutta la larghezza */
+    }
+
+    .search-results-list .list-group-item .result-title {
+        font-size: 1rem; /* Riduzione dimensione font per mobile */
+    }
+
+    .search-results-list .list-group-item .result-author {
+        font-size: 0.9rem; /* Riduzione dimensione font per mobile */
+    }
+
+    .search-results-list #noResultsMessage {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+    .modal-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .modal-footer .btn-secondary {
+        width: 100%;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+}

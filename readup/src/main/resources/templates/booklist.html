@@ -9,45 +9,58 @@
 <body>
     <header th:replace="~{fragments :: header}"></header>
 
-    <main class="container my-4">
-        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <span th:text="${successMessage}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <span th:text="${errorMessage}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+    <main class="container">
+        <div class="page-container">
+            <div class="main-content-card">
 
-        <h2 class="mb-4">Le Tue Booklist</h2>
+                <h2 class="page-title">Le Tue Booklist</h2>
+                <p class="page-description">Organizza i tuoi libri preferiti creando booklist personalizzate. Puoi aggiungere i tuoi libri letti, quelli che vuoi leggere, o creare liste tematiche!</p>
 
-        <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#createBooklistModal">
-            Crea Nuova Booklist
-        </button>
-
-        <div th:if="${#lists.isEmpty(booklists)}" class="alert alert-info">
-            Non hai ancora creato nessuna booklist. Clicca sul pulsante sopra per crearne una!
-        </div>
-        <div th:unless="${#lists.isEmpty(booklists)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            <div class="col" th:each="booklist : ${booklists}">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${booklist.nome}">Nome Booklist</h5>
-                        <p class="card-text text-muted" th:if="${booklist.description}" th:text="${booklist.description}">Descrizione della booklist.</p>
-                        <p class="card-text text-muted" th:unless="${booklist.description}">Nessuna descrizione.</p>
-                        <p class="card-text">
-                            Libri: <span th:text="${booklist.libri != null ? booklist.libri.size() : 0}">0</span>
-                        </p>
-                        <a th:href="@{/booklist/{id}(id=${booklist.idBooklist})}" class="btn btn-sm btn-info">Dettagli</a>
-                        <form th:action="@{/{id}/delete(id=${booklist.idBooklist})}" method="post" style="display:inline;"
-                              onsubmit="return confirm('Sei sicuro di voler eliminare questa booklist?');">
-                            <button type="submit" class="btn btn-sm btn-danger">Elimina</button>
-                        </form>
+                <div id="alertContainer">
+                    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:text="${successMessage}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${errorMessage}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
+
+                <div class="d-flex justify-content-center mb-5">
+                    <button type="button" class="button button-primary" data-bs-toggle="modal" data-bs-target="#createBooklistModal">
+                        Crea Nuova Booklist
+                    </button>
+                </div>
+
+
+                <div th:if="${#lists.isEmpty(booklists)}" class="alert alert-info empty-list-message">
+                    <p>Non hai ancora creato nessuna booklist. Clicca sul pulsante sopra per crearne una!</p>
+                </div>
+                <div th:unless="${#lists.isEmpty(booklists)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    <div class="col" th:each="booklist : ${booklists}">
+                        <div class="card h-100 shadow-sm booklist-card">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${booklist.nome}">Nome Booklist</h5>
+                                <p class="card-text description-text" th:if="${booklist.description}" th:text="${booklist.description}">Descrizione della booklist.</p>
+                                <p class="card-text description-text" th:unless="${booklist.description}">Nessuna descrizione.</p>
+                                <p class="card-text stats-text">
+                                    Libri: <span th:text="${booklist.libri != null ? booklist.libri.size() : 0}">0</span>
+                                </p>
+                                <div class="card-actions">
+                                    <a th:href="@{/booklist/{id}(id=${booklist.idBooklist})}" class="button-action button-info">Dettagli</a>
+                                    <form th:action="@{/{id}/delete(id=${booklist.idBooklist})}" method="post" style="display:inline;"
+                                            onsubmit="return confirm('Sei sicuro di voler eliminare questa booklist?');">
+                                        <button type="submit" class="button-action button-danger">Elimina</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
-
     </main>
 
     <div class="modal fade" id="createBooklistModal" tabindex="-1" aria-labelledby="createBooklistModalLabel" aria-hidden="true">
@@ -76,7 +89,7 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                            <button type="submit" class="btn btn-primary">Crea Booklist</button>
+                            <button type="submit" class="button button-primary">Crea Booklist</button>
                         </div>
                     </form>
                 </div>

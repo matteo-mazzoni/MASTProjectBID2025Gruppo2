@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 
+<!-- Head section, includes title and CSS/JS -->
 <head th:replace="~{fragments :: head(
         title=${'Dettagli Booklist: ' + booklist.nome + ' • Readup'},
         pageCss='/css/pages/booklist_details_style.css',
@@ -8,101 +9,130 @@
         pageJS='/js/booklist_details.js')}">
 </head>
 
+<!-- Set custom data attributes with Thymeleaf for JS usage -->
 <body th:data-booklist-id="${booklist.idBooklist}"
       th:data-success-message="${successMessage}"
       th:data-error-message="${errorMessage}">
 
+    <!-- Page header -->
     <header th:replace="~{fragments :: header}"></header>
 
-    <main class="container my-4">
-        <div id="alertContainer">
-            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-                <span th:text="${successMessage}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                <span th:text="${errorMessage}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </div>
+    <main class="container">
+        <div class="page-container">
+            <div class="main-content-card">
 
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/booklist.html}">Le Tue Booklist</a></li>
-                <li class="breadcrumb-item active" aria-current="page" th:text="${booklist.nome}">Nome Booklist</li>
-            </ol>
-        </nav>
+                <!-- Alerts for success or error messages -->
+                <div id="alertContainer">
+                    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span th:text="${successMessage}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${errorMessage}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
 
-        <h2 class="mb-3" th:text="${booklist.nome}">Nome Booklist</h2>
-        <p class="text-muted" th:text="${booklist.description ?: 'Nessuna descrizione per questa booklist.'}"></p>
+                <!-- Breadcrumb navigation -->
+                <nav aria-label="breadcrumb" class="custom-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/booklist.html}">Le Tue Booklist</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="${booklist.nome}">Nome Booklist</li>
+                    </ol>
+                </nav>
 
-        <hr>
+                <!-- Booklist title and description -->
+                <h2 class="mb-3 page-title-details" th:text="${booklist.nome}">Nome Booklist</h2>
+                <p class="page-description-details" th:text="${booklist.description ?: 'Nessuna descrizione per questa booklist.'}"></p>
 
-        <h3 class="mb-3">Libri in questa Booklist (<span th:text="${booklist.libri.size()}">0</span>)</h3>
+                <hr class="custom-hr">
 
-        <div th:if="${#lists.isEmpty(booklist.libri)}" class="alert alert-info">
-            Questa booklist non contiene ancora libri. Aggiungine uno!
-        </div>
-        <div th:unless="${#lists.isEmpty(booklist.libri)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-            <div class="col" th:each="libro : ${booklist.libri}">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${libro.titolo}">Titolo Libro</h5>
-                        <p class="card-text text-muted" th:text="${libro.autore}">Autore</p>
-                        <p class="card-text">ISBN: <span th:text="${libro.isbn != null ? libro.isbn : 'N/A'}"></span></p>
-                        <div th:if="${libro.isbn != null}">
-                            <img th:src="@{'http://covers.openlibrary.org/b/isbn/' + ${libro.isbn} + '-M.jpg'}" alt="Copertina del libro" class="img-fluid book-cover mb-2">
+                <!-- Section: Books inside the booklist -->
+                <h3 class="mb-3 section-title">Libri in questa Booklist (<span th:text="${booklist.libri.size()}">0</span>)</h3>
+
+                <!-- If no books are present -->
+                <div th:if="${#lists.isEmpty(booklist.libri)}" class="alert alert-info empty-list-message">
+                    <p>Questa booklist non contiene ancora libri. Aggiungine uno!</p>
+                </div>
+
+                <!-- If books are present, render each one -->
+                <div th:unless="${#lists.isEmpty(booklist.libri)}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    <div class="col" th:each="libro : ${booklist.libri}">
+                        <div class="card h-100 book-card">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${libro.titolo}">Titolo Libro</h5>
+                                <p class="card-text text-muted card-author" th:text="${libro.autore}">Autore</p>
+                                <p class="card-text card-isbn">ISBN: <span th:text="${libro.isbn != null ? libro.isbn : 'N/A'}"></span></p>
+
+                                <!-- Book cover image if ISBN is available -->
+                                <div th:if="${libro.isbn != null}" class="book-cover-container">
+                                    <img th:src="@{'http://covers.openlibrary.org/b/isbn/' + ${libro.isbn} + '-M.jpg'}" alt="Copertina del libro" class="img-fluid book-cover mb-2">
+                                </div>
+
+                                <!-- Fallback if no cover is available -->
+                                <div th:unless="${libro.isbn != null}" class="text-center text-muted no-cover-placeholder">
+                                    <i class="bi bi-book-half" style="font-size: 4rem;"></i>
+                                    <p>Copertina non disponibile</p>
+                                </div>
+
+                                <!-- Remove book button -->
+                                <div class="card-actions">
+                                    <form th:action="@{/booklist/{idBooklist}/remove-libro(idBooklist=${booklist.idBooklist})}" method="post">
+                                        <input type="hidden" name="libroId" th:value="${libro.idLibro}">
+                                        <button type="submit" class="btn btn-danger btn-sm mt-2 button-action button-danger">Rimuovi</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <div th:unless="${libro.isbn != null}" class="text-center text-muted">
-                            <i class="bi bi-book-half" style="font-size: 4rem;"></i> 
-                            <p>Copertina non disponibile</p>
+                    </div>
+                </div>
+
+                <hr class="my-4 custom-hr">
+
+                <!-- Section: Add a new book -->
+                <h3 class="mb-3 section-title">Aggiungi un Libro a questa Booklist</h3>
+
+                <!-- Button to open modal -->
+                <div class="d-flex justify-content-center mb-5">
+                    <button type="button" class="btn btn-success mb-3 button button-primary" data-bs-toggle="modal" data-bs-target="#addBookModal">
+                        Aggiungi Libro Esistente
+                    </button>
+                </div>
+
+                <!-- Modal for searching and adding a book -->
+                <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addBookModalLabel">Aggiungi Libro</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+                                <form id="searchBookForm" class="mb-4" method="get">
+                                    <div class="input-group search-input-group">
+                                        <input type="text" class="form-control" id="bookSearchQuery" placeholder="Cerca libro per titolo o autore...">
+                                        <button class="btn btn-outline-secondary button-secondary-outline" type="submit">Cerca</button>
+                                    </div>
+                                </form>
+
+                                <div id="searchResults" class="list-group search-results-list">
+                                    <p class="text-muted text-center" id="noResultsMessage">Nessun libro trovato. Inizia a digitare per cercare.</p>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                </div>
+                            </div> 
                         </div>
-                        <form th:action="@{/booklist/{idBooklist}/remove-libro(idBooklist=${booklist.idBooklist})}" method="post">
-                            <input type="hidden" name="libroId" th:value="${libro.idLibro}">
-                            <button type="submit" class="btn btn-danger btn-sm mt-2">Rimuovi</button>
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
-
-        <hr class="my-4">
-
-        <h3 class="mb-3">Aggiungi un Libro a questa Booklist</h3>
-        
-        <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addBookModal">
-            Aggiungi Libro Esistente
-        </button>
-
-        <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addBookModalLabel">Aggiungi Libro</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="searchBookForm" class="mb-4">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="bookSearchQuery" placeholder="Cerca libro per titolo o autore...">
-                                <button class="btn btn-outline-secondary" type="submit">Cerca</button>
-                            </div>
-                        </form>
-                        
-                        <div id="searchResults" class="list-group">
-                            <p class="text-muted text-center" id="noResultsMessage">Nessun libro trovato. Inizia a digitare per cercare.</p>
-                            </div>
-                        
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </main>
 
+    <!-- Page footer -->
     <footer th:replace="~{fragments :: footer}"></footer>
 </body>
 </html>
