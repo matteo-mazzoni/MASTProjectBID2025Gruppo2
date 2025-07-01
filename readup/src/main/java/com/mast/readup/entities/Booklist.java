@@ -40,6 +40,7 @@ public class Booklist {
 
     // Add the extra field of the entity
     // Booklist name
+    @EqualsAndHashCode.Include 
     @Column(name = "nome", length = 30, nullable = true)
     private String nome;
 
@@ -60,6 +61,14 @@ public class Booklist {
     )
     private Set<Libro> libri = new HashSet<>();
 
+    public String getName() {
+        return nome;
+    }
+
+    // Se l'errore menziona anche utenteCreatore dopo aver risolto name
+    public Utente getUtenteCreatore() {
+        return utenteCreatore;
+    }
     public void addLibro(Libro libro) {
         this.libri.add(libro);
         if (libro != null) { // Aggiunto controllo null per sicurezza
