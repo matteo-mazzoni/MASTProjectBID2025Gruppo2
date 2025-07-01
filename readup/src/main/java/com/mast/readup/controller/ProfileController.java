@@ -1,8 +1,10 @@
 package com.mast.readup.controller;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -92,12 +94,29 @@ public class ProfileController {
             model.addAttribute("showEditProfileModal", false);
         }
 
-        List<Libro> libriUtente = libreriaService.getLibriByUtenteId(currentUserActual.getIdUtente());
-        model.addAttribute("userLibraryBooks", libriUtente);
+        // --- QUESTE RIGHE SONO CORRETTE E DEVONO RIMANERE ---
+        List<Libro> allUserBooks = libreriaService.getLibriByUtenteId(currentUserActual.getIdUtente());
+        // Ordina i libri per ID in ordine decrescente (ID più alti = aggiunti più recentemente)
+        allUserBooks.sort(Comparator.comparing(Libro::getIdLibro, Comparator.reverseOrder()));
+        List<Libro> recentUserBooks = allUserBooks.stream().limit(3).collect(Collectors.toList());
+        model.addAttribute("userLibraryBooks", recentUserBooks); // <-- Questa è la lista limitata che vuoi usare
 
-        model.addAttribute("userBooklists", userBooklists);
+        List<Booklist> allUserBooklists = booklistService.getAllBooklistsByUser(currentUserActual.getNickname());
+        // Ordina le booklist per ID in ordine decrescente (ID più alti = create più recentemente)
+        allUserBooklists.sort(Comparator.comparing(Booklist::getIdBooklist, Comparator.reverseOrder()));
+        // Limita la lista alle prime 3 booklist
+        List<Booklist> recentUserBooklists = allUserBooklists.stream().limit(3).collect(Collectors.toList());
+        model.addAttribute("userBooklists", recentUserBooklists); // <-- Questa è la lista limitata che vuoi usare
 
-        int numBooklists = userBooklists.size();
+        // --- QUESTE DUE RIGHE SONO QUELLE DA RIMUOVERE O COMMENTARE ---
+        // List<Libro> libriUtente = libreriaService.getLibriByUtenteId(currentUserActual.getIdUtente());
+        // model.addAttribute("userLibraryBooks", libriUtente); // Rimuovi questa riga
+
+        // model.addAttribute("userBooklists", userBooklists); // Rimuovi questa riga
+
+        // Il conteggio delle booklist deve usare la lista NON limitata per dare il conteggio totale corretto
+        // Per ottenere il numero totale delle booklist e sfide devi usare le liste complete
+        int numBooklists = booklistService.getAllBooklistsByUser(currentUserActual.getNickname()).size();
         int numChallenges = sfidaService.countSfideByPartecipante(currentUserActual.getIdUtente());
 
         model.addAttribute("numBooklists", numBooklists);
