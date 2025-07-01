@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}"> <head>
+    <title>Crea Nuova Booklist</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container mt-4">
+            <h2 class="mb-4">Crea Nuova Booklist</h2>
+
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <form th:action="@{/booklist/salvabooklist}" th:object="${booklist}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome Booklist:</label>
+                    <input type="text" class="form-control" id="nome" th:field="*{nome}" required maxlength="30">
+                    <div class="invalid-feedback">Il nome è obbligatorio e non deve superare i 30 caratteri.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="descrizione" class="form-label">Descrizione:</label>
+                    <textarea class="form-control" id="descrizione" th:field="*{descrizione}" rows="3" maxlength="400"></textarea>
+                    <small class="form-text text-muted">Massimo 400 caratteri.</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Crea Booklist</button>
+                <a th:href="@{/booklists.html}" class="btn btn-secondary ms-2">Annulla</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

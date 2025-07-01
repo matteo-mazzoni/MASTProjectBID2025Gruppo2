@@ -6,9 +6,11 @@ import java.util.Set;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
@@ -35,6 +37,7 @@ public class Libro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_libro")
+    @EqualsAndHashCode.Include
     private long idLibro; // @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     // Book release year
@@ -73,6 +76,9 @@ public class Libro {
     // One-to-many relationship with the Contiene entity (another bridge table)
     @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BooklistContiene> contenuti = new HashSet<>();
+
+    @ManyToMany(mappedBy = "libri", fetch = FetchType.LAZY)
+    private Set<Booklist> booklists = new HashSet<>();
 
     public String getCoverUrl() {
         if (isbn == null || isbn.isBlank()) {

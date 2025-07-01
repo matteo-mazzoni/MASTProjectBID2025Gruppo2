@@ -1,7 +1,7 @@
 package com.mast.readup.controller;
 
+import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +15,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.mast.readup.entities.Booklist;
 import com.mast.readup.entities.Libro;
 import com.mast.readup.entities.Utente;
-import com.mast.readup.repos.BooklistRepos;
 import com.mast.readup.services.BooklistService;
+import com.mast.readup.services.LibroService;
+import com.mast.readup.services.UtenteService;
 
-import jakarta.servlet.http.HttpSession;
 @Controller
 public class BooklistController {
 
@@ -26,44 +26,52 @@ public class BooklistController {
     private BooklistService booklistService;
 
     @Autowired
-    private BooklistRepos booklistRepos;
+    private final UtenteService utenteService;
 
+    @Autowired
+    private LibroService libroService;
 
-    // Helper: method to get current user ID from session
-    private Long getCurrentUserId(HttpSession session) {
-        Utente u = (Utente) session.getAttribute("currentUser");
-        return (u != null) ? u.getIdUtente() : null;
+    public BooklistController(BooklistService booklistService, UtenteService utenteService, LibroService libroService) {
+        this.booklistService = booklistService;
+        this.utenteService = utenteService; 
+        this.libroService = libroService;
     }
 
+    // Metodo helper per ottenere l'utente loggato dal Principal
+    private Utente getLoggedInUser(Principal principal) {
+        if (principal == null) {
+            return null;
+        }
+        return utenteService.findByNickname(principal.getName())
+                .orElse(null); // O lancia un'eccezione se l'utente non dovesse mai essere null qui
+    }
 
     // Booklist page – Show user's booklists
     @GetMapping("/booklist.html")
-    public String viewUserBooklists(Model model, HttpSession session) { // MODIFICATO: Rimosso Principal principal
-        Long loggedInUserId = getCurrentUserId(session);
-        if (loggedInUserId == null) {
+    public String viewUserBooklists(Model model, Principal principal, RedirectAttributes redirectAttributes) { // MODIFICATO: Rimosso Principal principal
+        Utente loggedInUser = getLoggedInUser(principal); 
+        if (loggedInUser == null) {
             model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare le booklist."); 
             return "redirect:/"; 
         }
         
-        String nickname = ((Utente) session.getAttribute("currentUser")).getNickname(); // Retrieve nickname from session-stored user object
-        List<Booklist> booklists = booklistService.getAllBooklistsByUser(nickname); // Get all booklists created by the user
+        List<Booklist> booklists = booklistService.getAllBooklistsByUser(loggedInUser.getNickname()); // Get all booklists created by the user
         model.addAttribute("booklists", booklists); // List of booklists
         model.addAttribute("newBooklistName", ""); // Placeholder for creating a new booklist
-        model.addAttribute("currentUserId", loggedInUserId); // ID of the current user
+        model.addAttribute("currentUserId", loggedInUser); // ID of the current user
         return "booklist"; // Return the view
     }
 
     @PostMapping("/salvabooklist")
-    public String createBooklist(@RequestParam("name") String name, RedirectAttributes redirectAttributes, HttpSession session) { 
-        Long userId = getCurrentUserId(session);
-        if (userId == null) {
+    public String createBooklist(@RequestParam("name") String name, Principal principal, RedirectAttributes redirectAttributes) { 
+        Utente loggedInUser = getLoggedInUser(principal);
+        if (loggedInUser == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per creare una booklist.");
             return "redirect:/"; 
         }
         try {
-            String nickname = ((Utente) session.getAttribute("currentUser")).getNickname();
-            booklistService.creaBooklist(userId, name, nickname);
-            redirectAttributes.addFlashAttribute("successMessage", "Booklist '" + name + "' creata con successo!");
+           booklistService.creaBooklist(loggedInUser.getIdUtente(), name, loggedInUser.getNickname());
+           redirectAttributes.addFlashAttribute("successMessage", "Booklist '" + name + "' creata con successo!");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Errore nella creazione della booklist: " + e.getMessage());
         }
@@ -72,31 +80,30 @@ public class BooklistController {
     
     // View a specific booklist with its details
     @GetMapping("/booklist/{idBooklist}")
-    public String viewBooklistDetails(@PathVariable("idBooklist") long idBooklist, Model model, HttpSession session) {
-        Long currentUserId = getCurrentUserId(session);
-        if (currentUserId == null) {
+    public String viewBooklistDetails(@PathVariable("idBooklist") long idBooklist, 
+                                      Principal principal, 
+                                      Model model, 
+                                      RedirectAttributes redirectAttributes) {
+        Utente loggedInUser = getLoggedInUser(principal);
+        if (loggedInUser == null) {
             model.addAttribute("errorMessage", "Devi effettuare l'accesso per visualizzare i dettagli della booklist.");
             return "redirect:/"; 
         }
 
-        Optional<Booklist> booklistOpt = booklistRepos.findById(idBooklist);
-        if (booklistOpt.isEmpty()) {
-            model.addAttribute("errorMessage", "Booklist non trovata.");
-            return "error"; 
-        }
-
-        Booklist booklist = booklistOpt.get();
-
-        if (booklist.getUtenteCreatore().getIdUtente() != currentUserId) {  // Access control: only the owner can view their booklist
-            model.addAttribute("errorMessage", "Non hai i permessi per visualizzare questa booklist.");
-            return "error"; 
+        Booklist booklist = null;
+        try {
+            booklist = booklistService.findById(idBooklist); // Assicurati che questo metodo esista in BooklistService
+        } catch (IllegalArgumentException e) { // Il service dovrebbe lanciare un'eccezione se non trovata
+            redirectAttributes.addFlashAttribute("errorMessage", "Booklist non trovata.");
+            return "redirect:/booklists.html"; 
         }
 
         List<Libro> libriInBooklist = booklistService.getBooksInBooklist(idBooklist);
         model.addAttribute("booklist", booklist); // Selected booklist
         model.addAttribute("libriInBooklist", libriInBooklist); // Books in the booklist
-        model.addAttribute("currentUserId", currentUserId);
-        return "booklist_detail"; // View for detailed booklist
+        model.addAttribute("currentUserId", loggedInUser);
+
+        return "booklistdettagli"; // View for detailed booklist
     }
 
     // Add a book to a booklist
@@ -104,15 +111,15 @@ public class BooklistController {
     public String addBookToBooklist(@PathVariable("idBooklist") long idBooklist,
                                     @PathVariable("idLibro") long idLibro,
                                     RedirectAttributes redirectAttributes,
-                                    HttpSession session){
-        Long userId = getCurrentUserId(session);
-        if (userId == null) {
+                                    Principal principal){
+        Utente loggedInUser = getLoggedInUser(principal);
+        if (loggedInUser == null) {
              redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per aggiungere libri alle booklist.");
              return "redirect:/";
         }
 
         try {   // Add the book to the user's booklist
-            booklistService.addBookToBooklist(idBooklist, idLibro, userId);
+            booklistService.addBookToBooklist(idBooklist, idLibro, loggedInUser.getIdUtente());
             redirectAttributes.addFlashAttribute("successMessage", "Libro aggiunto alla booklist con successo!");
         } catch (SecurityException | IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Errore: " + e.getMessage());
@@ -122,17 +129,19 @@ public class BooklistController {
 
     // Remove a book from a booklist
     @PostMapping("/booklist/{idBooklist}/remove/{idLibro}")
-    public String removeBookFromBooklist(@PathVariable("idBooklist") long idBooklist, @PathVariable("idLibro") long idLibro,
-    RedirectAttributes redirectAttributes, HttpSession session) {                                                 
+    public String removeBookFromBooklist(@PathVariable("idBooklist") long idBooklist, 
+                                         @PathVariable("idLibro") long idLibro,
+                                         RedirectAttributes redirectAttributes, 
+                                         Principal principal) {                                                 
                                         
-        Long userId = getCurrentUserId(session);
-        if (userId == null) {
+        Utente loggedInUser = getLoggedInUser(principal);
+        if (loggedInUser == null) {
              redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per rimuovere libri dalle booklist.");
              return "redirect:/";
         }
 
         try {   // Remove the book from the user's booklist
-            booklistService.removeBookFromBooklist(idBooklist, idLibro, userId);
+            booklistService.removeBookFromBooklist(idBooklist, idLibro, loggedInUser.getIdUtente());
             redirectAttributes.addFlashAttribute("successMessage", "Libro rimosso dalla booklist con successo!");
         } catch (SecurityException | IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Errore: " + e.getMessage());
@@ -140,4 +149,25 @@ public class BooklistController {
         return "redirect:/booklist/" + idBooklist;
     }
 
+    @PostMapping("/{idBooklist}/delete") // CAMBIATO: Percorso più pulito
+    public String deleteBooklist(@PathVariable("idBooklist") Long idBooklist, Principal principal, RedirectAttributes redirectAttributes) {
+        Utente loggedInUser = getLoggedInUser(principal);
+        if (loggedInUser == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Devi effettuare l'accesso per eliminare le booklist.");
+            return "redirect:/";
+        }
+
+        try {
+            Booklist booklistToDelete = booklistService.findById(idBooklist); // Delega al service
+            if (!booklistToDelete.getUtenteCreatore().getIdUtente().equals(loggedInUser.getIdUtente())) { // Confronta ID numerici
+                throw new SecurityException("Non hai i permessi per eliminare questa booklist.");
+            }
+            booklistService.eliminaBooklist(idBooklist);
+            redirectAttributes.addFlashAttribute("successMessage", "Booklist eliminata con successo!");
+            return "redirect:/booklist.html"; // CAMBIATO: Coerenza con la nuova URL
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/booklist.html"; // O alla pagina di dettaglio se vuoi rimanere lì
+        }
+    }
 }

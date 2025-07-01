@@ -1,32 +1,104 @@
 <!DOCTYPE html>
-<html lang="it">
-    
-    <!-- Head -->
-    <head th:replace="~{fragments :: head(
-        title='Booklist • Readup', pageCss='/css/pages/booklist_style.css', 
-        extraPageCss=${null}, 
-        pageJS=${null})}">
-    </head>  
-    <!-- / Head -->
-  
-    <body>
-        <!-- Header -->
-        <header th:replace="~{fragments :: header}"></header>
-        <!-- / Header -->
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le mie Booklist</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #343a40;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .booklist-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .booklist-item:last-child {
+            border-bottom: none;
+        }
+        .booklist-name a {
+            font-size: 1.2em;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .booklist-name a:hover {
+            text-decoration: underline;
+        }
+        .form-create {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        .alert {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Le mie Booklist</h1>
 
-        <div th:fragment="content">
-
-            <!-- Main -->
-            <main>
-            </main>
-            <!-- / Main -->
-
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+            <span th:text="${successMessage}"></span>
         </div>
-        
-        <!-- Footer -->
-        <footer th:replace="~{fragments :: footer}"></footer>
-        <!-- / Footer -->
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <span th:text="${errorMessage}"></span>
+        </div>
 
-    </body>
+        <div th:if="${booklists.isEmpty()}" class="alert alert-info">
+            Non hai ancora creato nessuna booklist. Inizia creandone una!
+        </div>
 
+        <div th:unless="${booklists.isEmpty()}">
+            <h2 class="mb-3">Le tue booklist esistenti:</h2>
+            <ul class="list-unstyled">
+                <li th:each="booklist : ${booklists}" class="booklist-item">
+                    <div class="booklist-name">
+                        <a th:href="@{/booklist/{id}(id=${booklist.idBooklist})}" th:text="${booklist.name}">Nome Booklist</a>
+                    </div>
+                    <div class="booklist-actions">
+                        <form th:action="@{/booklist/{id}/delete(id=${booklist.idBooklist})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questa booklist?');">Elimina</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="form-create">
+            <h2 class="mb-3">Crea una nuova Booklist</h2>
+            <form th:action="@{/salvabooklist}" method="post" class="row g-3 align-items-end">
+                <div class="col-md-8">
+                    <label for="newBooklistName" class="form-label visually-hidden">Nome Booklist</label>
+                    <input type="text" class="form-control" id="newBooklistName" name="name" th:value="${newBooklistName}" placeholder="Inserisci il nome della nuova booklist" required>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Crea Booklist</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="mt-4 text-center">
+            <a href="/" class="btn btn-secondary">Torna alla Home</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

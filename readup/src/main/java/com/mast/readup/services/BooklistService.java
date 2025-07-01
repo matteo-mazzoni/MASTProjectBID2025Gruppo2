@@ -11,4 +11,6 @@ public interface BooklistService {
     Booklist addBookToBooklist(long idBooklist, long idLibro, long idUtente); // userId è per autorizzazione
     void removeBookFromBooklist(long idBooklist, long idLibro, long idUtente); // userId è per autorizzazione
     List<Libro> getBooksInBooklist(long idBooklist);
+
+    Booklist findById(long idBooklist); 
 }

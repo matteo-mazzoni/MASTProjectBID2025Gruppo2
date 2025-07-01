@@ -1,11 +1,17 @@
 package com.mast.readup.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
@@ -34,6 +40,7 @@ public class Utente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_utente")
+    @EqualsAndHashCode.Include
     private Long idUtente;
 
     // Add the extra field of the entity
@@ -74,4 +81,22 @@ public class Utente {
     // Transient field for confirming new password (not persisted in the DB)
     @Transient
     private String confirmNewPassword;
+
+    @OneToMany(mappedBy = "utenteCreatore", cascade = CascadeType
+    .ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Booklist> booklists = new ArrayList<>(); // Inizializza la lista per evitare NullPointerException
+
+    public void addBooklist(Booklist booklist) {
+        if (booklist != null) {
+            booklists.add(booklist);
+            booklist.setUtenteCreatore(this);
+        }
+    }
+
+    public void removeBooklist(Booklist booklist) {
+        if (booklist != null) {
+            booklists.remove(booklist);
+            booklist.setUtenteCreatore(null); // Rimuovi il riferimento all'utente dalla booklist
+        }
+    }
 }
