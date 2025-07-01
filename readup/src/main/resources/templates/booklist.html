@@ -49,11 +49,32 @@
                                 </p>
                                 <div class="card-actions">
                                     <a th:href="@{/booklist/{id}(id=${booklist.idBooklist})}" class="button-action button-info">Dettagli</a>
-                                    <form th:action="@{/booklist/{id}/delete(id=${booklist.idBooklist})}" method="post" style="display:inline;"
-                                        onsubmit="return confirm('Sei sicuro di voler eliminare questa booklist?');">
-                                        <button type="submit" class="button-action button-danger">Elimina</button>
-                                    </form>
+                                    <button type="button" class="button-action button-danger"
+                                            data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                            th:data-booklist-id="${booklist.idBooklist}"
+                                            th:data-booklist-name="${booklist.nome}"> Elimina
+                                    </button>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmDeleteModalLabel">Conferma Eliminazione</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Sei sicuro di voler eliminare la booklist "<strong id="booklistNameToDelete" ></strong>"? Questa azione è irreversibile.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                                <form id="deleteBooklistForm" method="post" style="display:inline;">
+                                    <button type="submit" class="button button-danger">Elimina Definitivamente</button>
+                                </form>
                             </div>
                         </div>
                     </div>
