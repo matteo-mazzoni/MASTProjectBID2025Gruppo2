@@ -16,7 +16,7 @@ public class LibreriaServiceImpl implements LibreriaService {
 
     @Autowired
     private final LibreriaRepos libreriaRepos;
-    private final UtenteRepos utenteRepos; // Needed to find the user
+    private final UtenteRepos utenteRepos; 
 
    
     public LibreriaServiceImpl(LibreriaRepos libreriaRepos, UtenteRepos utenteRepos) {

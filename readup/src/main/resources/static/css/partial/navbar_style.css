@@ -42,7 +42,7 @@
 
 .navbar-toggler:focus {
   outline: 2px solid var(--stripe_color);
-  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 0.2rem var(--text_color);
 }
 
 /* ----------------------------------------

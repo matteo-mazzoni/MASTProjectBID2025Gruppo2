@@ -43,6 +43,14 @@ public class LibroServiceImpl implements LibroService {
         this.openLibraryClient = openLibraryClient;
     }
 
+
+
+    // Retrieves all books from the database
+    @Override
+    public List<Libro> findAll() {
+        return libroRepos.findAll();
+    }    
+
      /**
      * 1) Queries the database for all books missing an ISBN.
      * 2) For each book, invokes OpenLibraryClient to retrieve possible ISBNs.

@@ -15,5 +15,5 @@ public interface LibroService {
     void populateMissingIsbns();
     List<Libro> findConIsbn();
     List<Libro> findRandomCarousel(int count);
-
+    List<Libro> findAll();
 }
