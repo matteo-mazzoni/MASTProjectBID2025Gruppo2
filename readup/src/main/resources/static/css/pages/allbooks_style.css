@@ -13,7 +13,13 @@
 /* Hover effect: slight lift and shadow */
 .card:hover {
   transform: translateY(-8px);       
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Hover effect for card title: underline text */
+.card-title:hover {
+  text-decoration: underline; 
+  cursor: pointer; /* Pointer cursor on hover */
 }
 
 /* Card body layout: vertical flexbox spaced between */
@@ -24,7 +30,7 @@
 }
 
 /* Centered card image with pointer cursor */
-.card-img {
+.card img {
   margin: auto;
   cursor: pointer;
 } 
@@ -32,4 +38,37 @@
 /* Bottom margin for links inside card body */
 .card-body a {
   margin-bottom: 1rem;
+}
+
+/* CSS of filter options */
+#no-results {
+    display: none;
+    text-align: center;
+    color: var(--text_color);
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+
+/* CSS Styles for book descriptions and hover effects */
+
+.book-item {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid var(--stripe_color);
+}
+
+.book-item:hover {
+    background-color: #f5f5f5;
+}
+
+.description {
+    display: none;
+    margin: 5px 20px;
+    font-style: italic;
+    color: #333;
+}
+
+.book-item:hover .description {
+    display: block;
 }

@@ -53,70 +53,77 @@
 
                    
                     <!-- No results message -->
-                    <div id="no-results" class="alert alert-warning text-center" style="display:none;">
+                    <div id="no-results" class="alert alert-warning text-center">
                         Nessun libro corrisponde ai filtri.
                     </div>
                     <!-- / No results message -->
-
+                    
                     <!-- Book catalogue -->
                     <div class="row">
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 book-card"
-                        th:each="book : ${books}" th:attr="  data-title=${#strings.toLowerCase(book.titolo)},
-                        data-author=${#strings.toLowerCase(book.autore)}, data-genre=${#strings.toLowerCase(book.genere)}">
+                       <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 book-card"
+                            th:each="book : ${books}"
+                            th:attr="data-title=${#strings.toLowerCase(book.titolo)}, data-author=${#strings.toLowerCase(book.autore)}, data-genre=${#strings.toLowerCase(book.genere)}">
 
-                            <!-- Single card -->
-                            <div class="card h-100">
+                           <!-- Single card -->
+                           <div class="card h-100">
 
-                                <!-- if there is an ISBN, display the book cover -->
-                                <img th:if="${book.isbn != null}"
+                               <!-- if there is an ISBN, display the book cover (clickable, to show description) -->
+                               <img th:if="${book.isbn != null}"
                                     th:src="@{${book.coverUrl}}"
-                                    class="card-img-top"
+                                    class="card-img-top clickable"
                                     th:alt="'Copertina di ' + ${book.titolo}"
                                     onerror="this.onerror=null; this.src='[[ @{/img/book-cover-placeholder.png} ]]';"/>
 
-                                <!-- If there is no ISBN, use a placeholder image -->
-                                <img th:if="${book.isbn == null}"
+                               <!-- If there is no ISBN, use a placeholder image (also clickable) -->
+                               <img th:if="${book.isbn == null}"
                                     th:src="@{/img/book-cover-placeholder.png}"
-                                    class="card-img-top"
+                                    class="card-img-top clickable"
                                     alt="Placeholder copertina"/>
 
                                 <!-- Card body with book details -->
-                                <div class="card-body d-flex flex-column">
-
+                               <div class="card-body d-flex flex-column">
+                                   
                                     <!-- Book details -->
-                                    <h5 class="card-title text-center" th:text="${book.titolo}">Titolo</h5>
-                                    <p class="card-text text-center mb-4" th:text="${book.autore}">Autore</p>
-                                    <p class="card-text text-center mb-4" th:text="'Genere: ' + ${book.genere}">Genere</p>
-                                    <p class="card-text text-center mb-4" th:text="'Num pagine: ' + ${book.numPagine}">Num pagine</p>
+                                    <h5 class="card-title text-center clickable" th:text="${book.titolo}"> Titolo</h5> 
+                                    <p class="card-text text-center mb-2" th:text="${book.autore}">Autore</p>
+                                    <p class="card-text text-center mb-2" th:text="'Genere: ' + ${book.genere}">Genere</p>
+                                    <p class="card-text text-center mb-2" th:text="'Pagine: ' + ${book.numPagine}">Pagine</p>
                                     <!-- / Book details -->
 
-                                    <!-- Buttons-->
+                                   <!-- Hidden description as separate div -->
+                                   <div th:id="${'desc-' + book.idLibro}"
+                                        class="description mt-2 p-3 bg-light border rounded"
+                                        style="display:none;">
+                                       <p th:text="${book.descrizione}">Descrizione in arrivo...</p>
+                                   </div>
+                                   <!-- / Hidden description -->
+
+                                   <!-- Buttons-->
                                     <div th:if="${session.currentUser != null}" class="mt-auto d-flex flex-column justify-content-center gap-2">
                                         <a th:href="@{/books/add/{id}(id=${book.idLibro})}" class="btn btn-secondary mt-auto">Aggiungi ai miei libri</a>                                
                                         <a th:href="@{/books/add/{id}(id=${book.idLibro})}"  class="btn btn-secondary mt-auto">Aggiungi a una sfida</a>
                                     </div>
                                     <!-- / Buttons --> 
-                                                               
-                                </div>
-                                <!-- / Card body with book details -->
-                            
-                            </div>
-                            <!-- / Single card -->
 
-                        </div>
-                    </div>
-                    <!-- / Book catalogue -->
-                </div>
-            
-            </main>
-            <!-- / Main -->
+                               </div>
+                               <!-- / Card body with book details -->
+                             
+                           </div>
+                          <!-- / Single card -->
+                       </div>
+                   </div>
+                   <!-- / Book catalogue -->
+               </div>
+           </main>
+           <!-- / Main -->
+       </div>
 
-        </div>
-        
-        <!-- Footer -->
-        <footer th:replace="~{fragments :: footer}"></footer>
-        <!-- / Footer -->
+       <!-- Footer -->
+       <footer th:replace="~{fragments :: footer}"></footer>
+       <!-- / Footer -->
 
-    </body>
-
+   </body>
 </html>
+
+
+           

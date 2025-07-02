@@ -1,4 +1,7 @@
 
+/* This script is used to filter books by title, author, and genre */
+
+
 document.addEventListener('DOMContentLoaded', function() {
   
     /*======================================================
@@ -47,4 +50,23 @@ document.addEventListener('DOMContentLoaded', function() {
     inputTitle.addEventListener('input',  filterBooks);
     inputAuthor.addEventListener('input', filterBooks);
     selectGenre.addEventListener('change', filterBooks);
+});
+
+
+/* This script is used to toggle the visibility of the book description */
+
+ document.addEventListener('DOMContentLoaded', () => {
+
+    // find all clickable elements inside cards
+    document.querySelectorAll('.card .clickable').forEach(el => {
+        el.addEventListener('click', () => {
+            const card = el.closest('.card');
+            if (!card) return;
+            // description div id inside this card
+            const desc = card.querySelector('[id^="desc-"]');
+            if (!desc) return;
+            // toggle visibility
+            desc.style.display = (desc.style.display === 'none' || desc.style.display === '') ? 'block' : 'none';
+        });
+    });
 });
