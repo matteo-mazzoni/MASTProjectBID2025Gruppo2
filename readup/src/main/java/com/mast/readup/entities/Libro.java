@@ -69,6 +69,14 @@ public class Libro {
     @Column(name = "ISBN", length = 13, nullable = false)
     private String isbn;
 
+    // Indicates if the book has been read, default is false
+    @Column(name = "letto", nullable = false)
+    private Boolean letto = false;
+
+    // Optional description of the book
+    @Column(name = "descrizione", columnDefinition = "TEXT", nullable = true)
+    private String descrizione;
+
     // One-to-many relationship with the Libreria entity (bridge table)
     @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Libreria> librerie = new HashSet<>();

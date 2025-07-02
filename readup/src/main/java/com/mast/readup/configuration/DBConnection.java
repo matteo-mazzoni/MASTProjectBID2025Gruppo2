@@ -1,4 +1,4 @@
-package com.mast.readup.util;
+package com.mast.readup.configuration;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

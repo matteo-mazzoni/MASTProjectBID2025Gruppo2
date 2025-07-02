@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
     /*======================================================
-                =           Mathing values:        =
+                =           Matching values:        =
     ========================================================*/
  
             const matchTitle  = !titleVal  || t.includes(titleVal);
