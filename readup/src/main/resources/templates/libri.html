@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+    
+<head th:replace="~{fragments :: head(
+    title='I miei libri • Readup',
+    pageCss='/css/pages/mybooks_style.css', 
+    extraPageCss=${null}, 
+    pageJS='/js/libri.js')}">
+</head>
+
+<body>
+    <!-- Header -->
+    <header th:replace="~{fragments :: header}"></header>
+
+    <div th:fragment="content">
+        <main>
+            <div id="my-books-container" class="d-flex flex-wrap">
+
+                <div class="col-12 tagline text-center py-5">
+                    <h1 class="primary_title">I miei libri</h1>
+                    <h3 class="secondary_title">Questa è la mia libreria personale</h3>
+                </div>    
+
+                <div class="container_90">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Copertina</th>
+                                <th>Titolo</th>
+                                <th>Autore</th>
+                                <th>Anno</th>
+                                <th>Letto</th>
+                                <th>Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="libro : ${userBooks}">
+                                <!-- Copertina -->
+                                <td>
+                                    <img th:if="${libro.coverUrl != null}"
+                                         th:src="@{${libro.coverUrl}}"
+                                         alt="Copertina"
+                                         width="80" />
+                                </td>
+
+                                <!-- Dati libro -->
+                                <td th:text="${libro.titolo}">Titolo</td>
+                                <td th:text="${libro.autore}">Autore</td>
+                                <td th:text="${libro.annoUscita}">Anno</td>
+
+                                <!-- Checkbox Letto -->
+                                <td>
+                                    <form th:action="@{/libri/letto}"
+                                          method="post">
+                                        <input type="hidden"
+                                               name="idLibro"
+                                               th:value="${libro.idLibro}" />
+
+                                        <!-- CSRF token -->
+                                        <input type="hidden"
+                                               th:if="${_csrf != null}"
+                                               th:name="${_csrf.parameterName}"
+                                               th:value="${_csrf.token}" />
+
+                                        <input type="checkbox"
+                                               name="letto"
+                                               th:checked="${libro.letto}"
+                                               onchange="this.form.submit()" />
+                                    </form>
+                                </td>
+
+                                <!-- Pulsanti Azioni -->
+                                <td>
+                                    <!-- Rimuovi -->
+                                    <form th:action="@{/user/books/remove}"
+                                          method="post"
+                                          onsubmit="return confirm('Rimuovere questo libro dalla tua libreria?');">
+                                        <input type="hidden"
+                                               name="idLibro"
+                                               th:value="${libro.idLibro}" />
+
+                                        <!-- CSRF token -->
+                                        <input type="hidden"
+                                               th:if="${_csrf != null}"
+                                               th:name="${_csrf.parameterName}"
+                                               th:value="${_csrf.token}" />
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-secondary">
+                                            Elimina
+                                        </button>
+                                    </form>
+                                </td> 
+                            </tr>
+
+                            <tr th:if="${#lists.isEmpty(userBooks)}">
+                                <td colspan="6">Non hai ancora aggiunto libri.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

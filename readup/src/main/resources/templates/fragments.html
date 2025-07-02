@@ -8,6 +8,8 @@
     <meta name="description" content="ReadUp. Join us and read books with our community!">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="robots" content="index, follow">
+    <meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}" />
+    <meta th:if="${_csrf != null}" name="_csrf_parameter" th:content="${_csrf.parameterName}" />
     <!-- / Meta tag area -->
 
     <!-- Dynamic title area -->
@@ -179,8 +181,8 @@
               <h5 class="card-title pt-4" th:text="${libro.titolo}">Titolo</h5>
               <p class="card-text text-muted mb-4" th:text="${libro.autore}">Autore</p>
               <img th:src="@{${libro.coverUrl}}" alt="cover" class="card-img-top">
-              <a href="#" class="btn btn-sm btn-action mb-2" th:if="${session.currentUser != null}">Aggiungi ai preferiti</a>
-              <a href="#" class="btn btn-sm btn-action mb-4" th:if="${session.currentUser != null}">Aggiungi a una booklist</a>
+              <button  type="button" class="btn btn-sm btn-action add-book-btn mb-2" th:if="${session.currentUser != null}" th:attr="data-book-id=${libro.idLibro}"> Aggiungi ai miei libri</button>
+              <button class="btn btn-sm btn-action add-book-btn mb-4" th:if="${session.currentUser != null}" data-book-id=${libro.idLibro}>Aggiungi a una booklist</button>
             </li>
           </ul>
           <!-- / Slides items -->

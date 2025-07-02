@@ -30,7 +30,7 @@ import com.mast.readup.entities.Booklist;
 import com.mast.readup.entities.Libro;
 import com.mast.readup.entities.Utente;
 import com.mast.readup.services.BooklistService;
-import com.mast.readup.services.LibreriaService;
+import com.mast.readup.services.LibriUtenteService;
 import com.mast.readup.services.SfidaService;
 import com.mast.readup.services.UtenteService;
 
@@ -45,7 +45,7 @@ public class ProfileController {
     private UtenteService utenteService;
 
     @Autowired
-    private LibreriaService libreriaService;
+    private LibriUtenteService libreriaService;
 
     @Autowired
     private BooklistService booklistService;

@@ -1,3 +1,9 @@
+/* Index Javascript - Logic for the main page of ReadUp */
+/* Main contents: Carousel, Testimonial function, Buttons to add books on favourite page) */
+/* Version: 1.0.0 */
+/* Author: Romina Trazzi */
+
+
 /*======================================================
         =            Carousel Selection            =
 ========================================================*/
@@ -127,16 +133,16 @@ document.querySelector("form").addEventListener("submit", function (event) {
 ====================================================*/
 
  const testimonials = [
-    [4, "Mario", "Rossi", "ReadUp ha rivoluzionato il mio modo di leggere!"],
-    [3, "Anna",  "Bianchi", "Bellissima community e suggerimenti sempre azzeccati!"],
-    [4, "Luca",  "Verdi",   "Grazie a ReadUp ho scoperto autori straordinari!"],
-    [3, "Sara",  "Neri",    "Interazione con altri lettori davvero stimolante!"],
-    [4, "Paolo", "Galli",  "Ogni libro è diventato un’esperienza unica grazie a ReadUp."]
+    [4, "Andrea", "Cerrato", "ReadUp ha rivoluzionato il mio modo di leggere!"],
+    [3, "Robert",  "Smau", "Bellissima community e suggerimenti sempre azzeccati!"],
+    [4, "Giada",  "Perro",   "Grazie a ReadUp ho scoperto autori straordinari!"],
+    [3, "Alessia",  "SanFilippo", "Interazione con altri lettori davvero stimolante!"],
+    [4, "Elia", "Sollazzo",  "Ogni libro è diventato un’esperienza unica grazie a ReadUp."]
   ];
 
 
 /*==================================================
-          =            Function           =
+      =           Testimonial Function           =
 ====================================================*/
 
 const container = document.getElementById("sliderContent");
@@ -167,3 +173,106 @@ renderTestimonials();
 setInterval(renderTestimonials, 20000);
 
     
+/*==================================================
+=           Button (Aggiungi ai miei libri)          =
+====================================================*/
+document.addEventListener('DOMContentLoaded', () => {
+  // 1) Seleziono tutti i bottoni "add-book-btn"
+  const addBtns = document.querySelectorAll('.add-book-btn');
+  // 2) Se non ne trovo, esco subito (nessun errore)
+  if (!addBtns || addBtns.length === 0) {
+    return;
+  }
+
+  // 3) Prendo meta CSRF (opzionale, solo se hai CSRF enabled)
+  const csrfMeta    = document.querySelector('meta[name="_csrf"]');
+  const csrfHeader  = document.querySelector('meta[name="_csrf_header"]');
+  const csrfToken   = csrfMeta    ? csrfMeta.content    : null;
+  const csrfHeaderName = csrfHeader ? csrfHeader.content : null;
+
+  // 4) Aggiungo event listener a ciascun bottone
+  addBtns.forEach(btn => {
+    btn.addEventListener('click', event => {
+      event.preventDefault();
+      // Rileggo btn qui, così è sicuramente non-null
+      const bookId = btn.getAttribute('data-book-id');
+      if (!bookId) {
+        console.warn('Bottone senza data-book-id!');
+        return;
+      }
+
+      const headers = { 'Content-Type': 'application/json' };
+      if (csrfHeaderName && csrfToken) {
+        headers[csrfHeaderName] = csrfToken;
+      }
+
+      fetch('/api/user/books/add', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ bookId: Number(bookId) })
+      })
+      .then(resp => {
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        return resp.json();
+      })
+      .then(data => {
+        if (data.success) {
+          alert('Libro aggiunto con successo!');
+          window.location.href = '/mybooks.html';
+        } else {
+          alert('Errore: ' + (data.message || 'Impossibile aggiungere'));
+        }
+      })
+      .catch(err => {
+        console.error('Fetch error:', err);
+        alert('Qualcosa è andato storto.');
+      });
+    });
+  });
+});
+
+
+// // Select all buttons with the class 'add-book-btn'
+// const addBtns = document.querySelectorAll('.add-book-btn');
+
+// const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+// const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+//   // Add an event listener for each add-book button
+//   addBtns.forEach(btn => {
+//     btn.addEventListener('click', event => {
+//       event.preventDefault();  // Prevent default behaviour 
+
+//       // Take the book ID from the button's data attribute
+//       const bookId = btn.getAttribute('data-book-id');
+
+//       // Make an AJAX post request to the server, to add the book to the user's collection
+//       fetch('/api/user/books/add', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'X-CSRF-TOKEN': /*[[${_csrf.token}]]*/ ''
+//         },
+//         // Send the book ID in the request body
+//         body: JSON.stringify({ bookId })
+//       })
+//       .then(resp => resp.json())
+//       .then(data => {
+//         if (data.success) {
+//           // Show a success message to the user
+//           alert('Libro aggiunto con successo!');
+
+//           // Reload the page to reflect the changes
+//           window.location.href = '/libri.html';
+//         } else {
+//           // Show an error message if the book could not be added
+//           alert('Errore: ' + data.message);
+//         }
+//       })
+//       .catch(err => {
+//         console.error('Fetch error:', err);
+//         // Show a generic error message
+//         alert('Qualcosa è andato storto.');
+//       });
+//     });
+//   });
