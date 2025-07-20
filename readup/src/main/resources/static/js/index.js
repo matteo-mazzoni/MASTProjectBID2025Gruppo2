@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
   addBtns.forEach(btn => {
     btn.addEventListener('click', event => {
       event.preventDefault();
-      // Rileggo btn qui, così è sicuramente non-null
+      
       const bookId = btn.getAttribute('data-book-id');
       if (!bookId) {
         console.warn('Bottone senza data-book-id!');
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(data => {
         if (data.success) {
           alert('Libro aggiunto con successo!');
-          window.location.href = '/mybooks.html';
+          window.location.href = '/libri'
         } else {
           alert('Errore: ' + (data.message || 'Impossibile aggiungere'));
         }
@@ -231,48 +231,3 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-
-// // Select all buttons with the class 'add-book-btn'
-// const addBtns = document.querySelectorAll('.add-book-btn');
-
-// const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-// const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-//   // Add an event listener for each add-book button
-//   addBtns.forEach(btn => {
-//     btn.addEventListener('click', event => {
-//       event.preventDefault();  // Prevent default behaviour 
-
-//       // Take the book ID from the button's data attribute
-//       const bookId = btn.getAttribute('data-book-id');
-
-//       // Make an AJAX post request to the server, to add the book to the user's collection
-//       fetch('/api/user/books/add', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'X-CSRF-TOKEN': /*[[${_csrf.token}]]*/ ''
-//         },
-//         // Send the book ID in the request body
-//         body: JSON.stringify({ bookId })
-//       })
-//       .then(resp => resp.json())
-//       .then(data => {
-//         if (data.success) {
-//           // Show a success message to the user
-//           alert('Libro aggiunto con successo!');
-
-//           // Reload the page to reflect the changes
-//           window.location.href = '/libri.html';
-//         } else {
-//           // Show an error message if the book could not be added
-//           alert('Errore: ' + data.message);
-//         }
-//       })
-//       .catch(err => {
-//         console.error('Fetch error:', err);
-//         // Show a generic error message
-//         alert('Qualcosa è andato storto.');
-//       });
-//     });
-//   });

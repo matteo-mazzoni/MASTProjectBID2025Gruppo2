@@ -1,0 +1,46 @@
+id_libro,autore,titolo,genere,num_pagine,anno_uscita,casa_editrice
+1,Jules Verne,Ventimila leghe sotto i mari,Grandi Classici per Ragazzi,426,1870,Pierre-Jules Hetzel
+2,Carlo Collodi,Le avventure di Pinocchio,Grandi Classici per Ragazzi,240,1883,Enrico Spahn
+3,Eiichiro Oda,One Piece: East Blue Vol.1,Fumetti e Manga,208,1997,Shueisha
+4,Stephen King,It,"Horror, Gotico e Thriller",1138,1986,Viking Press
+5,Agatha Christie,Assassinio sull'Orient Express,"Gialli, Polizieschi e Noir",256,1934,Collins Crime Club
+6,Stephenie Meyer,Twilight,Teen Romance e Romanzi Rosa,498,2005,"Little, Brown and Company"
+7,J.R.R. Tolkien,Il Signore degli Anelli: La Compagnia dell'Anello,"Fantasy, Fantascienza e Avventura",423,1954,Allen & Unwin
+8,Yuval Noah Harari,Sapiens: Da animali a dèi,Narrativa d'Autore e Saggistica,443,2011,Harvill Secker
+9,Colleen Hoover,It Ends with Us,Nuove Uscite Popolari sui Social,384,2016,Atria Books
+10,Andrea Camilleri,Il ladro di merendine,"Gialli, Polizieschi e Noir",224,1996,Sellerio
+11,Brie Larson,Enola Holmes – Il caso del marchese scomparso,Teen Romance e Romanzi Rosa,304,2015,Penguin Random House
+12,Marion Zimmer Bradley,Le nebbie di Avalon,"Fantasy, Fantascienza e Avventura",838,1983,Doubleday
+13,Bram Stoker,Dracula,"Horror, Gotico e Thriller",418,1897,Archibald Constable and Company
+14,Nicholas Sparks,Le pagine della nostra vita,Teen Romance e Romanzi Rosa,214,1996,Warner Books
+15,Licia Troisi,Le cronache del mondo emerso: Nihal della Terra del Vento,"Fantasy, Fantascienza e Avventura",448,2004,Mondadori
+16,Margaret Atwood,Il racconto dell'ancella,Narrativa d'Autore e Saggistica,311,1985,McClelland and Stewart
+17,Carlo Lucarelli,Nearly Dead,"Gialli, Polizieschi e Noir",160,2014,Einaudi
+18,H. G. Wells,La guerra dei mondi,Grandi Classici per Ragazzi,192,1898,William Heinemann
+19,Ali Hazelwood,The Love Hypothesis,Nuove Uscite Popolari sui Social,320,2021,Berkley
+20,Umberto Eco,Il nome della rosa,Narrativa d'Autore e Saggistica,512,1980,Bompiani
+21,Masashi Kishimoto,Naruto Vol.1,Fumetti e Manga,192,2000,Shueisha
+22,Hajime Isayama,Attack on Titan Vol.1,Fumetti e Manga,200,2009,Kodansha
+23,Tite Kubo,Bleach Vol.1,Fumetti e Manga,208,2001,Shueisha
+24,Yoshihiro Togashi,Hunter × Hunter Vol.1,Fumetti e Manga,192,1998,Shueisha
+25,John Green,Colpa delle stelle,Teen Romance e Romanzi Rosa,318,2012,Dutton Books
+26,Rainbow Rowell,Eleanor & Park,Teen Romance e Romanzi Rosa,328,2013,St. Martin's Press
+27,Colleen Hoover,Ugly Love,Teen Romance e Romanzi Rosa,336,2014,Atria Books
+28,Taylor Jenkins Reid,The Seven Husbands of Evelyn Hugo,Teen Romance e Romanzi Rosa,400,2017,Alyson Books
+29,Christina Lauren,Beautiful Bastard,Teen Romance e Romanzi Rosa,256,2013,Gallery Books
+30,Nicholas Sparks,A Walk to Remember,Teen Romance e Romanzi Rosa,272,1999,Warner Books
+31,Deb Caletti,The Nature of Jade,Teen Romance e Romanzi Rosa,304,2004,HarperTeen
+32,Arthur Conan Doyle,Il mastino dei Baskerville,"Gialli, Polizieschi e Noir",256,1902,George Newnes
+33,Raymond Chandler,Il grande sonno,"Gialli, Polizieschi e Noir",282,1939,Knopf
+34,Dashiell Hammett,Il falcone maltese,"Gialli, Polizieschi e Noir",217,1930,Knopf
+35,Stieg Larsson,Uomini che odiano le donne,"Gialli, Polizieschi e Noir",465,2005,Norstedts Förlag
+36,Gillian Flynn,Gone Girl,"Gialli, Polizieschi e Noir",422,2012,Crown Publishing
+37,Patricia Highsmith,Il talento di Mr. Ripley,"Gialli, Polizieschi e Noir",256,1955,Heinemann
+38,Michael Connelly,Il poeta,"Gialli, Polizieschi e Noir",400,1996,"Little, Brown and Company"
+39,Lee Child,Zona pericolosa,"Gialli, Polizieschi e Noir",400,1997,Bantam Press
+40,Ian Rankin,Sette giorni,"Gialli, Polizieschi e Noir",432,2005,Orion
+41,Tana French,Nel bosco,"Gialli, Polizieschi e Noir",416,2007,Viking Press
+42,Andrea Camilleri,La forma dell'acqua,"Gialli, Polizieschi e Noir",224,1994,Sellerio
+43,John Grisham,Il socio,"Gialli, Polizieschi e Noir",612,1991,Doubleday
+44,Ellery Queen,Il mistero della collina,"Gialli, Polizieschi e Noir",300,1958,Pyramid Books
+45,Paulo Coelho,Il manoscritto ritrovato ad Accra,"Gialli, Polizieschi e Noir",240,2012,HarperOne

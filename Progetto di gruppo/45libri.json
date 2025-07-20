@@ -1,0 +1,407 @@
+[
+  {
+    "id_libro": 1,
+    "autore": "Jules Verne",
+    "titolo": "Ventimila leghe sotto i mari",
+    "genere": "Grandi Classici per Ragazzi",
+    "num_pagine": 426,
+    "anno_uscita": 1870,
+    "casa_editrice": "Pierre-Jules Hetzel"
+  },
+  {
+    "id_libro": 2,
+    "autore": "Carlo Collodi",
+    "titolo": "Le avventure di Pinocchio",
+    "genere": "Grandi Classici per Ragazzi",
+    "num_pagine": 240,
+    "anno_uscita": 1883,
+    "casa_editrice": "Enrico Spahn"
+  },
+  {
+    "id_libro": 3,
+    "autore": "Eiichiro Oda",
+    "titolo": "One Piece: East Blue Vol.1",
+    "genere": "Fumetti e Manga",
+    "num_pagine": 208,
+    "anno_uscita": 1997,
+    "casa_editrice": "Shueisha"
+  },
+  {
+    "id_libro": 4,
+    "autore": "Stephen King",
+    "titolo": "It",
+    "genere": "Horror, Gotico e Thriller",
+    "num_pagine": 1138,
+    "anno_uscita": 1986,
+    "casa_editrice": "Viking Press"
+  },
+  {
+    "id_libro": 5,
+    "autore": "Agatha Christie",
+    "titolo": "Assassinio sull'Orient Express",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 256,
+    "anno_uscita": 1934,
+    "casa_editrice": "Collins Crime Club"
+  },
+  {
+    "id_libro": 6,
+    "autore": "Stephenie Meyer",
+    "titolo": "Twilight",
+    "genere": "Teen Romance e Romanzi Rosa",
+    "num_pagine": 498,
+    "anno_uscita": 2005,
+    "casa_editrice": "Little, Brown and Company"
+  },
+  {
+    "id_libro": 7,
+    "autore": "J.R.R. Tolkien",
+    "titolo": "Il Signore degli Anelli: La Compagnia dell'Anello",
+    "genere": "Fantasy, Fantascienza e Avventura",
+    "num_pagine": 423,
+    "anno_uscita": 1954,
+    "casa_editrice": "Allen & Unwin"
+  },
+  {
+    "id_libro": 8,
+    "autore": "Yuval Noah Harari",
+    "titolo": "Sapiens: Da animali a dèi",
+    "genere": "Narrativa d'Autore e Saggistica",
+    "num_pagine": 443,
+    "anno_uscita": 2011,
+    "casa_editrice": "Harvill Secker"
+  },
+  {
+    "id_libro": 9,
+    "autore": "Colleen Hoover",
+    "titolo": "It Ends with Us",
+    "genere": "Nuove Uscite Popolari sui Social",
+    "num_pagine": 384,
+    "anno_uscita": 2016,
+    "casa_editrice": "Atria Books"
+  },
+  {
+    "id_libro": 10,
+    "autore": "Andrea Camilleri",
+    "titolo": "Il ladro di merendine",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 224,
+    "anno_uscita": 1996,
+    "casa_editrice": "Sellerio"
+  },
+  {
+    "id_libro": 11,
+    "autore": "Brie Larson",
+    "titolo": "Enola Holmes – Il caso del marchese scomparso",
+    "genere": "Teen Romance e Romanzi Rosa",
+    "num_pagine": 304,
+    "anno_uscita": 2015,
+    "casa_editrice": "Penguin Random House"
+  },
+  {
+    "id_libro": 12,
+    "autore": "Marion Zimmer Bradley",
+    "titolo": "Le nebbie di Avalon",
+    "genere": "Fantasy, Fantascienza e Avventura",
+    "num_pagine": 838,
+    "anno_uscita": 1983,
+    "casa_editrice": "Doubleday"
+  },
+  {
+    "id_libro": 13,
+    "autore": "Bram Stoker",
+    "titolo": "Dracula",
+    "genere": "Horror, Gotico e Thriller",
+    "num_pagine": 418,
+    "anno_uscita": 1897,
+    "casa_editrice": "Archibald Constable and Company"
+  },
+  {
+    "id_libro": 14,
+    "autore": "Nicholas Sparks",
+    "titolo": "Le pagine della nostra vita",
+    "genere": "Teen Romance e Romanzi Rosa",
+    "num_pagine": 214,
+    "anno_uscita": 1996,
+    "casa_editrice": "Warner Books"
+  },
+  {
+    "id_libro": 15,
+    "autore": "Licia Troisi",
+    "titolo": "Le cronache del mondo emerso: Nihal della Terra del Vento",
+    "genere": "Fantasy, Fantascienza e Avventura",
+    "num_pagine": 448,
+    "anno_uscita": 2004,
+    "casa_editrice": "Mondadori"
+  },
+  {
+    "id_libro": 16,
+    "autore": "Margaret Atwood",
+    "titolo": "Il racconto dell'ancella",
+    "genere": "Narrativa d'Autore e Saggistica",
+    "num_pagine": 311,
+    "anno_uscita": 1985,
+    "casa_editrice": "McClelland and Stewart"
+  },
+  {
+    "id_libro": 17,
+    "autore": "Carlo Lucarelli",
+    "titolo": "Nearly Dead",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 160,
+    "anno_uscita": 2014,
+    "casa_editrice": "Einaudi"
+  },
+  {
+    "id_libro": 18,
+    "autore": "H. G. Wells",
+    "titolo": "La guerra dei mondi",
+    "genere": "Grandi Classici per Ragazzi",
+    "num_pagine": 192,
+    "anno_uscita": 1898,
+    "casa_editrice": "William Heinemann"
+  },
+  {
+    "id_libro": 19,
+    "autore": "Ali Hazelwood",
+    "titolo": "The Love Hypothesis",
+    "genere": "Nuove Uscite Popolari sui Social",
+    "num_pagine": 320,
+    "anno_uscita": 2021,
+    "casa_editrice": "Berkley"
+  },
+  {
+    "id_libro": 20,
+    "autore": "Umberto Eco",
+    "titolo": "Il nome della rosa",
+    "genere": "Narrativa d'Autore e Saggistica",
+    "num_pagine": 512,
+    "anno_uscita": 1980,
+    "casa_editrice": "Bompiani"
+  },
+  {
+    "autore": "Masashi Kishimoto",
+    "titolo": "Naruto Vol.1",
+    "genere": "Fumetti e Manga",
+    "num_pagine": 192,
+    "anno_uscita": 2000,
+    "casa_editrice": "Shueisha",
+    "id_libro": 21
+  },
+  {
+    "autore": "Hajime Isayama",
+    "titolo": "Attack on Titan Vol.1",
+    "genere": "Fumetti e Manga",
+    "num_pagine": 200,
+    "anno_uscita": 2009,
+    "casa_editrice": "Kodansha",
+    "id_libro": 22
+  },
+  {
+    "autore": "Tite Kubo",
+    "titolo": "Bleach Vol.1",
+    "genere": "Fumetti e Manga",
+    "num_pagine": 208,
+    "anno_uscita": 2001,
+    "casa_editrice": "Shueisha",
+    "id_libro": 23
+  },
+  {
+    "autore": "Yoshihiro Togashi",
+    "titolo": "Hunter × Hunter Vol.1",
+    "genere": "Fumetti e Manga",
+    "num_pagine": 192,
+    "anno_uscita": 1998,
+    "casa_editrice": "Shueisha",
+    "id_libro": 24
+  },
+  {
+    "autore": "John Green",
+    "titolo": "Colpa delle stelle",
+    "genere": "Teen Romance e Romanzi Rosa",
+    "num_pagine": 318,
+    "anno_uscita": 2012,
+    "casa_editrice": "Dutton Books",
+    "id_libro": 25
+  },
+  {
+    "autore": "Rainbow Rowell",
+    "titolo": "Eleanor & Park",
+    "genere": "Teen Romance e Romanzi Rosa",
+    "num_pagine": 328,
+    "anno_uscita": 2013,
+    "casa_editrice": "St. Martin's Press",
+    "id_libro": 26
+  },
+  {
+    "autore": "Colleen Hoover",
+    "titolo": "Ugly Love",
+    "genere": "Teen Romance e Romanzi Rosa",
+    "num_pagine": 336,
+    "anno_uscita": 2014,
+    "casa_editrice": "Atria Books",
+    "id_libro": 27
+  },
+  {
+    "autore": "Taylor Jenkins Reid",
+    "titolo": "The Seven Husbands of Evelyn Hugo",
+    "genere": "Teen Romance e Romanzi Rosa",
+    "num_pagine": 400,
+    "anno_uscita": 2017,
+    "casa_editrice": "Alyson Books",
+    "id_libro": 28
+  },
+  {
+    "autore": "Christina Lauren",
+    "titolo": "Beautiful Bastard",
+    "genere": "Teen Romance e Romanzi Rosa",
+    "num_pagine": 256,
+    "anno_uscita": 2013,
+    "casa_editrice": "Gallery Books",
+    "id_libro": 29
+  },
+  {
+    "autore": "Nicholas Sparks",
+    "titolo": "A Walk to Remember",
+    "genere": "Teen Romance e Romanzi Rosa",
+    "num_pagine": 272,
+    "anno_uscita": 1999,
+    "casa_editrice": "Warner Books",
+    "id_libro": 30
+  },
+  {
+    "autore": "Deb Caletti",
+    "titolo": "The Nature of Jade",
+    "genere": "Teen Romance e Romanzi Rosa",
+    "num_pagine": 304,
+    "anno_uscita": 2004,
+    "casa_editrice": "HarperTeen",
+    "id_libro": 31
+  },
+  {
+    "autore": "Arthur Conan Doyle",
+    "titolo": "Il mastino dei Baskerville",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 256,
+    "anno_uscita": 1902,
+    "casa_editrice": "George Newnes",
+    "id_libro": 32
+  },
+  {
+    "autore": "Raymond Chandler",
+    "titolo": "Il grande sonno",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 282,
+    "anno_uscita": 1939,
+    "casa_editrice": "Knopf",
+    "id_libro": 33
+  },
+  {
+    "autore": "Dashiell Hammett",
+    "titolo": "Il falcone maltese",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 217,
+    "anno_uscita": 1930,
+    "casa_editrice": "Knopf",
+    "id_libro": 34
+  },
+  {
+    "autore": "Stieg Larsson",
+    "titolo": "Uomini che odiano le donne",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 465,
+    "anno_uscita": 2005,
+    "casa_editrice": "Norstedts Förlag",
+    "id_libro": 35
+  },
+  {
+    "autore": "Gillian Flynn",
+    "titolo": "Gone Girl",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 422,
+    "anno_uscita": 2012,
+    "casa_editrice": "Crown Publishing",
+    "id_libro": 36
+  },
+  {
+    "autore": "Patricia Highsmith",
+    "titolo": "Il talento di Mr. Ripley",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 256,
+    "anno_uscita": 1955,
+    "casa_editrice": "Heinemann",
+    "id_libro": 37
+  },
+  {
+    "autore": "Michael Connelly",
+    "titolo": "Il poeta",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 400,
+    "anno_uscita": 1996,
+    "casa_editrice": "Little, Brown and Company",
+    "id_libro": 38
+  },
+  {
+    "autore": "Lee Child",
+    "titolo": "Zona pericolosa",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 400,
+    "anno_uscita": 1997,
+    "casa_editrice": "Bantam Press",
+    "id_libro": 39
+  },
+  {
+    "autore": "Ian Rankin",
+    "titolo": "Sette giorni",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 432,
+    "anno_uscita": 2005,
+    "casa_editrice": "Orion",
+    "id_libro": 40
+  },
+  {
+    "autore": "Tana French",
+    "titolo": "Nel bosco",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 416,
+    "anno_uscita": 2007,
+    "casa_editrice": "Viking Press",
+    "id_libro": 41
+  },
+  {
+    "autore": "Andrea Camilleri",
+    "titolo": "La forma dell'acqua",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 224,
+    "anno_uscita": 1994,
+    "casa_editrice": "Sellerio",
+    "id_libro": 42
+  },
+  {
+    "autore": "John Grisham",
+    "titolo": "Il socio",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 612,
+    "anno_uscita": 1991,
+    "casa_editrice": "Doubleday",
+    "id_libro": 43
+  },
+  {
+    "autore": "Ellery Queen",
+    "titolo": "Il mistero della collina",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 300,
+    "anno_uscita": 1958,
+    "casa_editrice": "Pyramid Books",
+    "id_libro": 44
+  },
+  {
+    "autore": "Paulo Coelho",
+    "titolo": "Il manoscritto ritrovato ad Accra",
+    "genere": "Gialli, Polizieschi e Noir",
+    "num_pagine": 240,
+    "anno_uscita": 2012,
+    "casa_editrice": "HarperOne",
+    "id_libro": 45
+  }
+]

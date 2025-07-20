@@ -32,7 +32,7 @@ const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttrib
   document.querySelectorAll('.remove-book-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const bookId = btn.dataset.bookId;
-      fetch('/user/books/remove', {
+      fetch('/remove', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
